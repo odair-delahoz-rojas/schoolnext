@@ -1,0 +1,49 @@
+<?php
+// TEMPLATE PARA GENERAR ARCHIVOS DE 
+// EXCEL (.xlsx)
+
+try {
+
+  $col_options = array(
+    'font'=>'Arial', // 'Arial', 'Comic Sans MS', 'Times New Roman', 'Courier New'
+    'font-size'=>9,
+    'font-style'=>'bold', // 'bold', 'italic', 'strike', 'underline', 'strikethrough'
+    'fill'=>'#4472C4', 
+    'color'=> '#FFFFFF',
+    'halign'=>'general',  // 'general','left','right','justify','center', 'none'
+    'valign'=>'bottom',  // 'bottom','center','distributed','top'
+    'border'=>'left,right,top,bottom',
+    'border-style' => 'thin', // 'thin','medium','thick','dashDot','dashDotDot','dashed','dotted','double','hair','mediumDashDot','mediumDashDotDot','mediumDashed','slantDashDot'
+    'auto_filter'=>true, 
+    //'widths'=>[10,20,30,40],
+    //['height'=>20],
+  );
+  
+  $row_styles = array(
+    'font'=>'Arial',
+    'font-size'=>9, 
+    'halign'=>'general',
+    'border'=>'left,right,top,bottom',
+    'border-style' => 'thin',
+  );
+
+  $sheet_name = $controller_name;
+  $writer = new XLSXWriter();
+  $writer->writeSheetHeader($sheet_name, $header, $col_options);
+  foreach($data as $key => $row) {  
+    $style = (($key % 2) == 0) ? [...$row_styles, ...['fill'=>'#D9E1F2']]  : $row_styles;
+    $writer->writeSheetRow($sheet_name, $row, $style);
+  }
+  $writer->setTitle("$file_title - $_instit_name");
+  $writer->setCompany($_instit_name);
+  $writer->setSubject("$file_title - $_instit_name");
+  $writer->setDescription("$file_title - $_instit_name");
+  $writer->setKeywords( ['report', $controller_name, $_instit_name] );
+
+  $file = 'files/download/'.$file_name.'.xlsx';
+  $writer->writeToFile($file);
+  Redirect::to($file);
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

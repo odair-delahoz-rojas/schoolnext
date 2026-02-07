@@ -1,0 +1,16 @@
+<select id="mySelect">
+  <option value="Opción 1">Opción 1</option>
+  <option value="Opción 2">Opción 2</option>
+  <option value="Opción 3">Opción 3</option>
+</select>
+<button id="myButton">Enviar</button>
+
+<script type="text/javascript"> 
+  const mySelect = document.getElementById("mySelect");
+  const myButton = document.getElementById("myButton");
+
+  mySelect.addEventListener("change", () => {
+    const selectedValue = mySelect.options[mySelect.selectedIndex].value;
+    myButton.textContent = "Enviar " + selectedValue;
+  });
+</script>

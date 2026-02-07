@@ -1,0 +1,9 @@
+<?php
+try {
+  $f = new NumberFormatter("es", NumberFormatter::CURRENCY_ACCOUNTING);
+  echo $f->format(123456);
+  OdaLog::debug("mensaje", __CLASS__.' : '.__FUNCTION__);
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

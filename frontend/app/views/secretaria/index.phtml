@@ -1,0 +1,34 @@
+<div class="w3-panel">
+  <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+  <?= View::flash(); ?>
+  
+  <div class="w3-row">
+    <div class="w3-container w3-green w3-mobile">
+      <h3 style="text-shadow:1px 1px 0 #444"><i class="fa-solid fa-recycle w3-large"></i> <?= Config::get('institutions.'.INSTITUTION_KEY.'.campania') ?></h3>
+    </div>
+  </div>
+
+  <div class="w3-row">
+    <?php $Estad = [
+      ['Aspirantes','address-card', '', ''], 
+      ['Estudiantes', 'person', 'admin/estudiantes', ''], 
+      ['Salones', 'people-roof', 'admin/salones', ''], 
+      ['Padres', 'people-arrows-left-right', '', '']
+    ] ?>
+    <?php foreach ($Estad as $key => $tit): ?>
+      <div class="w3-quarter w3-padding w3-center">
+         <div class="w3-card w3-container w3-round-large w3-theme-l3 w3-hover-theme">
+            <header class="w3-container">
+              <h4 class="w3-left"><?=$tit[0]?></h4> 
+            </header>
+            <p class="w3-left"> <i class="fa-solid fa-<?=$tit[1]?> w3-xxxlarge"></i> </p>
+            <h3 class="w3-right w3-xxxlarge"><?=random_int(1,99)?>+</h3>
+            <footer class="w3-container">
+              <h5 class="w3-"><?= OdaTags::link(action: $tit[2], text: 'Ver +')?></h5> 
+            </footer>
+         </div>
+      </div>
+   <?php endforeach ?>
+  </div>
+
+</div>

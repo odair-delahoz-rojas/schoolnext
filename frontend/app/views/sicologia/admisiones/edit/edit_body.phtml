@@ -1,0 +1,55 @@
+<?php
+  try {
+    $ModeloAspirante  = $arrData['Aspirante'];
+    $FormAspir = new OdaForm(modelo: $ModeloAspirante, action: 'admin/aspirantes/actualizarPsicologia', method: 'post');
+    $FormAspir->setEdit();
+    
+    $ModeloAspirPsico  = $arrData['AspirantePsico'];
+    $FormAspirPsico = new OdaForm(modelo: $ModeloAspirPsico, action: '');
+    
+    $datos_basicos = require('form_info_basicos.phtml');
+    $datos_padre   = require('form_info_padre.phtml');
+    $datos_madre   = require('form_info_madre.phtml');
+    $hist_pers     = require('form_info_hist_pers.phtml');
+    $desa_psico    = require('form_info_desa_psico.phtml');
+    $desa_result   = require('form_info_result.phtml');
+
+    $antec_fami   = require('form_info_antec_fami.phtml');
+    $hist_escolar = require('form_info_hist_escolar.phtml');
+    $academico    = require('form_info_academico.phtml');
+    $documentos   = require('form_info_doc_adjuntos.phtml');
+    
+    $tabs = new OdaTabs();
+    
+    $tabs->addTab('basicos', 'Básicos', $datos_basicos, true);
+    $tabs->addTab('madre', 'Madre', $datos_madre, true);
+    $tabs->addTab('padre', 'Padre', $datos_padre, true);
+    $tabs->addTab('hist_pers', 'Personal', $hist_pers, true);
+    $tabs->addTab('desa_psico','Desa Psico', $desa_psico, true);
+    $tabs->addTab('antec_fami','Familia', $antec_fami, true);
+    $tabs->addTab('hist_escolar','Escolar', $hist_escolar, true);
+    $tabs->addTab('academico','Academico', $academico, true);
+    
+    
+    $nombre_aspirante = "<h2>$ModeloAspirante->nombres $ModeloAspirante->apellido1 $ModeloAspirante->apellido2</h2>";
+    echo 
+    "<div class=\"w3-row\">
+
+      <div class=\"w3-half w3-container\">
+        $nombre_aspirante 
+        {$FormAspir->getOpenForm()}
+          $desa_result
+        {$FormAspir::close()}
+      </div>
+
+      <div class=\"w3-half w3-container\">
+        $tabs
+      </div>
+
+    </div>";
+
+  } catch (\Throwable $th) {
+    OdaFlash::error($th);
+  }
+  
+?>

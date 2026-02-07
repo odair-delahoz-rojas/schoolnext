@@ -1,0 +1,36 @@
+<?php
+  require_once VENDOR_PATH. 'autoload.php';
+  use AdminLTE\Components\Tabs;
+
+  try {
+    $Aspirante  = new Aspirante();
+    $FormAspir = new OdaForm(modelo: $Aspirante, action: 'admin/aspirantes/crear', method: 'post');
+
+    $AspirPsico  = new AspirantePsico();
+    $FormAspirPsico = new OdaForm(modelo: $AspirPsico, action: 'admin/aspirantes/crear', method: 'post');
+
+    $arr_show_tabs = ['privacidad2', 'doc_adjuntos', 'basicos2', 'madre2', 'padre', 'hist_pers', 'desa_psico', 'antec_fami', 'academico', 'hist_escolar', 'final' ];
+    if ('formsencillo'==$data['tipo_form_admisiones'])
+    {
+      $arr_show_tabs = ['privacidad2', 'basicos2', 'madre2', 'padre', 'hist_escolar', 'desa_psico',  'final' ];
+    }
+    
+    $tabsData1 = [];
+    foreach ($arr_show_tabs as $key => $item_tab)
+    {
+      $tabsData1[] = [
+        'title' => ucfirst($item_tab),
+        'content' => require('form_info_'.$item_tab.'.phtml'),
+        'active' => ($key==0)
+      ];
+    }
+    
+    echo $FormAspir->getOpenForm();
+    echo Tabs::render($tabsData1, ['card' => 'Formulario de Admisiones', 'id_prefix' => 'custom-title-tabs-']);
+    echo$FormAspir::close();
+  
+  } catch (\Throwable $th) {
+    OdaFlash::error($th);
+  }
+  
+?>

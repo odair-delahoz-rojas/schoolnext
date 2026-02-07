@@ -1,0 +1,28 @@
+<?php 
+$head = ['', 'Estado', 'Salon', 'Estudiante', 'Documento', 'Usuario', 'Clave'];
+
+$tabla = new OdaTable(theme:'light');
+$tabla->setCaption($file_title);
+/* $tabla->setHead(data_head: $head,
+arr_attrs_th:['class="w3-theme"', 'class="w3-theme"', 'class="w3-theme"', 'class="w3-theme"', 'class="w3-theme"']
+); */
+
+$brake = '';
+foreach ($data as $key => $item) {
+  if ($brake<>$item->salon_nombre) {
+    $tabla->addRow($head);
+  }
+  
+  $tabla->addRow([
+    $key,
+    $item->is_active ?? '0',
+    $item->salon_nombre, 
+    OdaUtils::nombrePersona(($item->estudiante_nombre ?? '')), 
+    $item->documento, 
+    ($item->email_instit ?? ''), 
+    ($item->clave_instit ?? ''),
+  ]);
+  $brake = $item->salon_nombre;
+}
+echo $tabla;
+?>

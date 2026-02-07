@@ -1,0 +1,33 @@
+<?php 
+try {
+  $header = [
+      'Salón'       => 'string', 
+      'Grado'       => 'string', 
+      'Director'    => 'string', 
+      'Codirector'  => 'string', 
+      'Estudiantes' => 'integer', 
+  ];
+  
+  $fileds_names = [
+    'Salón'       => 'nombre', 
+    'Grado'       => 'grado_nombre', 
+    'Director'    => 'director_nombre', 
+    'Codirector'  => 'codirector_nombre', 
+    'Estudiantes' => 'tot_estudiantes',
+  ];
+      
+  $data = [];
+  foreach ($registros as $item) {
+    $columnas = [];
+    foreach ($header as $title_name => $title_type) {
+      $campo = $fileds_names[$title_name];
+      $columnas[] =  ('integer'==$title_type) ? (int)$item->$campo : $item->$campo;
+    }
+    $data[] = $columnas;
+  }
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}
+  
+?>

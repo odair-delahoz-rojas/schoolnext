@@ -1,0 +1,41 @@
+<?php
+try {
+  $myTabla = new OdaTable();
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('salud_eps'),
+    $frmDataEstud->getDataLabel('grupo_sang'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('salud_antec_med_fam'),
+    $frmDataEstud->getDataLabel('salud_cirugias'),
+  ]);
+  
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('salud_alergico'),
+    $frmDataEstud->getDataLabel('salud_tratamientos'),
+  ]);
+
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('salud_enfermedades'),
+    $frmDataEstud->getDataLabel('salud_medicam_prohibi'),
+  ]);
+
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('salud_trastornos_alim'),
+    $frmDataEstud->getDataLabel('salud_aliment_prohibi'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('salud_comentarios'),
+    '',
+  ]);
+
+  $myTabs->addTab('salud', 'Salud', $myTabla);
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

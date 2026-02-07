@@ -1,0 +1,69 @@
+<?php
+  
+  $p = $Reg->periodo_id-1;
+  $arr_notas_anteriores = [];
+  $notas_anteriores = '';
+
+  for ($i=1; $i<=$p; $i++) { 
+    $arr_notas_anteriores[] = $arrData['Calificaciones'][$Reg->estudiante_id][$i];
+    $notas_anteriores .= 'P'.$i.': '.$arrData['Calificaciones'][$Reg->estudiante_id][$i] .'&nbsp&nbsp';  
+  }
+  if ($p>2 && count($arr_notas_anteriores)>0) {
+    $notas_anteriores .= '<br>Prom: ' .array_sum($arr_notas_anteriores)/count($arr_notas_anteriores);
+  }
+  
+  // fila #1
+  $chk = Form::check(
+    field: 'chk_calif_'.$Reg->id, 
+    checkValue: true, 
+    attrs: 'class="chk-estud-control" onclick="contar_check_seleccionados()"',
+    checked: true
+  );
+
+  $cnt = $key+1;
+  $info_reg = "<div class=\"w3-center\">Item: $cnt <br>{$Reg->getFoto()} <br>#$Reg->id <br>$chk</div>";
+  $info_reg = "<div class=\"w3-center\">Item: $cnt <br> <br>Reg #$Reg->id <br>$chk</div>";
+
+  $frm = "<tr class=\"\">";  
+  $frm .= OdaTags::tag(tag: 'td', content: $info_reg, attrs: 'rowspan="3"');
+  $frm .= OdaTags::tag(tag: 'td', content: $Reg->estudiante_nombre."<br>$info_indic<br>".$notas_anteriores, attrs: 'colspan="4"');
+  $frm .= OdaTags::tag(tag: 'td', content: '');
+  
+  $slider_definitiva = OdaTags::inputRango(id_name: $Reg->id, value: $Reg->definitiva, min: 0, max: $arrData['rango_nota_superior'], step: 1);
+  $field_definitiva = $Reg->fieldForm('definitiva');
+  $field_plan_apoyo = $Reg->fieldForm(field_name: 'plan_apoyo', type:'hidden');
+  $field_nota_final = $Reg->fieldForm(field_name: 'nota_final', type:'hidden');
+
+  $las_notas = $field_definitiva.$field_plan_apoyo.$field_nota_final;
+  $frm .= OdaTags::tag(tag: 'td', content: $slider_definitiva.'<br>Nota:'.$las_notas, attrs: 'colspan="3"');
+  $frm .= OdaTags::tag(tag: 'td', content: 'P.A.<br>'.$Reg->plan_apoyo);
+  $frm .= OdaTags::tag(tag: 'td', content: 'N.F.<br>'.$Reg->nota_final);
+  $frm .= '</tr>';
+  
+
+  // reglas para los indicadores
+  $patternInidisc  = ' pattern="/^('. implode('|', $arrData['Indicadores']) .')$/"';
+  $min_max  = ' min="'.$arrData['min_indic'].'" max="'.$arrData['max_indic'].'" ';
+  $min_max  = ' min="100" max="'.$arrData['max_indic'].'" ';
+  $max_lenght = ' maxlength="'.strlen($arrData['max_indic']).'" size="'.(strlen($arrData['max_indic'])).'"' ;
+  
+  // fila #2
+  $frm .= "<tr class=\"\">";
+  $fields['f2'] = ['i01', 'i02', 'i03', 'i04', 'i05', 'i06', 'i07', 'i08', 'i09', 'i10'];
+  foreach ($fields['f2'] as $key => $campo) { 
+    $field = $Reg->fieldForm($campo, $min_max .$max_lenght .$patternInidisc.' class="color-input" ');
+    $frm .= OdaTags::tag('td', $field);
+  }//foreach
+  $frm .= '</tr>';
+  
+  // fila #3
+  $frm .= "<tr class=\"\">";
+  $fields['f3'] = ['i11', 'i12', 'i13', 'i14', 'i15', 'i16', 'i17', 'i18', 'i19', 'i20'];
+  foreach ($fields['f3'] as $key => $campo) { 
+    $field = $Reg->fieldForm($campo, $min_max .$max_lenght .$patternInidisc.' class="color-input" ');
+    $frm .= OdaTags::tag('td', $field);
+  }//foreach
+  $frm .= '</tr>';
+
+  return $frm;
+?>

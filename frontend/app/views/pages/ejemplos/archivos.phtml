@@ -1,0 +1,24 @@
+<div class="w3-container">
+   <?= View::flash(); ?>
+   <?= View::Encab($controller_name, $page_action); ?>
+</div>
+
+<div class="w3-container">
+  <h1>Iconos</h1>
+  <?php
+    echo 'APP_PATH: '.APP_PATH.'<br>';
+    echo 'CORE_PATH: '.CORE_PATH.'<br>';
+    echo 'PUBLIC_PATH: '.PUBLIC_PATH.'<br>';
+    echo 'SERVER PATH_INFO:'.$_SERVER['PATH_INFO'].'<br>';
+
+    $directorio = APP_PATH.'../public/';
+    $files = OdaFile::findFilesInDir($directorio);
+    foreach ($files as $key => $f) {
+        $f_nombre = pathinfo($f, PATHINFO_FILENAME);
+        $ext = pathinfo($f, PATHINFO_EXTENSION);
+        if ($ext=='css') {
+        }
+        echo $key.': '.$f_nombre.'.'.$ext.' - '._Icons::solid($f_nombre)  .'<br>';
+    }
+  ?>
+</div>

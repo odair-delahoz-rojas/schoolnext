@@ -1,0 +1,47 @@
+<details class="w3-padding">
+  <summary> <u>Docentes</u> </summary>
+  <?= OdaTags::linkBarItem('docentes/index', 'Index') ?>
+  <?php View::partial("docentes/docentes_menu") ?>
+</details>
+   
+<details class="w3-padding">
+  <summary> <u>Coordinaci&oacute;n</u> </summary>
+  <?= OdaTags::linkBarItem('coordinador/index', 'Index') ?>
+  <?php View::partial("coordinador/coordinador_menu") ?>
+</details>
+
+<details class="w3-padding">
+  <summary> <u>Secretaria</u> </summary>
+  <?= OdaTags::linkBarItem('secretaria/index', 'Index') ?>
+  <?php View::partial("secretaria/secretaria_menu") ?>
+</details>
+
+<details class="w3-padding">
+  <summary> <u>Sicologia</u> </summary>
+  <?= OdaTags::linkBarItem('sicologia/index', 'Index') ?>
+  <?php View::partial("sicologia/sicologia_menu") ?>
+</details>
+
+<details class="w3-padding">
+  <summary> <u>Contabilidad</u> </summary>
+  <?= OdaTags::linkBarItem('contabilidad/index', 'Index') ?>
+  <?php View::partial("contabilidad/contabilidad_menu") ?>
+</details>
+
+<details class="w3-padding">
+  <summary> <u>Padres</u> </summary>
+  <?= OdaTags::linkBarItem('padres/index', 'Index') ?>
+  <?php View::partial("padres/padres_menu") ?>
+</details>
+
+<details class="w3-padding">
+  <summary> <u>Enfermeria</u> </summary>
+  <?= OdaTags::linkBarItem('enfermeria/index', 'Index') ?>
+  <?php View::partial("enfermeria/enfermeria_menu") ?>
+</details>
+
+<details class="w3-padding">
+  <summary><u>Config del Sistema</u></summary>
+  <?= OdaTags::linkBarItem('pages/status_app', 'Check General', '') ?>
+  <?= OdaTags::linkBarItem('pages/check', 'Check PhpInfo', '') ?>
+</details>

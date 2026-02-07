@@ -1,0 +1,21 @@
+<?php
+  $contenido_tab .= '<small>¿Requiere Soporte técnico por WhatsApp? '
+  .OdaUtils::linkWhatsApp(
+    telefono: '3017153066', 
+    message: '%F0%9F%9B%91%20MATRICULAS:%20Requiero%20Soporte%20tecnico:%20%20estudiante:%20'.$estud,
+    show_tel: true,
+    ).'</small><br>';
+  $contenido_tab .= OdaTags::tag('h2', "$estud");
+  
+  $contenido_tab .= OdaTags::Tag('div', $estud->getFoto().'<br>', 'class="w3-cell w3-padding w3-mobile"');
+
+  $grado_prom = (1==$estado_mat->value) ? $estud->grado_mat : $estud->grado_promovido ; 
+
+  $Grado = (new Grado())::get($grado_prom);
+  $cont = "<h3>Grado al que se promueve: {$Grado->nombre} </h3><br>"
+          .$estud->getPagoPension().'<br>'
+          .$estud->getDebePreicfes().'<br>'
+          .$estud->getDebeAlmuerzos().'<br>';
+
+  $contenido_tab .= OdaTags::Tag('div',  $cont.'<br>', 'class="w3-cell w3-padding w3-mobile"');
+?>

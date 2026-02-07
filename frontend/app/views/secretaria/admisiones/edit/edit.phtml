@@ -1,0 +1,17 @@
+<div class="w3-container">
+  <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+  <?=View::flash()?>
+  
+  <div class="w3-row w3-theme">    
+    <span id="public_path"  class="w3-hide"><?=trim(PUBLIC_PATH)?></span>
+    <span id="theme" class="w3-hide"><?=Session::get('theme')?></span>
+    <span id="periodo" class="w3-hide"><?=Session::get('periodo')?></span>
+    </div>
+    <br>
+    
+  <?php
+    require 'edit_header.phtml';
+    require 'edit_body.phtml';
+    require 'edit_footer.phtml'; 
+  ?>
+</div>

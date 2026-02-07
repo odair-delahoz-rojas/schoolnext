@@ -1,0 +1,73 @@
+<div class="w3-container">
+   <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+   <?= View::flash(); ?>
+</div>
+
+<div class="w3-container">
+  <h2><?=$arrData['Estudiante']?> </h2>
+  <?php
+    $modelEstud = $arrData['Estudiante'];
+    $frmEstud = new OdaForm(
+      $modelEstud, 'admin/estudiantes/editEstudiante/'.$arrData['Estudiante']->id.'/secretaria.listadoEstudActivos', 
+      multipart: true,
+      url_back: 'secre-estud-list-activos',
+    );
+    $frmEstud->setAtrib('id="frm_edit1" name="frm_edit1"');
+    $frmEstud->setEdit();
+    $fieldsToHidden_Estud = $modelEstud::getFieldsHidden('edit');
+    $frmEstud->addHiddens(implode(",", $fieldsToHidden_Estud));
+    
+    $modelDataEstud = $arrData['DatosEstud'];  
+    $frmDataEstud = new OdaForm($modelDataEstud, '');
+    $frmDataEstud->setAtrib('id="frm_edit2" name="frm_edit2"');
+    $frmDataEstud->setEdit();
+    $fieldsToHidden_DataEstud = $modelDataEstud::getFieldsHidden('edit');
+    $frmDataEstud->addHiddens(implode(",", $fieldsToHidden_DataEstud));
+
+    $modelAdjuntos = $arrData['Adjuntos'];
+
+    $myTabs = new OdaTabs();
+    include 'basicos.phtml';
+    include 'ubicacion.phtml';
+    include 'matricula.phtml';
+    include 'madre.phtml';
+    include 'padre.phtml';
+    include 'acudiente.phtml';
+    include 'salud.phtml';
+    include 'instit.phtml';
+    include 'contab.phtml';
+    
+    $formulario  = $frmEstud->getOpenForm();
+    $formulario .= $myTabs;
+    $formulario .= $frmEstud->getHiddens();
+    $formulario .= $frmDataEstud->getHiddens();
+    
+    $formulario .= '<br><div class="w3-bar">'.$frmEstud::submit('Guardar', 'class="w3-button"') . $frmEstud->getBtnBack().'</div>';
+    $formulario .= $frmEstud::close();
+
+    echo  "<div class=\"w3-container\">$formulario</div>";
+  ?>
+
+  <pre>
+    <?php
+      if (1==$user_id && 1==Config::get('config.application.modo_depuracion_admin')) {
+        echo "<p>Campos que faltan Estudiantes</p>";
+        print_r( $frmEstud->getFieldsNotInForm() );
+        echo "<p>Campos Ocultos</p>";
+        print_r($fieldsToHidden_Estud);
+        
+        echo "<hr>";
+        echo "<p>Campos que faltan DatosEstud</p>";
+        print_r( $frmDataEstud->getFieldsNotInForm() );
+        echo "<p>Campos Ocultos</p>";
+        print_r($fieldsToHidden_DataEstud);
+
+        echo "<hr> F A L T A<br>";
+        echo "CHECK DE Debe Preicfes<br>";
+        echo "CHECK DE Debe Almuerzos<br>";
+      }
+    ?>
+  </pre>
+  
+</div>
+<?= $myTabs::getJs() ?>

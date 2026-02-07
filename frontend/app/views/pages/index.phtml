@@ -1,0 +1,22 @@
+<div class="w3-container">
+  <?= View::flash(). View::Encab($controller_name, ucfirst($controller_name). ': '.ucfirst($action_name), '') ?>
+</div>
+
+<?php 
+  $tabla = new OdaTable();
+    $tabla->setCaption('Indice de Paginas estáticas de Ejemplos');
+    $tabla->addRow(data: [Html::linkAction('ejemplos/componentes', 'Componentes'), 'Manejo de componentes']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/archivos', 'Archivos'), 'Ejemplos de manejo de archivos y carpetas']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/input_car_faltan', 'Input Calcula Caracteres'), 'Calcula la cantidad de caracteres faltantes en un input']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/datalists', 'datalist'), 'Uso de datalist']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/element_data', 'Element Data'), 'Uso de Element Data']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/excel', 'PHP to Excel'), 'Leer y Generar archivos excel']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/fechas', 'Fechas'), 'Manejo de Fechas']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/html_template', 'HTML template'), 'Cómo usar HTML template con Javascript']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/js_validations', 'JS Validations'), 'Cómo validar formularios con Javascript']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/pdf', 'Genrar PDF'), 'Generación de Archivos con Mpdf']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/tabs', 'Manejo de Tabs'), 'Manejo de Tabs con W3-CSS']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/validar.backend', 'Validar Backend'), 'Validar en el Backend con Respect Validation']);
+    $tabla->addRow(data: [Html::linkAction('ejemplos/xml_cvs', 'xml cvs'), 'Generar archivos XML y CVS']);
+  echo $tabla;
+?>

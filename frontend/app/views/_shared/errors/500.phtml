@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset=utf-8>
+    <title>ERROR 500</title>
+    <meta name=robots content=noindex>
+    <meta name=generator content="<?=APP_NAME?>">
+    <style>
+        body{font-family:arial, sans-serif;
+        text-align: center;
+        background:#EEE}
+        img {
+        border: 0;
+        max-width: 100%;
+        height: auto;
+        }
+        .logo{padding:0}
+        #error-404{padding-top:2%}
+        p{font-size:xx-large;}
+        h1 {
+            color: #FE4747;
+            font-size: 112px;
+            line-height: 0;
+            font-family:"arial black", sans-serif;
+        }
+        .logo{background:transparent}
+        .logo:hover{border:none}
+        a{color:#fff;
+        background:#00A1CB;
+        padding:.5em 2em;
+        border-radius:2em;
+        margin-top:1em;
+        font-size:large;
+        font-weight: bold;
+        text-decoration:none}
+        a:hover{background:#eee;
+        border:2px solid #00A1CB;
+        color:#00A1CB;}
+    </style>
+</head>
+<body>
+    
+    <div id="error-500">
+        <a class=logo href="<?=PUBLIC_PATH?>" title="School NEXT">
+          <img src="<?=PUBLIC_PATH?>img/logo_<?=INSTITUTION_KEY?>.png" alt="School NEXT" style="width:400px"/>
+        </a>
+        <p>¡OOPS! Algo va mal en nuestro servidor. <br> intentalo después</p>
+        <p><a href="<?=PUBLIC_PATH?>">Ir a la página de inicio</a></p>
+        <h1>500</h1>
+        <img src="<?=PUBLIC_PATH?>img/img-working.svg"/>
+    </div>
+
+</body>
+</html>

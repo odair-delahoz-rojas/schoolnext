@@ -1,0 +1,24 @@
+<?php 
+try {
+  $tabla = new OdaTable(theme:'light', _attrs: 'class="w3-table w3-striped w3-border w3-bordered"');
+  $tabla->setCaption($file_title);
+  $tabla->setHead(
+    data_head: ['Id', 'Sección', 'Grado', 'Matrícula', 'Pensión'],
+    arr_attrs_th:['class="w3-theme"', 'class="w3-theme"', 'class="w3-theme"', 'class="w3-theme"', 'class="w3-theme"']
+  );
+  foreach ($data as $item) {
+    $tabla->addRow( data:[
+      $item->id, 
+      $item->seccion_nombre, 
+      $item->grado_nombre, 
+      $item->valor_matricula, 
+      $item->valor_pension
+    ] );
+  }
+  echo $tabla;
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}
+
+?>

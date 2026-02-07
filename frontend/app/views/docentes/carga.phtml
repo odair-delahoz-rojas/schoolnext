@@ -1,0 +1,62 @@
+<div class="w3-container"> 
+  <?= View::flash().View::Encab($controller_name, $page_action, $breadcrumb) ?> 
+</div>
+
+<?php 
+// PENDIENTE PROGRAMAR ::
+// Estadísticas de avance de la digitación de notas 
+?>
+
+<div class="w3-row">
+
+  <div class="w3-container">
+    <?php 
+    try 
+    {
+      $lnk_lista_de_clase = SalAsigProf::getLnkListaClase($_periodo_actual);
+      $lnk5p = '';
+      if ( (4==$_periodo_actual) && (5==$_max_periodos) )
+      { 
+        $lnk5p = SalAsigProf::getLnkListaClase(5);
+      }
+      echo $lnk_lista_de_clase . $lnk5p;      
+    }
+    catch (\Throwable $th)
+    {
+      OdaFlash::error($th);
+    }
+    ?>
+  </div>
+    
+  <div class="w3-container">
+    <?php
+      try {
+        echo OdaForm::inputSearch();
+        $tabla = new OdaTable(showTotalRegs: true);
+        $tabla->setHead("*Asignatura, *Salon, Estudiantes, Indicadores, Notas", 
+          arr_attrs_th: ['style="width:40%;"', 'style="width:30%;"', 'style="width:15%;"', 'style="width:15%;"'] );
+        $tabla->setCaption(caption:'Carga Asignada');
+
+        foreach($data as $key => $carga) {
+          $tabla->addRow( 
+            data: [
+              $carga->getAsignaturaF($user_id, $carga->asignatura_nombre, (string)$carga->profesor_nombre),
+              $carga->getSalonF($user_id, $carga->salon_nombre), 
+              $carga->tot_estudiantes, 
+              $carga->getLnkPageIndicadores($carga->grado_id),
+              $carga->getLnkPageListNotas(),
+            ], 
+            attrs_td: [
+              'class="searchTdata"',
+              'class="searchTdata"'
+            ]
+          );
+        }
+        echo $tabla;
+        echo Tag::js("table_filter");
+      }
+      catch (\Throwable $th) { OdaFlash::error($th); }
+    ?>
+  </div>
+
+</div>

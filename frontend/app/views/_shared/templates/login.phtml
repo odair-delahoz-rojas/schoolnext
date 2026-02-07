@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+ <head>
+  <meta charset=<?= APP_CHARSET ?> >
+  <title><?=$page_title?></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?= Tag::css('w3/w3') ?>
+  <?= Tag::css('propios') ?>
+  <?= Html::includeCss() ?>
+  <script src="https://kit.fontawesome.com/174118a0df.js" crossorigin="anonymous"></script>
+  <style> html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif} </style>
+</head>
+
+<body class="w3-grey">
+  <?php View::content() ?>
+</body>
+
+</html>

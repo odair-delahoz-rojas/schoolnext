@@ -1,0 +1,24 @@
+<?php 
+
+try { 
+  $lnk_ley_1581_2012  = OdaTags::linkExterno(Config::get('admisiones.lnk_ley_1581_2012'), 'ley 1581 de 2012');
+  $lnk_decreto_1377_2013  = OdaTags::linkExterno(Config::get('admisiones.lnk_decreto_1377_2013'), 'Decreto 1377 de 2013');
+  $btn_check = $FormAspir->getCheck(field: 'is_habeas_data');
+  return "
+  <div class=\"w3-display-container\">
+    <br/>
+    <h2>Bienvenido</h2>
+    <p> Doy mi consentimiento para permitir al <strong>{$data['institucion_nombre']}</strong> almacenar y procesar mis datos personales de acuerdo 
+      a la Política de Tratamiento de Datos.
+    </p>
+    <p>Conforme al derecho <strong>Habeas Data</strong> reconocido por el <strong>artículo 15 de la 
+      Constitución Política</strong> y desarrollado en la <strong>{$lnk_ley_1581_2012}</strong> y <br>
+      en cumplimiento a lo establecido por 
+      el <strong>artículo 10 del {$lnk_decreto_1377_2013}</strong>. 
+    </p>
+    </p>{$btn_check}</p>
+    <br/>
+  </div>";
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

@@ -1,0 +1,19 @@
+  <div class="w3-container">
+  <?php require('createHeader.phtml') ?>
+  <div class="w3-row">
+    <?php
+      $myForm = new OdaForm(
+        modelo: $Modelo, 
+        action: "admin/$controller_name/create",
+        url_back: "admin/$controller_name",
+      );
+      $myForm->setAtrib('id="form_new"');
+      foreach($fieldsToShow as $field) {
+        $myForm->addInput(field: $field);
+      }
+      $myForm->addHiddens(implode(",", $fieldsToHidden));
+      echo $myForm;
+    ?>
+  </div>
+  <?php require('createFooter.phtml') ?>
+</div>

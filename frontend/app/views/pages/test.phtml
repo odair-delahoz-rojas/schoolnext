@@ -1,0 +1,14 @@
+<div class="w3-container">
+   <?= View::flash().View::Encab($controller_name, $page_action, '') ?>
+</div>
+
+<div class="w3-container">
+  <h2>Test</h2>
+  <?php
+
+echo '<br/><br/><hr/>hola<br/>';
+echo (new Rango)->getLimiteInferior(Rangos::Superior);
+echo (new Rango)->getLimiteSuperior(Rangos::Superior);
+
+  ?>
+</div>

@@ -1,0 +1,102 @@
+<div class="w3-panel">
+  <?php 
+  try {    
+    require('filtrarHeader.phtml');
+    echo OdaForm::inputSearch();
+
+    if ($tot_regs = count($data)) {
+      $tabla = new OdaTable();
+      $tabla->setHead(data_head: ['Acciones', ...$fieldsToShowLabels, '']);
+      foreach ($data as $key => $item_data) 
+      {
+
+        $lnkSetupCalificar = '';
+        if ('salones'==$controller_name and 1==$item_data->is_active) 
+        {
+          $item_data->setNumeroEstudiantes();
+          $lnkSetupCalificar = $item_data->getLnkSetupCalificarSalon();
+        }
+        $lnkRetirar = '';
+        if ('usuarios'==$controller_name and 1==$item_data->is_active) 
+        {
+          //$lnkRetirar = $item_data->getLnkRetirar();
+        }
+        $lnkVincularPadresHijos = '';
+        if ('estudiantes'==$controller_name and 1==$item_data->is_active) 
+        {
+          $lnkVincularPadresHijos = $item_data->getLnkVincularPadresHijos($item_data->id);
+        }
+        
+        $uuid_ok   = (property_exists(object_or_class: $item_data, property: 'uuid') && !is_null(value: $item_data->uuid));
+        $edit_id   = ($uuid_ok) ? "editUuid/$item_data->uuid" : "edit/$item_data->id";
+        $lnkEditar = OdaTags::linkIcon(
+          action: "admin/$controller_name/$edit_id", 
+          icon: 'square-pen', 
+          attr: 'title="Editar Registro"'
+        );
+        
+        $delete_id = ($uuid_ok) ? "delUuid/$item_data->uuid" : "del/$item_data->id";
+        $msg_name  = strtoupper(string: $nombre_modelo.': '.((property_exists(object_or_class: $item_data, property: 'nombre')) ? $item_data->nombre : " # $item_data->id")) ;
+        $lnkBorrar = Html::linkAction(
+          action: $delete_id, 
+          text: _Icons::solid(icon: 'trash-can'), 
+          attrs: 'title="Eliminar Registro" onclick="return confirm(\'Atención: ¿Quiere eliminar? \n'.$msg_name.'\')"'
+        );
+        
+        $lnkSetPass = '';
+        if ('usuarios'==$controller_name) 
+        {
+          $lnkSetPass = Html::linkAction(
+            action: "setPassword/$item_data->id", 
+            text: _Icons::solid(icon: 'key'), 
+            attrs: 'title="Actualizar Password" onclick="return confirm(\'Atención: ¿Quiere establecer password por default?)\'"'
+          );
+        }
+
+        $arrFields = [];
+        foreach ($fieldsToShow as $key => $field) {
+          //$arrFields[]= (('is_active'==$field)? $item_data->is_active_f(true): $item_data->$field);
+          $dato = $item_data->$field;
+          if ('is_active'==$field) { $dato = $item_data->is_active_enum(show_ico: true); }
+          if ('nombre'==$field) { $dato = OdaUtils::nombrePersona(string: (string)$item_data->$field).' ['.$item_data->id.']'; }
+
+          if (str_ends_with(haystack: $field, needle: '_id')) {
+            $field_with_name = substr(string: $field, offset: 0, length: strlen(string: $field)-3).'_nombre';
+            if (isset($item_data->$field_with_name) and (!is_null(value: $item_data->$field_with_name))) {
+              $dato = OdaUtils::nombrePersona(string: $item_data->$field_with_name).' ['.$item_data->$field.']';
+            } else {
+              $dato = $item_data->$field.' ['.$item_data->$field.']';
+            }
+          }
+          $arrFields[] = $dato;
+        }
+
+        $linksActions = $lnkSetPass.'&nbsp;&nbsp;'
+                      .$lnkEditar.'&nbsp;&nbsp;'
+                      .$lnkBorrar.'&nbsp;&nbsp;'
+                      .$lnkRetirar.'&nbsp;&nbsp;'
+                      .$lnkVincularPadresHijos.'&nbsp;&nbsp;';
+        $arrBody = [
+          $linksActions, 
+          ...$arrFields, $lnkSetupCalificar 
+        ];
+        $tabla->addRow(data: $arrBody, attrs_td: [null, null, 'class="searchTdata"', 'class="searchTdata"', 'class="searchTdata"']);
+      }
+      echo $tabla;
+      echo "<h4>Total Registros: $tot_regs</h4>";
+    }
+    require('filtrarFooter.phtml');
+  } catch (\Throwable $th) {
+    OdaFlash::error($th);
+  }
+  ?>
+</div>
+
+<script>
+      document.getElementById("inputSearch").focus();
+      document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.key === 'b') {
+          document.getElementById('inputSearch').select();
+        }
+      });
+</script>

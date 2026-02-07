@@ -1,0 +1,19 @@
+{
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "mpdf/mpdf": "^8.1",
+        "tedivm/jshrink": "~1.0",
+        "shuchkin/simplexlsx": "^1.0",
+        "almasaeed2010/adminlte": "4.0.0-rc3",
+        "odairdelahoz/adminlte4-helper": "@dev"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "php bin/publish.php"
+        ],
+        "post-update-cmd": [
+            "php bin/publish.php"
+        ]
+    }
+}

@@ -1,0 +1,106 @@
+<?php
+try {
+  $archivoPDF = new MpdfDocsMatricula([
+    'tempDir' => APP_PATH . 'temp/mpdf',
+    'format' => 'Legal',
+    'progressBar' => true,
+    'title2annots' => true,  // convert headers in annotations
+    'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages 
+    'exposeVersion' => false, // security 
+    
+    'margin_left' => 20,
+    //'margin_right' => 15,
+    //'margin_top' => 48,
+    'margin_bottom' => 25, // no tocar
+    'margin_header' => 15, // no tocar
+    'margin_footer' => 10 // no tocar
+    // 'orientation' => 'L', // P(portrait), L(landscape) 
+    // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+  ]);
+  
+  $Plantillas = new Plantilla();
+  
+  // initialize
+  $annio_mat = Config::get('matriculas.'.INSTITUTION_KEY.'.annio_mat');
+  $direccion = Config::get('institutions.'.INSTITUTION_KEY.'.direccion');
+  
+  $datetimezone = new DateTimeZone('America/Bogota');
+  $ahora = new DateTimeImmutable('now', $datetimezone);
+  $fecha = $ahora->format("D, d M Y");
+
+  $representante = strtoupper(Config::get('institutions.'.INSTITUTION_KEY.'.rep_legal'));
+  $ciudad = Config::get('institutions.'.INSTITUTION_KEY.'.ciudad');
+  $razon_social = strtoupper(Config::get('institutions.'.INSTITUTION_KEY.'.razon_social'));
+  $nit = Config::get('institutions.'.INSTITUTION_KEY.'.nit');
+
+  // CONTRATO MATRÍCULA
+  $PContrato = $Plantillas::first("SELECT t.contenido FROM snxt_plantillas AS t WHERE t.nombre=?", ['mat_contrato1']);
+  $contrato = str_replace(
+    [ '$CONTRATO$', '$PRES$', '$BPRIM$', '$BSEC$', '$MEDA$', 
+      '$REPRESENTANTE$', '$ACUDIENTES$', '$NOMBRE_ESTUDIANTE$', '$ANNIO_LECTIVO$',
+      '$COSTO_ANUAL_PALABRA$', '$COSTO_ANUAL_NUMEROS$', '$VALOR_MATRICULA$', '$VALOR_CUOTAS$', 
+      '$DIA_EXIGIBLE$', '$DIA_INI_VIGENCIA$', '$DIA_FIN_VIGENCIA$', 
+      '$DIA_FIRMA$', '$MES_FIRMA$', '$ANNIO_FIRMA$', 
+    ],
+    [ $data->numero_mat, '['.$arrData['Grado']->getIsPrescolar().']', '['.$arrData['Grado']->getIsPrimaria().']', '['.$arrData['Grado']->getIsBasicaSecundaria().']', '['.$arrData['Grado']->getIsMediaAcademica().']', 
+    $representante, strtoupper($arrData['DatosEstud']->getResponsableDIAN()), strtoupper($data->getNombreCompleto()), $annio_mat,
+    strtoupper($arrData['Grado']->getCostoAnualMatriculaPalabras()), $arrData['Grado']->getCostoAnualMatriculaF(), $arrData['Grado']->getValorMatriculaF(), $arrData['Grado']->getValorPensionF(), 
+    '5', '5', '30', 
+    $_now->format('d'), MES::tryFrom($_now->format('m'))->label(), $_now->format('Y'), ], 
+    $PContrato->contenido
+  );
+  $archivoPDF->WriteHTML($contrato);
+  
+  // LIBRO DE MATRÍCULA
+  $archivoPDF->AddPage();
+  $PLibroMat = $Plantillas::first("SELECT t.contenido FROM snxt_plantillas AS t WHERE t.nombre=?", ['mat_libro_matricula']);
+  $si = $arrData['DatosEstud']->ante_instit ? 'X' : '';
+  $no = !$arrData['DatosEstud']->ante_instit ? '' : 'X';
+
+  // $acudi = ucwords(strtolower(trim($arrData['DatosEstud']->getAcudiente())));
+  // $acudiente_nombre = $arrData['DatosEstud']->$acudi;
+  // $acudiente_nombre = $arrData['DatosEstud']->"$acudi_tel";
+  // $acudiente_nombre = $arrData['DatosEstud']->$acudi;
+  
+
+  $libro_mat = str_replace(
+    [ 
+      '$CIUDAD_FECHA$', '$NOMBRE_ESTUDIANTE$', '$CODIGO_ESTUD$', 
+      '$PAIS_NAC$', '$DEPTO_NAC$', '$CIUDAD_NAC$', 
+      '$ANNIO_NAC$', '$MES_NAC$', '$DIA_NAC$', '$EDAD$', 
+      '$IDENTIFICACION$', '$RELIGION$', '$DIRECCION$', '$TELEFONO$', 
+      '$GRADO_MAT$', '$SI$', '$NO$', '$PLANTEL$', '$GRADO_PLANTEL$', '$DIR_PLANTEL$', 
+      '$TEL_PLANTEL$', '$FECHA_RET_PLANTEL$', 
+      
+      '$PADRE$', '$ID_PADRE$', '$OCUPA_PADRE$', '$TRAB_PADRE$', '$TSERV_PADRE$', '$TEL_OF_PADRE$', '$CEL_PADRE$', '$EMAIL_PADRE$',
+      '$MADRE$', '$ID_MADRE$', '$OCUPA_MADRE$', '$TRAB_MADRE$', '$TSERV_MADRE$', '$TEL_OF_MADRE$', '$CEL_MADRE$', '$EMAIL_MADRE$',
+      '$ACUDIENTE$', '$TEL_ACUDIENTE1$', '$TEL_ACUDIENTE2$', '$DIR_ACUDIENTE$', '$EMAIL_ACUDIENTE$', 
+    ],
+    [ 
+      "$ciudad, $fecha", strtoupper($data->getNombreCompleto()), "WS-$data->id", 
+      $arrData['DatosEstud']->pais_nac, $arrData['DatosEstud']->depto_nac, $arrData['DatosEstud']->ciudad_nac, 
+      $data->getAnnioNac(), $data->getMesNac(), $data->getDiaNac(), $data->getEdad(), 
+      $data->documento, $arrData['DatosEstud']->religion, $data->direccion, $data->telefono1, 
+      $arrData['Grado']->nombre, $si, $no, $arrData['DatosEstud']->ante_instit, $arrData['DatosEstud']->ante_grado, 
+      $arrData['DatosEstud']->ante_instit_dir, $arrData['DatosEstud']->ante_instit_tel, $arrData['DatosEstud']->ante_fecha_ret, 
+
+      $arrData['DatosEstud']->padre, $arrData['DatosEstud']->padre_id, $arrData['DatosEstud']->padre_ocupa,
+      $arrData['DatosEstud']->padre_lugar_tra, $arrData['DatosEstud']->padre_tiempo_ser, $arrData['DatosEstud']->padre_tel_1, 
+      $arrData['DatosEstud']->padre_tel_2, $arrData['DatosEstud']->padre_email, 
+
+      $arrData['DatosEstud']->madre, $arrData['DatosEstud']->madre_id, $arrData['DatosEstud']->madre_ocupa,
+      $arrData['DatosEstud']->madre_lugar_tra, $arrData['DatosEstud']->madre_tiempo_ser, $arrData['DatosEstud']->madre_tel_1, 
+      $arrData['DatosEstud']->madre_tel_2, $arrData['DatosEstud']->madre_email, 
+
+      strtoupper($arrData['DatosEstud']->getAcudiente()), '', '', '', '',
+    ], 
+    $PLibroMat->contenido
+  );
+  $archivoPDF->WriteHTML($libro_mat);
+
+  $archivoPDF->showWatermarkText = false;
+  $archivoPDF->Output("$file_name.pdf", 'I');
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

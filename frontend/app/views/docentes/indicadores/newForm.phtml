@@ -1,0 +1,20 @@
+<h2>Agregando Nuevo Registro</h2>
+<?php
+  $model = new Indicador();
+  $fieldsToHidden = $model::getFieldsHidden('create');
+  $titulo = '<h3 id="titulo_indicador_new">NUEVO Indicador</h3>';
+  
+  $myForm = new OdaForm($model, 'admin/indicadores/create_ajax');
+  $myForm->setAtrib('id="frm_new" name="frm_new"');
+    
+  $myForm->addSelect(field:'valorativo', data: OdaUtils::VALORATIVOS);
+  $myForm->addInput(field:'codigo', tipo:'number');
+  $myForm->addTextarea(field:'concepto');
+
+  $myForm->addHiddens(implode(",", $fieldsToHidden));
+  return "<div class=\"w3-container\">$titulo $myForm</div>";
+
+// PENDIENTE PROGRAMAR ::
+// Validar que los códigos ingresados (no repetir)
+// Sincronizar Código con Valorativo.
+?>

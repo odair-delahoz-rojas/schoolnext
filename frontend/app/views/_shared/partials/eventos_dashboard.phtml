@@ -1,0 +1,29 @@
+<div class="w3-row">
+<?php
+  $tabla = new OdaTable();
+  $tabla->setCaption(caption:'Calendario de Eventos');
+  
+  $hoy = new DateTime();
+  foreach ($data as $key => $value) {
+    $desde = DateTime::createFromFormat('Y-m-d', $value->fecha_desde);
+    $hasta = DateTime::createFromFormat('Y-m-d', $value->fecha_hasta);
+    $is_pasado = ($hoy > $hasta);
+    $is_vigente = (($hoy >= $desde) and ($hoy <= $hasta));
+
+
+    $pasado  = ($is_pasado) ? 'Pasado' : '';
+    $vigente = ($is_vigente) ? '<b class="w3-yellow">HOY</b>' : '';
+
+    $diferencia = $hoy->diff($hasta);
+    $numDias = ($is_vigente and ($diferencia->days > 0)) ? '<b class="w3-yellow">Falta(n) '.($diferencia->days).' dia(s) mas</b>' : '' ;
+
+    $col_estado_evento = $pasado.$vigente;
+    $col_fecha_evento = ($desde == $hasta) ? $desde->format('M-d') : $desde->format('M-d').'<br> '.$hasta->format('M-d') ;
+    $col_evento = $value->nombre.'<br>'.$numDias;
+
+    $tabla->addRow(data:[$col_estado_evento, $col_fecha_evento, $col_evento], attrs_td:['class="w3-center"', 'class="w3-center"']);
+  } 
+  echo $tabla;
+
+?>
+</div>

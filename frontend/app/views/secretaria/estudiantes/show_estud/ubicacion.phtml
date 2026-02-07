@@ -1,0 +1,29 @@
+<?php
+try {
+  $myTabla = new OdaTable();
+  
+  $myTabla->addRow([
+    $frmEstud->getDataLabel('direccion'), 
+    $frmEstud->getDataLabel('barrio'), 
+  ]);
+  
+  $myTabla->addRow([
+    $frmEstud->getDataLabel('telefono1'), 
+    $frmEstud->getDataLabel('email'),
+  ]);
+
+  $myTabla->addRow([
+    $frmEstud->getDataLabel('email_instit'),
+    $frmEstud->getDataLabel('clave_instit'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('religion'),
+    $frmDataEstud->getDataLabel('observacion'),
+  ]);
+
+  $myTabs->addTab('ubica', 'Ubicación', $myTabla);
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

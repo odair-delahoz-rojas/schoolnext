@@ -1,0 +1,11 @@
+<footer class="app-footer">
+  <div class="text-center small">
+    <strong>Copyright &copy; <?= date('Y') ?> <a href="<?= htmlspecialchars($copyright_link) ?>" target="_blank"><?=htmlspecialchars($copyright_link_text) ?></a>.</strong> 
+    <br>
+    All rights reserved.
+    <br>
+    Time Zone: <?= date_default_timezone_get()?>
+    <br>
+    <?= round((microtime(1) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000, 0)?> ms / <?= number_format(memory_get_usage() / 1048576, 2)?> MB
+  </div>
+</footer>

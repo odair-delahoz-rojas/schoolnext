@@ -1,0 +1,41 @@
+<?php 
+try {  
+  $tabla = new OdaTable('id="myTable-p" class="w3-table w3-responsive w3-striped w3-bordered"');
+  $tabla->setCaption('Datos Básicos del Padre');
+
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('padre'), 
+      $FormAspir->getDataLabel('padre_id'), 
+      ],
+  );
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('padre_prof'), 
+      $FormAspir->getDataLabel('padre_edad'), 
+      ],
+  );
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('padre_empresa'), 
+      $FormAspir->getDataLabel('padre_cargo'), 
+      ],
+  );
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('padre_tel_ofi'), 
+      $FormAspir->getDataLabel('padre_tel_per'), 
+      ],
+  );
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('padre_email'), 
+      '', 
+    ],
+  );
+
+  return $tabla;
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

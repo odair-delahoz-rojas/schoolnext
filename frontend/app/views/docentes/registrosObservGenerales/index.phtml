@@ -1,0 +1,45 @@
+<?= require 'indexHeader.phtml' ?>
+
+<div class="w3-container w3-row">
+  <div id="list_estudiantes" style="display: none"> <?= require('listEstudiantes.phtml') ?></div>
+  <div id="form_new" style="display: none"> <?= require 'newForm.phtml' ?> </div>
+  <div id="form_edit" style="display: none"> <?= require 'editForm.phtml' ?> </div>
+  
+  <div id="list_index">
+    <button 
+      id="id_btn_new" 
+      class="w3-btn w3-blue" 
+      onclick="show_lista_estudiantes()"> 
+      <?= _Icons::solid('plus') ?> Nuevo Registro
+    </button>
+
+    <?php
+    try 
+    {
+      if (!$data) {
+        require 'indexFooter.phtml';
+        return 1;
+      }
+      OdaForm::inputSearch(placeholder:"Filtra por estudiante o asunto");
+      $tabla = new OdaTable(showTotalRegs: true);
+      $tabla->setHead("Registro, *Estudiante, *Asunto, Docente");
+      foreach($data as $key => $reg) {
+        $estudiante = ucwords(OdaUtils::sanearString($reg->estudiante_nombre))." $reg->salon_nombre [$reg->salon_id]";
+        $btn_edit = $reg->lnkEditRegistro($estudiante);
+        $data_row = array(
+          $reg.$btn_edit,
+          $estudiante,
+          OdaUtils::TIPO_REG_OBSERV[$reg->tipo_reg].'<br>' .$reg->asunto,
+          $reg->director.'<br>'.$reg->getFotoDirector(),
+        );
+        $tabla->addRow(data: $data_row, attrs_td:['','class="searchTdata"','class="searchTdata"']);
+      }
+      echo $tabla;      
+    } catch (\Throwable $th) {
+      OdaFlash::error($th);
+    }    
+    require 'indexFooter.phtml';
+    ?>
+
+  </div>
+</div>

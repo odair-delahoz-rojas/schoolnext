@@ -1,0 +1,17 @@
+<?php
+require_once VENDOR_PATH.'autoload.php';
+$mpdf = new \Mpdf\Mpdf();
+$mpdf->WriteHTML('<h1>Hello world!</h1>');
+$mpdf->Output('archivo.pdf', 'I'); // establece el parámetro 'I' para abrir en una nueva ventana
+exit;
+
+/*   $pdf = new OdaPdf('P','mm','A4');
+    $pdf->AliasNbPages();
+    $pdf->AddPage();
+    $pdf->SetFont('Arial','B',20);
+    $pdf->SetXY(0,20);
+    $pdf->Cell(209,18,$data,0,0,'C');
+    $pdf->Output(); 
+*/
+
+?>

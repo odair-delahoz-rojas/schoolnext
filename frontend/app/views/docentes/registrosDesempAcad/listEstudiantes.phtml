@@ -1,0 +1,20 @@
+<div class="w3-panel">
+    <?php
+         if (count($arrData['estudiantes'])==0) {
+           Flash::valid('<h3>Atenci&oacute;n!</h3><p>No hay registros para mostrar.</p>');
+          } else {
+            echo OdaForm::inputSearch(input_search_id:'inputSearch2', table_id:'mytable2', placeholder:"Filtra por estudiante");
+            $tabla = new OdaTable(showTotalRegs: true, _attrs: 'id="myTable2" class="w3-table w3-responsive w3-striped w3-bordered"');
+            $tabla->setHead("*Estudiante");
+            foreach($arrData['estudiantes'] as $key => $estudiante) {
+              $estud = ucwords(OdaUtils::sanearString($estudiante->estudiante_nombre))." $estudiante->salon_nombre [$estudiante->salon_id]";
+              $data_row = array(
+                "<span class=\"w3-btn\" onclick=\"show_new_form('$estud', $estudiante->id, $estudiante->grado_id, $estudiante->salon_id, $user_id)\">
+                [$estudiante->id]  $estudiante->estudiante_nombre [$estudiante->salon_nombre]</span>"
+              );
+              $tabla->addRow(data: $data_row, attrs_td:['class="searchTdata"']);
+            }
+            echo $tabla;
+          }//END-IF
+    ?>
+</div>

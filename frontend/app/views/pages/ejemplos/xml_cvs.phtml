@@ -1,0 +1,17 @@
+<div class="w3-conatiner">
+  <h1>Listado de Alumnos</h1>
+
+  
+<?php
+    $DOM = new DOMDocument('1.0', 'utf-8');
+    $xml_file = FILE_UPLOAD_PATH.'informacion_windsor_2012.xml';
+    $DOM->loadXML(file_get_contents($xml_file));
+    
+    $usuarios = $DOM->getElementsByTagName('desmat');
+    foreach($usuarios as $usuario) {
+      echo '<li><a href="'.$usuario->getElementsByTagName("url")->item(0)->nodeValue.'" target="_blank">'
+          .utf8_decode($usuario->getElementsByTagName("nombre")->item(0)->nodeValue).'</a></li>';
+    }
+?>
+
+</div>

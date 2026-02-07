@@ -1,0 +1,13 @@
+<?php
+  echo View::Encab($controller_name, $page_action, $breadcrumb);
+  echo View::flash();
+
+  $btn_lnk = OdaTags::linkButton(action: "admin/$controller_name", text: 'Volver a la Lista', attrs:'class="w3-button w3-green" id="btn_volver"');
+  //echo (1==Session::get('id')) ? '<br>Show: '.implode(',', $fieldsToShow).'<br>Hiddens: '.implode(',', $fieldsToHidden) : '';
+  ?>
+<div class="w3-container w3-blue">
+  <div class="w3-display-container" style="height:50px;">
+    <div class="w3-display-left"><h2>Creación de Nuevo Registro</h2></div>
+    <div class="w3-display-right"><?=$btn_lnk?></div>
+  </div>
+</div>

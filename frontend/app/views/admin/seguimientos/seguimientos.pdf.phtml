@@ -1,0 +1,121 @@
+<?php
+try {
+  $annio = $_annio_actual;
+  $seccion = $arrData['Grado']->seccion_id;
+  
+  $archivoPDF = new OdaMpdf([
+    'tempDir' => APP_PATH . 'temp/mpdf',
+    'format' => 'Legal',
+    'progressBar' => true,
+    'title2annots' => true,  // convert headers in annotations
+    'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages 
+    'exposeVersion' => false, // security 
+    'margin_left' => 20,
+    'margin_right' => 15,
+    'margin_top' => 48,
+    'margin_bottom' => 25, // no tocar
+    'margin_header' => 15, // no tocar
+    'margin_footer' => 15 // no tocar
+    // 'orientation' => 'L', // P(portrait), L(landscape) 
+    // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+  ]);
+
+ /* 
+  'id', 'uuid', 'annio', 'periodo_id', 'grado_id', 'salon_id', 'asignatura_id', 'estudiante_id', 
+  'definitiva', 'plan_apoyo', 'nota_final', 'profesor_id', 
+  
+  /// INDICADORES DE SEGUIMIENTOS
+  'i21', 'i22', 'i23', 'i24', 'i25', 'i26', 'i27', 'i28', 'i29', 'i30',
+
+  'asi_desempeno', 'asi_activ_profe', 'asi_activ_estud', 'asi_fecha_entrega', 'is_asi_validar_ok', 
+  'asi_calificacion', 'is_asi_ok_dirgrupo', 'is_asi_ok_coord', 'asi_link_externo1', 'asi_link_externo2', 
+  
+  'created_at', 'updated_at', 'created_by', 'updated_by'
+*/
+
+  $archivoPDF->SetSubject($file_tipo);
+  $archivoPDF->SetTitle($file_title);
+
+  // ENCADEZADO
+  // --------------------------------
+  $attrs_td  = ['width="15%"', 'width="30%"', 'width="45%"', 'width="10%"'];
+  $tabla = new OdaTable('style="width:100%"');
+  $tabla->setCaption("ACCIONES DE SEGUIMIENTO INTERMEDIO PERIODO {$arrData['Periodo']}");
+  $fila = [
+    '<b>Salon: </b>'. $arrData['Salon']->nombre,
+    '<b>Asignatura: </b>'. $arrData['Asign']->nombre,
+    '<b>Desempeno: </b>'. $data->asi_desempeno,
+    '<b>Periodo: </b>'. $arrData['Periodo'],
+  ];
+  $tabla->addRow(data: $fila, attrs: ['bgcolor="#B2BABB";'], attrs_td: $attrs_td);
+  // --------------------------------
+  // --------------------------------
+  //$attrs_td  = ['colspan="2"; width="50%";','width="15%"','width="15%"', 'width="20%"'];
+  $attrs_td  = ['colspan="2";', 'width="15%"', 'width="20%"'];
+  $fila = [
+    '<b>'.$arrData['Estud'].'</b>',
+    '' ,
+    '' ,
+    '',
+  ];
+  $tabla->addRow(data: $fila, attrs: ['bgcolor="#B2BABB";'], attrs_td: $attrs_td);
+  // --------------------------------
+  
+  
+  // CUERPO DEL REPORTE 
+
+  // Dificultades
+  $titulo = '<hr><h4>DIFICULTADES</h4>';
+  $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+  $dificultades = '';
+  for ($i=21; $i<=30; $i++) {
+    $indi = "i{$i}";
+    $codigo = $data->{$indi};
+    if (strlen($codigo)>0) {
+      $concepto = $arrData ['Indicadores'] [$data->asignatura_id] [$codigo] ['concepto'] ?? "$codigo -not found-";      
+      if (strlen($concepto)>0) {
+        $dificultades .= "* $concepto<br>";
+      }
+    }
+  }
+  $fila = [$dificultades];
+  $tabla->addRow(data: $fila, attrs_td: ['colspan="4"']);
+  
+  // paf_acciones
+  if (strlen($data->paf_acciones)>0) {
+    $titulo = '<hr><h4>Acciones Realizadas</h4>';
+    $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->paf_acciones], attrs_td: ['colspan="4"']);
+  }
+
+  // asi_activ_profe
+  if (strlen($data->asi_activ_profe)>0) {
+    $titulo = '<hr><h4>Actividades realizadas por el profesor</h4>';
+    $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->asi_activ_profe], attrs_td: ['colspan="4"']);
+  }
+
+  // asi_activ_estud
+  if (strlen($data->asi_activ_estud)>0) {
+    $titulo = '<hr><h4>Actividades para el Estudiante</h4>';
+    $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->asi_activ_estud], attrs_td: ['colspan="4"']);
+  }
+
+  // paf_link_externo1
+  if (strlen($data->asi_link_externo1)>0 or strlen($data->asi_link_externo2)>0 ) {
+    $titulo = '<hr><h4>Links a recursos externos</h4>';
+    $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->asi_link_externo1], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->asi_link_externo2], attrs_td: ['colspan="4"']);
+  }
+  
+  $dt = DateTime::createFromFormat('Y-m-d', $data->asi_fecha_entrega, new DateTimeZone("America/Bogota"));
+  $tabla->addRow(data: ['<hr><b>Fecha de entrega:</b> '.$dt->format("l, j F [Y]")], attrs_td: ['colspan="4"']);
+  
+  $archivoPDF->WriteHTML($tabla);
+  $archivoPDF->Output("{$file_name}.pdf", 'I');
+
+} catch (\Throwable $th) {
+  OdaLog::error($th);
+}

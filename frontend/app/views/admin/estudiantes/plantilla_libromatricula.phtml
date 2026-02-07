@@ -1,0 +1,174 @@
+<?php
+
+echo 
+'
+
+<div style="text-align: center;">
+  <strong>REPÚBLICA DE COLOMBIA</strong> <br/>
+  <strong>DEPARTAMENTO DEL CESAR</strong> <br/>
+  <strong>LIBRO DE MATRÍCULA</strong> <br/>
+</div>
+
+<p> $CIUDAD_FECHA$ </p>
+
+<table border="0" cellpadding="2" cellspacing="1" style="text-align: left; width: 100%;">
+  <caption style="text-align: center; background-color:Silver;">
+    1. Datos del Alumno (a)
+  </caption>
+  <tbody>
+    <tr>
+      <td>Nombre completo:</td> <td colspan="2">$NOMBRE_ESTUDIANTE$</td> <td>$GRADO_MAT$</td>
+    </tr>
+    <tr> 
+      <td>Lugar de Nacimiento:</td> <td>País: $PAIS_NAC$</td>  <td>Dpto: $DEPTO_NAC$</td> <td>Ciudad: $CIUDAD_NAC$</td>
+    </tr>
+    <tr>
+      <td>Fecha de Nacimiento:</td> <td colspan="2">Año: $ANNIO_NAC$ Mes: $MES_NAC$ Día: $DIA_NAC$</td> <td>Edad: $EDAD$</td>
+    </tr>
+    <tr>
+      <td>Identifiacaión No.:</td> <td>$IDENTIFICACION$</td> <td></td>  <td>Religión: $RELIGION$</td>
+    </tr>
+    <tr>
+      <td>Dirección:</td> <td colspan="2"> $DIRECCION$</td>  <td>Teléfono: $TELEFONO$</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table border="0" cellpadding="2" cellspacing="1" style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td colspan="2">¿Ha Estudiado en otra Institución?: </td> <td>Si: $SI$ No: $NO$</td> <td> </td>
+    </tr>
+    <tr>
+      <td>Nombre Del Plantel:</td> <td colspan="2">$PLANTEL$</td> <td>Grado: $GRADO_PLANTEL$</td>
+    </tr>
+    <tr>
+      <td colspan="1">Dirección:</td> <td colspan="2">$DIR_PLANTEL$</td> <td>Teléfono: $TEL_PLANTEL$</td>
+    </tr>
+    <tr>
+      <td>Fecha De Retiro:</td> <td>$FECHA_RET_PLANTEL$</td> <td> </td> <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table border="0" cellpadding="2" cellspacing="1" style="text-align: left; width: 100%;">
+  <caption style="text-align: center; background-color:Silver;">
+    2. Datos de Los Padres
+  </caption>
+  <tbody>
+    <tr>
+      <td>Nombre del Padre:</td> <td>$PADRE$</td> <td style="text-align: right;">Cédula:</td> <td>$ID_PADRE$</td>
+    </tr>
+    <tr>
+      <td>Ocupación:</td> <td>$OCUPA_PADRE$</td> <td style="text-align: right;">Lugar de trabajo:</td> <td>$TRAB_PADRE$</td>
+    </tr>
+    <tr>
+      <td>Tiempo de servicio:</td> <td>$TSERV_PADRE$</td> <td style="text-align: right;">Teléfono Oficina:</td> <td>$TEL_OF_PADRE$</td>
+    </tr>
+    <tr>
+      <td>Celular:</td>  <td>$CEL_PADRE$</td> <td style="text-align: right;">E-Mail:</td>  <td>$EMAIL_PADRE$</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table border="0" cellpadding="2" cellspacing="1" style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td>Nombre de la Madre:</td> <td>$MADRE$</td>  <td style="text-align: right;">Cédula:</td>  <td>$ID_MADRE$</td>
+    </tr>
+    <tr>
+      <td>Ocupación:</td> <td>$OCUPA_MADRE$</td> <td style="text-align: right;">Lugar de trabajo:</td> <td>$TRAB_MADRE$</td>
+    </tr>
+    <tr>
+      <td>Tiempo de servicio:</td> <td>$TSERV_MADRE$</td> <td style="text-align: right;">Teléfono Oficina:</td> <td>$TEL_OF_MADRE$</td>
+    </tr>
+    <tr>
+      <td>Celular:</td> <td>$CEL_MADRE$</td> <td style="text-align: right;">E-Mail:</td> <td>$EMAIL_MADRE$</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table border="0" cellpadding="2" cellspacing="1" style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td>Nombre del Acudiente:</td> <td colspan="2">$ACUDIENTE$</td> <td> </td>
+    </tr>
+    <tr>
+      <td>Teléfono Oficina:</td> <td>$TEL_ACUDIENTE1$</td> <td style="text-align: right;">Celular:</td> <td>$TEL_ACUDIENTE2$</td>
+    </tr>
+    <tr>
+      <td>Dirección:</td> <td>$DIR_ACUDIENTE$</td> <td style="text-align: right;">E-Mail:</td> <td>$EMAIL_ACUDIENTE$</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<div style="text-align: left;">
+  Aceptamos las normas reglamentarias establecidas por el plantel.  <br/><br/>
+</div>
+
+<table border="0" cellpadding="2" cellspacing="1" style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td><br/> ______________________________
+          <br/> Firma del Padre y/o Acudiente 
+          <br/> C.C. No.</td>
+      <td>
+         <br/> ______________________________
+         <br/> Firma del Estudiante 
+         <br/> T.I. No.</td>
+    </tr>
+    <tr>
+      <td>
+         <br/>
+         <br/> ______________________________
+         <br/> Fima de la Rectora <br/> C.C. No. 57.401.865</td>
+      <td>
+         <br/>
+         <br/> ______________________________
+         <br/> Firma de la Secretaria 
+         <br/> C.C. No.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="text-align: center;">
+   <hr/>
+  <span style="font-weight: bold;">Cancelación de Matrícula</span>
+</div>
+<br/>
+
+<table border="0" cellpadding="2" cellspacing="1" style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td>Fecha: _________________________</td>
+      <td>Motivo: ___________________________________________</td>
+    </tr>
+  </tbody>
+</table>
+
+<br/>
+
+<table border="0" cellpadding="2" cellspacing="1" style="text-align: left; width: 100%;">
+  <tbody>
+    <tr>
+      <td>
+         <br/>
+         <br/> ______________________________
+         <br/> Fima de la Rectora 
+         <br/> C.C. No. 57.401.865</td>
+      <td>
+         <br/>
+         <br/> ______________________________
+         <br/> Fima del Padre de Familia o Acudiente 
+         <br/> C.C. No.</td>
+    </tr>
+  </tbody>
+</table>
+
+';

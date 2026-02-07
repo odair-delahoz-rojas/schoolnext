@@ -1,0 +1,78 @@
+<?php
+$header_types = array(
+  'c1-text'=>'string', //text
+  'c2-text'=>'string', //text
+  'c3-text'=>'string',
+  /* 
+  'c4-integer'=>'0',
+  'c5-price'=>'price',
+  'c6-price'=>'#,##0.00', //custom
+  'c7-date'=>'date',
+  'c8-date'=>'YYYY-MM-DD',
+  */
+);
+
+foreach ($arrData['Estudiantes'] as $key => $reg_estudiante) {
+  $data[] = 
+  [
+    1, // Tipo ident [1: Cédula de Ciudadanía]
+    $reg_estudiante->documento, // Nº identificación
+    $reg_estudiante->getNombreCompleto(), // Nombre tercero
+    
+    /*
+    $reg_estudiante, // Fecha límite de pago [AAAAMMDD]
+    $reg_estudiante, // Numero obligación [NUM CONTRATO ??]
+    1, // Código sucursal
+    'P', // Calidad [A:Avalista, C:Codeudor, P:Principal, S:Deudor Solidario, T:Coarrendatario]
+    1, // Estado de obligación [1:Vigente, 2:Saldada, 3:Dudoso Recaudo, 4:Suspendida por la entidad, 6:Castigada, 8:Inactivo, 10:Ley 550, 11:Ley 116]
+    -1, // Edad de mora [0:0-29, 1:30-59, 2:60-89, 3:90-119, 4:120-149, 5:150-179, 6:180-209, 7:210-239, 8:240-269, 9:270-299, 10:300-239]
+    $reg_estudiante, // Fecha de corte [AAAAMMDD]
+    $reg_estudiante, // Fecha inicio [AAAAMMDD]
+    $reg_estudiante, // Fecha de exigibilidad
+    $reg_estudiante, // Fecha de prescripción
+    $reg_estudiante, // Fecha de pago [AAAAMMDD]
+    $reg_estudiante, // Modo extinción [1:Voluntario, 2: Proceso ejecutivo, 3:Mandatoria de Pago, 4:Proceso ejecutivo con excepción, 5: Prescripción, 7: Dación de Pago, 11: Novacion, 12: Transacción]
+    $reg_estudiante, // Tipo de pago [1:Voluntario, 2:No Voluntario]
+    $reg_estudiante, // Periodicidad
+    $reg_estudiante, // Número de cuotas pagadas
+    $reg_estudiante, // Número de cuotas pactadas
+    $reg_estudiante, // Cuotas en mora
+    $reg_estudiante, // Valor inicial
+    $reg_estudiante, // Valor de mora
+    $reg_estudiante, // Valor del saldo
+    $reg_estudiante, // Valor de la cuota
+    $reg_estudiante, // Tipo de contrato
+    $reg_estudiante, // Estado de contrato
+    $reg_estudiante, // Termino O Vigencia Del Contrato
+    $reg_estudiante, // Obligación Refinanciada
+    $reg_estudiante, // Naturaleza de la Refinanciación
+    $reg_estudiante, // Numero de Refinanciaciones
+    $reg_estudiante, // Categoría Servicios
+    $reg_estudiante, // Dirección casa del tercero
+    $reg_estudiante, // Correo Electronico
+    $reg_estudiante, // Numero Celular
+    $reg_estudiante, // Valor Real Pagado
+    */
+  ];
+}
+
+print_r($data);
+
+$writer = new XLSXWriter();
+$writer->writeSheetHeader
+(
+  sheet_name: 'Sheet1', 
+  header_types: $header_types
+); 
+foreach($data as $row)
+{
+  $writer->writeSheetRow
+  (
+    sheet_name: 'Sheet1', 
+    row: $row
+  );
+}
+
+/* 
+$writer->writeToFile(filename: 'excel_riesgo.xlsx');
+*/

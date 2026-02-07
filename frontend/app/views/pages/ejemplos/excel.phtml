@@ -1,0 +1,16 @@
+<div class="w3-container">
+  <?= View::flash(); ?>
+  <?= View::Encab($controller_name, $page_action); ?>
+</div>
+  
+<div class="w3-container">
+  
+  <?php
+    //https://xlswriter-docs.viest.me/
+    $excel = new OdaExcel();
+    $excel->ejemplo1();
+    $excel->ejemplo2();
+    $excel->ejemplo3();
+  ?>
+
+</div>

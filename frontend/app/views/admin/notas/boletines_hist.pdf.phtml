@@ -1,0 +1,112 @@
+<?php
+try {
+$archivoPDF = new MpdfBoletines([
+  'tempDir' => APP_PATH . 'temp/mpdf',
+  'format' => 'Legal',
+  'progressBar' => true,
+  'title2annots' => true,  // convert headers in annotations
+  'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages 
+  'exposeVersion' => false, // security 
+   
+  'margin_left' => 20,
+  'margin_right' => 15,
+  'margin_top' => 48,
+  'margin_bottom' => 25, // no tocar
+  'margin_header' => 15, // no tocar
+  'margin_footer' => 15 // no tocar
+  // 'orientation' => 'L', // P(portrait), L(landscape) 
+  // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+]);
+  
+$seccion = $arrData['Grado']->seccion_id;
+$pivote_estudiante = 0;
+$pivote_materia = 0;
+$tabla_rango = (1==$seccion) ? '' : (new RangoD())->showTablaRangos();
+  
+$DoliK = new DoliConst();
+$_show_nota_boletin = $DoliK->getValue('SCHOOLNEXTCORE_SHOW_NOTA_BOLETIN') ?? false;
+
+$t_materia = new OdaTable();
+foreach ($data as $key => $nota)
+{
+  if ($pivote_estudiante <> $nota->estudiante_id) // CAMBIO DE ESTUDIANTE
+  { 
+    if ($key>0) // antes de añadoir la pagina nueva del siguiete estudiante
+    {    
+      $Params_pie = [ 
+        $tabla_rango,
+        '', //$arrData['Salon']->getImgFirmaDirector(),
+        '', //($arrData['Docentes'][$arrData['Salon']->director_id] ?? ''),
+      ];
+      $archivoPDF->WriteHTML($archivoPDF->pieBloqueBoletines($Params_pie));
+    }      
+    $archivoPDF->AddPage();
+    $Params_encab = [
+      $nota->estudiante_nombre,
+      $arrData['Periodo'],
+      $arrData['Annio'],
+      $arrData['Salon']->nombre,
+    ];
+    $archivoPDF->WriteHTML($archivoPDF->encabezadoBloqueBoletines($Params_encab));
+  }//end-pivote estudiante (nuevo boletín)
+  
+  // CAMBIO DE MATERIA
+  if ($pivote_materia <> $nota->asignatura_id)
+  {
+    $Asignat = (new Asignatura())->get($nota->asignatura_id);
+    $titulo_asignatura = '<b>'.strtoupper(OdaUtils::sanearString($Asignat->nombre)).'</b>';
+    
+    if (TBoletin::Preboletin->label()==$file_tipo) 
+    {
+      $docente = "[$nota->profesor_id] ".($arrData['Docentes'][$nota->profesor_id] ?? '--');
+      $titulo_asignatura = "<span color=\"red\">[$nota->asignatura_id] <b>". strtoupper(OdaUtils::sanearString($Asignat->nombre))."</b> $docente </span>";
+    }
+  
+    $rango = (new RangoD())->getRangoNota($nota->definitiva);
+    $nota_estud = $_show_nota_boletin ? $nota->definitiva : '' ;
+    $titulo_calificacion = (1==$seccion) ? '' : '<b>'.((1==$Asignat->calc_prom) ? "[{$rango}]" : '').' '.$nota_estud.'</b>';
+      
+    $t_materia = new OdaTable('style="width:100%;"');
+    $t_materia->addRow([$titulo_asignatura, $titulo_calificacion], attrs: ['style="width:50%;"'], attrs_td: ['style="text-align:left;"', 'style="text-align:right;"']);
+  }
+  
+  for ($i=1; $i<=20; $i++)
+  { 
+    $codigo = ($i<=9) ? $nota->{'i0'."$i"} : $nota->{'i'."$i"};
+    if (strlen($codigo??'')>0)
+    {
+      $valorativo_concepto = $arrData ['Indicadores'] [$nota->asignatura_id] [$codigo] ['concepto'] ?? '';
+      if (strlen($valorativo_concepto)>0) 
+      {
+        $concepto = substr($arrData ['Indicadores'] [$nota->asignatura_id] [$codigo] ['concepto'], offset: 2) ?? '';
+        $descripcion = (TBoletin::Boletin->label() == $file_tipo) ? "$concepto" : "<span style=\"color:red;\">[$codigo]</span> $concepto" ;
+        $t_materia->addRow(["* $descripcion"], attrs_td: ['colspan="2"']);
+      }
+      else 
+      {
+        // Indicador no encontrado.
+      }
+    }
+  }
+    
+  $archivoPDF->WriteHTML($t_materia.'<hr>');
+  $pivote_estudiante = $nota->estudiante_id;
+  $pivote_materia = $nota->asignatura_id;    
+}
+  
+$Params_pie = [ 
+  $tabla_rango,
+  '', //$arrData['Salon']->getImgFirmaDirector(),
+  '', //($arrData['Docentes'][$arrData['Salon']->director_id] ?? ''),
+];
+$archivoPDF->WriteHTML($archivoPDF->pieBloqueBoletines($Params_pie));
+
+$archivoPDF->showWatermarkText = false;
+$archivoPDF->Output("$file_name.pdf", 'D');
+}
+
+catch (\Throwable $th) 
+{
+  OdaLog::error($th);
+  echo $th;
+}

@@ -1,0 +1,49 @@
+<div class="w3-panel">
+  <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+  <?= View::flash(); ?>
+  <?= View::partial(partial: 'eventos_dashboard', params: ['data'=>$data]); ?>
+  <hr>
+  
+  <div class="w3-row">
+    <?php
+      /*
+      */
+      $lnks = ['empleados', 'estudiantes', 'salones' , 'notas', 'indicadores', 'usuarios'];
+      $text = '';
+      foreach ($lnks as $key => $item) {
+        $text .= '<div class="w3-quarter w3-padding w3-center">';
+          $text .= '<div class="w3-card w3-container w3-round-large w3-theme-l3 w3-hover-theme">';
+            $header = "<h4 class=\"w3-left\">{$item} #</h4>";
+            $text .= OdaTags::tag('header', $header, 'class="w3-container"');
+
+            $text .= OdaTags::tag('p', _Icons::getAleatorio('w3-xxxlarge'), 'class="w3-left"');
+            $text .= OdaTags::tag('h3', random_int(1,99), 'class="w3-right w3-xxxlarge"');
+
+            $lnk = OdaTags::link("admin/{$item}", 'Gestionar +');
+            $footer = "<h5 class=\"w3-btn\">$lnk</h5>";
+            $text .= OdaTags::tag('footer', $footer, 'class="w3-container"');
+
+          $text .= '</div>';
+        $text .= '</div>';
+      }
+      $text .= '</div>';
+      echo $text;
+    ?>
+  </div>
+
+  <hr>
+  <?=OdaTags::linkExterno('https://adminlte.io/docs/3.2/', 'AdminLTE Doc 3.2', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://github.com/KumbiaPHP/Documentation/tree/master/es', 'Kumbia PHP Doc', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://sandbox.kumbiaphp.com/', 'Kumbia PHP SANDBOX', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://developer.mozilla.org/es/docs/Web/HTML', 'MDN Html', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://developer.mozilla.org/eS/docs/Web/JavaScript', 'MDN Javascript', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://www.w3schools.com/w3css/default.asp', 'w3-CSS', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://www.w3schools.com/w3js/default.asp', 'w3-JS', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://www.w3schools.com/js/default.asp', 'w3-Javascript', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://www.w3schools.com/howto/default.asp', 'w3 HowTO ?', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://respect-validation.readthedocs.io/en/latest/', 'Respcet Validation', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::linkExterno('https://php.watch/versions/8.0', 'Novedades PHP 8.0', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::link('pages/tools/colores', 'Help Page Colores', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+  <?=OdaTags::link('pages/tools/iconos', 'Help Page Íconos', 'class="w3-button w3-bar-item w3-hover-blue"' );?>
+
+</div>

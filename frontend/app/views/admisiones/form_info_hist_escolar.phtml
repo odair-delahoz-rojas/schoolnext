@@ -1,0 +1,38 @@
+<?php 
+try { 
+
+  $info = "<h2>Paso {$num_paso}: Historia Escolar</h2>
+          <p>Información sobre los últimos Jardines y colegios en los que ha estudiado</p>";
+
+  $tabla = new OdaTable('id="myTable-he1" class="w3-table w3-responsive w3-striped w3-bordered"');
+  $tabla->setCaption('Institución Anterior');
+  $tabla->addRow(data:[$FormAspir->getInput(field: '1_colegio'),
+      $FormAspir->getInput(field: '1_ciudad'),
+      $FormAspir->getInput(field: '1_telefono')]);
+  $tabla->addRow(data:[$FormAspir->getInput(field: '1_grados'),
+      $FormAspir->getInput(field: '1_annios'),
+      $FormAspir->getInput(field: '1_motivo_ret')]);
+  $info .= $tabla.'<hr>';
+
+  return "
+  <div class=\"w3-display-container\">
+    <div class=\"w3-display-container\">
+      <div class=\"w3-display-topleft\"> 
+        <span class=\"w3-button\" onclick=\"openTab(event,'{$prev}')\"><< Anterior</span>
+        <span class=\"w3-button\" onclick=\"openTab(event,'{$next}')\">Siguiente >></span>
+      </div>
+      <br/><br/>
+      
+      {$tabla}
+
+      <br/><br/>
+      <div class=\"w3-display-bottomleft\"> 
+        <span class=\"w3-button\" onclick=\"openTab(event,'{$prev}')\"><< Anterior</span>
+        <span class=\"w3-button\" onclick=\"openTab(event,'{$next}')\">Siguiente >></span>
+      </div>
+    </div>
+  </div>";
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

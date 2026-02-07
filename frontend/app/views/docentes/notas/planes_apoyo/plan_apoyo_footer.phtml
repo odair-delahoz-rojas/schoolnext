@@ -1,0 +1,38 @@
+<footer class="w3-margin-top">
+</footer>
+
+<?= tag::js(src: "tabs_h");?>
+
+<script>
+  // sincronizar inputs (definitiva) con ranges.
+  const ranges = document.querySelectorAll('input[type="range"]');
+  const valores = document.querySelectorAll('input[type="number"][id*="notas_definitiva"]');
+  for (let i = 0; i < ranges.length; i++) {
+    ranges[i].addEventListener('input', (event) => {
+      valores[i].value = event.target.value;
+    });
+  }
+  
+  for (let i = 0; i < valores.length; i++) {
+    valores[i].addEventListener('input', (event) => {
+      ranges[i].value = event.target.value;
+    });
+  }
+  
+  const inputs = document.querySelectorAll('.color-input');
+  inputs.forEach(input => {
+    input.addEventListener('input', () => {
+      const num = parseInt(input.value);
+      if (num >= 100 && num <= 199) {
+        input.style.color = 'green';
+      } else if (num >= 200 && num <= 299) {
+        input.style.color = 'blue';
+      } else if (num >= 300 && num <= 399) {
+        input.style.color = 'red';
+      } else {
+        input.style.color = 'black';
+      }
+    });
+  });
+
+</script>

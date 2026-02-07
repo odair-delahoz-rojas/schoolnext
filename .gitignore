@@ -1,0 +1,12 @@
+*.xlsx
+*.zip
+frontend/public/img/upload/*
+frontend/public/img/download/*
+frontend/public/files/upload/*
+frontend/public/files/download/*
+
+frontend/app/temp/logs/*
+frontend/app/temp/mpdf/*
+frontend/app/temp/cache/*
+
+help/*

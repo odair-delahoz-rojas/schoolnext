@@ -1,0 +1,30 @@
+<?php
+  $myTabla = new OdaTable();
+
+  $myTabla->addRow([
+    $frmEstud->getSelect(field:'mes_pagado', data: Mes::toArray()),
+    $frmEstud->getInput(field:'annio_pagado'),
+  ]);
+
+  $myTabla->addRow([
+    $frmEstud->getSelect(field:'is_debe_preicfes', data: EstadoDebe::toArray(false)),
+    $frmEstud->getSelect(field:'is_debe_almuerzos', data: EstadoDebe::toArray(false)),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getInput(field:'deudor'),
+    $frmDataEstud->getInput(field:'codeudor'),
+    $frmDataEstud->getInput(field:'codeudor_cc'),
+  ]);
+  
+  $myTabla->addRow([
+    $frmDataEstud->getSelect(field:'resp_pago_ante_dian', data: TipoAcudiente::toArray()),
+    '',
+  ]);
+
+  $myTabla->addRow([
+    $frmEstud->getInput(field:'contabilidad_id'),
+    '',
+  ]);
+
+  $myTabs->addTab('conta', 'Contabilidad', $myTabla);

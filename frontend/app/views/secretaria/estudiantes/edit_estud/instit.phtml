@@ -1,0 +1,19 @@
+<?php
+  $myTabla = new OdaTable();
+
+  $myTabla->addRow([
+    $frmDataEstud->getInput('ante_instit'),
+    $frmDataEstud->getInput('ante_instit_dir'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getInput('ante_instit_tel'),
+    '',
+  ]);
+  
+  $myTabla->addRow([
+    $frmDataEstud->getInput('ante_grado'),
+    $frmDataEstud->getInput('ante_fecha_ret'),
+  ]);
+
+  $myTabs->addTab('instit', 'Instit Anterior', $myTabla);

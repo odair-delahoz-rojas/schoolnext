@@ -1,0 +1,16 @@
+<?php 
+try {  
+  $tabla = new OdaTable('id="myTable-ds" class="w3-table w3-responsive w3-striped w3-bordered"');
+  $tabla->setCaption('Desarrollo Psicológico');
+
+  $tabla->addRow( data: [$FormAspirPsico->getDataLabel('lenguaje') ]);
+  $tabla->addRow( data: [$FormAspirPsico->getDataLabel('aprendizaje') ]);
+  $tabla->addRow( data: [$FormAspirPsico->getDataLabel('comporta') ]);
+  $tabla->addRow( data: [$FormAspirPsico->getDataLabel('afecto') ]);
+  $tabla->addRow( data: [$FormAspirPsico->getDataLabel('autocuidado') ]);
+  $tabla->addRow( data: [$FormAspirPsico->getDataLabel('especialista') ]);
+  return $tabla;
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

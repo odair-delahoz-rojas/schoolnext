@@ -1,0 +1,94 @@
+<?php
+
+$annio = $_annio_actual;
+$seccion = $arrData['Grado']->seccion_id;
+
+$archivoPDF = new MpdfPreinformes([
+  'tempDir' => APP_PATH . 'temp/mpdf',
+  'format' => 'Legal',
+  'progressBar' => true,
+  'title2annots' => true,  // convert headers in annotations
+  'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages 
+  'exposeVersion' => false, // security 
+  
+  'margin_left' => 20,
+  'margin_right' => 15,
+  'margin_top' => 40,
+  'margin_bottom' => 25, // no tocar
+  'margin_header' => 15, // no tocar
+  'margin_footer' => 15 // no tocar
+  // 'orientation' => 'L', // P(portrait), L(landscape) 
+  // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+]);
+
+$Asignat = new Asignatura();
+$pivote_estudiante = 0;
+$pivote_materia = 0;
+$img_rango_notas = (1==$seccion) ? '' : (new RangoD())->showTablaRangos();
+
+$DoliK = new DoliConst();
+
+$t_materia = new OdaTable();
+foreach ($data as $key => $nota) {
+
+  // CAMBIO DE ESTUDIANTE
+  if ($pivote_estudiante <> $nota->estudiante_id) 
+  {
+    if ($key>0)  // antes de añadir la pagina nueva del siguiete estudiante
+    {
+      $Params_pie = [ 
+        $img_rango_notas,
+        $arrData['Salon']->getImgFirmaDirector(),
+        ($arrData['Docentes'][$arrData['Salon']->director_id] ?? ''),
+      ];
+      $archivoPDF->WriteHTML($archivoPDF->pieBloqueBoletines($Params_pie));
+    }
+    
+    $archivoPDF->AddPage();
+    
+    $Params_encab = [
+      $nota->estudiante_nombre,
+      $arrData['Periodo'],
+      $annio,
+      $arrData['Salon']->nombre,
+    ];
+    $archivoPDF->WriteHTML($archivoPDF->encabezadoBloqueBoletines($Params_encab));
+  } //end-pivote estudiante (nuevo boletín)
+
+  // CAMBIO DE MATERIA
+  if ($pivote_materia <> $nota->asignatura_id) 
+  {
+    $titulo_asignatura = "<b><h4>$nota->asignatura_nombre</h4></b>";
+
+    $nota_estud = (int)$nota->asi_calificacion;
+    $rango = (new Rango())->getRangoNota($nota_estud);
+    $titulo_calificacion = "<b>[{$rango}] {$nota_estud}</b>" ;
+    
+    $t_materia = new OdaTable('style="width:100%;"');
+    $t_materia->addRow(
+      data: [$titulo_asignatura, $titulo_calificacion], 
+      attrs: ['style="width:50%;"'], 
+      attrs_td: ['style="text-align:left;"', 'style="text-align:right;"']
+    );
+  }
+  
+  $t_materia->addRow(
+    data: [$nota->asi_activ_profe], 
+    attrs_td: ['colspan="2"']
+  );
+
+  $archivoPDF->WriteHTML($t_materia);
+  $pivote_estudiante = $nota->estudiante_id;
+  $pivote_materia = $nota->asignatura_id;
+
+}
+
+$Params_pie = [ 
+  $img_rango_notas,
+  $arrData['Salon']->getImgFirmaDirector(),
+  ($arrData['Docentes'][$arrData['Salon']->director_id] ?? '..'),
+];
+$archivoPDF->WriteHTML($archivoPDF->pieBloqueBoletines($Params_pie));
+
+$archivoPDF->showWatermarkText = false;
+$archivoPDF->Output("$file_name.pdf", 'I');

@@ -1,0 +1,23 @@
+<?php 
+  //$insitu = Session
+?>
+
+<div class="w3-container">
+  <?=View::flash()?>
+  <div class="w3-row w3-theme">
+    <h2 class="w3-margin-left w3-bottombar w3-border-green w3-margin-right">MÓDULO DE ADMISIONES</h2>
+    
+    <span id="public_path"  class="w3-hide"><?=trim(PUBLIC_PATH)?></span>
+    <span id="theme" class="w3-hide"><?=Session::get('theme')?></span>
+    <span id="periodo" class="w3-hide"><?=Session::get('periodo')?></span>
+    </div>
+    <br>
+    
+  <div class="container">
+  <?php
+    require 'index_header.phtml';
+    require 'index_body.phtml';
+    require 'index_footer.phtml'; 
+  ?>
+  </div>
+</div>

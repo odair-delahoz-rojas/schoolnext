@@ -1,0 +1,21 @@
+<?php 
+$head = ['#', 'Salon', 'Estudiante', 'Promedio'];
+
+$tabla = new OdaTable();
+$tabla->setCaption($file_title);
+$tabla->setHead($head);
+
+$brake = '';
+foreach ($data as $key => $item) {
+  //if ($brake<>$item->salon_nombre) { $tabla->addRow($head); }
+  $tabla->addRow([
+    ($key+1),
+    $item->salon_nombre,
+    $item->estudiante_nombre,
+    round($item->prom, 2), 
+  ]);
+  //$brake = $item->salon_nombre;
+}
+
+echo $tabla;
+?>

@@ -1,0 +1,43 @@
+<?php 
+try {
+
+  $header = [
+    'username' => 'string',
+    'password' => 'string',
+    'firstname' => 'string',
+    'lastname' => 'string',
+    'email' => 'string',
+    'cohort1' => 'string',
+  ];
+  
+  $fileds_names = [
+    'username' => 'username',
+    'password' => 'password',
+    'firstname' => 'firstname',
+    'lastname' => 'lastname',
+    'email' => 'email',
+    'cohort1' => 'cohort1',
+  ];
+  
+  $data = [];
+  $data[] = array_keys($header);
+  
+  foreach ($registros as $item) 
+  {
+    $columnas = [];
+    foreach ($header as $title_name => $title_type) 
+    {
+      $campo = $fileds_names[$title_name];
+      $valor = ($item->$campo) ? $item->$campo : $item->$campo;
+      if (isset($item[$campo])) { $valor = $item[$campo]; }
+      if (isset($item->$campo)) { $valor = $item->$campo; }
+      $columnas[] =  ('integer'==$title_type) ? (int)$valor : $valor;
+    }
+    $data[] = $columnas;
+  }
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}
+  
+?>

@@ -1,0 +1,13 @@
+<?php
+$Items = [
+  ['link' => PUBLIC_PATH.'docentes/carga', 'label' => 'Mi Carga'],
+  ['link' => PUBLIC_PATH.'docentes/registros_observaciones', 'label' => 'Reg. Observaciones'],
+];
+
+if ( Session::get('es_director') )
+{
+  $Items[] = ['link' => PUBLIC_PATH.'docentes/registros_desemp_acad', 'label' => 'Reg. Acad&eacute;micos'];
+  $Items[] = ['link' => PUBLIC_PATH.'docentes/direccion_grupo', 'label' => 'Mi Grupo'];
+}
+
+return $Items;

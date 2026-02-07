@@ -1,0 +1,48 @@
+<div class="w3-panel">
+<?php
+
+  try {
+    $Modelo  = new Aspirante();
+    $FormAspir = new OdaForm(modelo: $Modelo, action: 'admin/aspirantes/crear', method: 'post');
+
+    $Modelo  = new AspirantePsico();
+    $FormAspirPsico = new OdaForm(modelo: $Modelo, action: 'admin/aspirantes/crear', method: 'post');
+
+    $arr_show_tabs = ['privacidad', 'doc_adjuntos', 'basicos', 'madre', 'padre', 'hist_pers', 'desa_psico', 'antec_fami', 'academico', 'hist_escolar', 'final' ];
+    if ('formsencillo'==$data['tipo_form_admisiones'])
+    {
+      $arr_show_tabs = ['privacidad', 'basicos', 'madre', 'padre', 'hist_escolar', 'desa_psico',  'final' ];
+    }
+    
+    $tabs = new OdaTabs();
+    $cnt = count($arr_show_tabs);
+    foreach ($arr_show_tabs as $key => $item_tab)
+    {      
+      $prev = '';
+      $next = '';
+      switch ($key+1)
+      {
+        case 1:
+          $next = $arr_show_tabs[$key+1];
+          break;
+        case $cnt:
+            $prev = $arr_show_tabs[$key-1];
+            break;
+        default:
+          $prev = $arr_show_tabs[$key-1];
+          $next = $arr_show_tabs[$key+1];
+          break;
+      }
+      $num_paso = $key+1;
+      $contenido = require('form_info_'.$item_tab.'.phtml');
+      $tabs->addTab($item_tab, $item_tab, $contenido, true);
+    }
+
+    echo  $FormAspir->getOpenForm() .$tabs .$FormAspir::close();
+  
+  } catch (\Throwable $th) {
+    OdaFlash::error($th);
+  }
+  
+?>
+</div>

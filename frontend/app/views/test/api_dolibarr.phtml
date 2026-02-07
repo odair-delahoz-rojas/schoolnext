@@ -1,0 +1,33 @@
+<?php
+
+echo "<h3>{$arrData['content']}</h3>";
+echo "<h3>endpoint: {$arrData['endpoint']['title']}</h3>";
+echo "<h4>endpoint: {$arrData['endpoint']['url']}</h4>";
+
+echo '<hr/>';
+if ( in_array($arrData['endpoint']['name'], ['setupcompany']))
+{
+  foreach ($data['body'] as $key => $value) 
+  {
+    if (in_array($key, $arrData['endpoint']['fields'])) 
+    {
+      echo "$key = $value".'<br/>';
+    }
+  }  
+}
+else
+{
+  foreach ($data['body'] as $key => $value) 
+  {
+    echo "<hr/>$key = $value".'<br/>';
+    foreach ($value as $key2 => $value2) 
+    {
+      if (in_array($key2, $arrData['endpoint']['fields'])) 
+      {
+        echo "$key2 = $value2".'<br/>';
+      }
+    }
+  }
+}
+
+echo '<hr/><hr/>';

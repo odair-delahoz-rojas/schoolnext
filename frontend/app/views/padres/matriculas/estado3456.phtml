@@ -1,0 +1,34 @@
+<?php
+/*
+[DocIncompletos] => 3
+[DocEnRevision] => 4
+[DocRechazados] => 5
+[DocAprobados] => 6
+ */  
+try {
+    $tabla = new OdaTable();
+    $tabla->setHead(['#', 'Estado', 'Ver o Descargar']);
+    
+    $num_archivos = (int)Config::get('matriculas.'.INSTITUTION_KEY.'.num_archivos');
+    for ($i=1; $i<=$num_archivos; $i++) { 
+      $tabla->addRow([$i, $Adjuntos->estado_archivo.$i.'<br>'.$Adjuntos->getComentAPapa($i), $Adjuntos->getLinkArchivo($i)]);
+    }
+    $btn_subir_arch = OdaTags::linkButton("padres/subirArchivos/$estud->id", 'Subir Archivos');
+
+    $contenido_tab .= "
+    <div class=\"w3-panel w3-pale-red w3-leftbar w3-border-red\">
+      <p>Estado del proceso [{$estado_mat->value}]: <b>{{$estado_mat->label()}}</b></p>
+      <p>{$estado_mat->comments()}</p>
+    </div>
+    $tabla
+    <div class=\"w3-display-container\">
+      $btn_subir_arch
+    </div>
+    ";
+  
+    
+  } catch (\Throwable $th) {
+    OdaFlash::error($th);
+  }
+
+?>

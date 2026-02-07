@@ -1,0 +1,56 @@
+<div class="w3-panel">
+   <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+   <?= View::flash(); ?>
+
+   <div class="w3-row w3-section">
+      <?=OdaForm::inputSearch();?>
+   </div>
+   
+   <?php 
+      $tabla = new OdaTable(theme: $theme, showTotalRegs: true);
+      $tabla->setHead(
+        ['Actions', 'Estudiante', 'Contabilidad'], 
+        'class="w3-theme"', 
+        ['style="width:10%;"','style="width:50%;"','style="width:40%;"']
+      );
+
+try {
+
+  foreach($data as $key => $Estud) {
+    $col1 = $Estud->salon_nombre .'<br/>' 
+    .$Estud->getFoto() .'<br/>' 
+    .$Estud->documento .'<br/>';
+        
+    $nombre = $Estud;
+    $col2 = 'Grado: '.$Estud->grado_nombre.'<br/>'
+    ."<span class=\"w3-large w3-blue\">$nombre</span><br>"
+    ."{$Estud->getPagoPension()} {$Estud->getlnkSetPonerAldia()} <br> 
+    {$Estud->getDebePreicfes()} - {$Estud->getDebeAlmuerzos()} <br> <br>"
+    
+    .$Estud->getlnkSetMesPagosTodos().'<br>'
+    
+    ."<b>Deudor</b>: $Estud->deudor " .(($Estud->codeudor_cc) ? "<b>Codeudor</b>: $Estud->codeudor. CC: $Estud->codeudor_cc<br>" : '')
+    ."  - <b>Responsable DIAN</b>: $Estud->resp_pago_ante_dian";
+
+    $col3 = "$Estud->madre <br> $Estud->madre_email <br>C.C. $Estud->madre_id <br>"
+      .OdaUtils::linkWhatsApp(telefono: (string)$Estud->madre_tel_1)
+      .OdaUtils::linkTelefono(telefono: (string)$Estud->madre_tel_1, show_tel:true).'<br><br>'
+      ."$Estud->padre <br> $Estud->padre_email <br> C.C. $Estud->padre_id <br>"
+      .OdaUtils::linkWhatsApp(telefono: (string)$Estud->padre_tel_1)
+      .OdaUtils::linkTelefono(telefono: (string)$Estud->padre_tel_1, show_tel:true);
+
+    $data=[$col1, $col2, $col3];
+
+    $tabla->addRow(
+      data: $data, 
+      attrs_td: ['class="searchTdata w3-center"', 'class="searchTdata"']
+    );
+  }
+  echo $tabla;
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}      
+  ?>   
+</div>
+
+<?= Tag::js("table_filter"); ?>

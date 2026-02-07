@@ -1,0 +1,56 @@
+<?php 
+try {
+  /* 
+   * operation, role, idnumber(user), idnumber(course)
+   *
+   * operation = add | del
+   * role = student | teacher | teacheredit
+   * idnumber(user) = idnumber in the user table NB not id
+   * idnumber(course) = idnumber in the course table NB not id
+   */
+
+  $header = [
+    'operation' => 'string',
+    'role' => 'string',
+    'idnumber_user' => 'string',
+    'idnumber_course' => 'string',
+  ];
+  
+  $fileds_names = [
+    'operation' => 'operation',
+    'role' => 'role',
+    'idnumber_user' => 'idnumber_user',
+    'idnumber_course' => 'idnumber_course',
+  ];
+  
+  $data = [];
+  $data[] = array_keys($header); 
+  OdaLog::debug('numero regs: '.Count($matricular));
+  foreach ($matricular as $item) 
+  {
+    $columnas = [];
+    foreach ($header as $title_name => $title_type) 
+    {
+      $campo = $fileds_names[$title_name];
+      $valor = ($item->$campo) ? $item->$campo : $item->$campo;
+      if (is_object($item))
+      {
+        $valor = $item->$campo;
+      }
+      else 
+      {
+        $valor = $item[$campo];
+      }
+      $columnas[] =  ('integer'==$title_type) ? (int)$valor : $valor;
+    }
+    $data[] = $columnas;
+  }
+
+} 
+
+catch (\Throwable $th) 
+{
+  OdaFlash::error($th);
+}
+  
+?>

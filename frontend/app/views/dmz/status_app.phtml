@@ -1,0 +1,72 @@
+
+<div class="w3-container">
+   <h1>Ip Actual: <?= OdaUtils::getIp(); ?></h1>
+   
+   <table class="w3-table-responsive w3-striped w3-bordered w3-hoverable ">
+      <caption><h2>Frameworks</h2></caption>
+      <thead>
+         <tr>
+            <th></td>
+            <th>Versión</td>
+         </tr> 
+      </thead>
+
+      <tbody>
+         <tr> <?=OdaTags::multiTags('td', array('KumbiaPHP',KUMBIA_VERSION) ); ?> </tr>
+         <tr> <?=OdaTags::multiTags('td', array('W3 CSS','4.15 Dec 2020') ); ?> </tr>
+         <tr> <?=OdaTags::multiTags('td', array('W3 JS','1.04 April 2019') ); ?> </tr>
+      </tbody>
+   </table>
+
+
+   <table class="w3-table-responsive w3-striped w3-bordered w3-hoverable ">
+      <caption><h2>Configuración de PHP</h2></caption>
+      <thead class="w3-theme-d5">
+         <tr>
+            <?=OdaTags::multiTags('th', array('Config','Obligatorio','Servidor','Diagnóstico') ); ?>
+         </tr> 
+      </thead>
+
+      <tbody>
+         <tr> <?= OdaTags::multiTags('td', array('php version', '7.4.1', phpversion(), (version_compare(PHP_VERSION, '7.4.1') >= 0 ? 'OK': 'CUIDADO')) ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('memory limit', '128M', ini_get('memory_limit'), '??') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('magic quotes gpc', '??', (ini_get('magic_quotes_gpc')?'ON':'OFF'), '??') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('Subir Archivos: Tamaño Máximo', '??', ini_get('upload_max_filesize'), '??') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('post: Tamaño Máximo', '??', ini_get('post_max_size'), '??') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('register globals', '??', (ini_get('register_globals')?'ON':'OFF'), '??') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('session auto_start', '??', (ini_get('session.auto_start')?'ON':'OFF'), '??') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('utf8_decode()', '??', (function_exists('utf8_decode')?'ON':'OFF'), '??') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('exec()', '??', (ini_get('exec')?'ON':'OFF'), '??') ); ?> </tr>
+      </tbody>
+   </table>
+
+   <table class="w3-table-responsive w3-striped w3-bordered w3-hoverable ">
+   <caption><h2>Extensiones PHP</h2></caption>
+      <thead class="w3-theme-d5">
+         <tr>
+            <?=OdaTags::multiTags('th', array('Extension','Obligatorio','Servidor','Diagnóstico') ); ?>
+         </tr> 
+      </thead>
+
+      <tbody>
+         <tr> <?= OdaTags::multiTags('td', array('pdo_mysql', 'SI', (extension_loaded('pdo_mysql')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('json', 'SI', (extension_loaded('json') ? phpversion('json') : 'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('gd', 'SI', (extension_loaded('gd')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('date', 'SI', (extension_loaded('date')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('ctype', 'SI', (extension_loaded('ctype')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('dom', 'SI', (extension_loaded('dom')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('iconv', 'SI', (extension_loaded('iconv')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('pcre', 'SI', (extension_loaded('pcre')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('reflection', 'SI', (extension_loaded('reflection')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('session', 'SI', (extension_loaded('session')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('apc', 'NO', (extension_loaded('apc')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('bitset', 'NO', (extension_loaded('bitset')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('simplexml', 'SI', (extension_loaded('SimpleXML')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('mbstring', 'SI', (extension_loaded('mbstring')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('curl', 'SI', (extension_loaded('curl')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('xml', 'SI', (extension_loaded('xml')?'ON':'OFF'), '') ); ?> </tr>
+         <tr> <?= OdaTags::multiTags('td', array('xsl', 'SI', (extension_loaded('xsl')?'ON':'OFF'), '') ); ?> </tr>
+      </tbody>
+   </table>
+
+</div>

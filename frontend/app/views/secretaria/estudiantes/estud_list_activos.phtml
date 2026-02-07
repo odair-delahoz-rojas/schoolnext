@@ -1,0 +1,147 @@
+<div class="w3-panel">
+   <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+   <?= View::flash(); ?>
+
+   <div class="w3-row w3-section">
+      <?=OdaForm::inputSearch();?>
+   </div>
+   
+   <?php 
+   try {
+      $ico_email = '<i class="fa-solid fa-envelope w3-large"></i>';
+      $tabla = new OdaTable(theme: $theme, showTotalRegs: true);
+      $tabla->setHead(
+         data_head:    ['Actions', 'Estudiante', 'Cambiar Salon'], 
+         attrs:         'class="w3-theme"', 
+         arr_attrs_th: ['style="width:10%;"','style="width:60%;"','style="width:30%;"']
+      );
+
+      $arrMatriculas = [];
+      $tot_estudiantes = 0;
+      $tot_matriculados = 0;
+      foreach($data as $key => $Estud)
+      {
+        $tot_estudiantes += 1;
+        $lnk_gen_num_mat = '';
+        if ( empty($Estud->numero_mat) ) 
+        {
+          if ($_show_matricula)
+          {
+            $lnk_gen_num_mat = '<br>'.$Estud->getLnkGenerarNumeroMatricula();
+          }
+        }
+        else 
+        {
+          $lnk_gen_num_mat = '<br>'.OdaTags::tag('span', "Matricula #{$Estud->numero_mat_f()}", 'class="w3-tag"');
+          if (isset($arrMatriculas[$Estud->grado_promovido])) 
+          {
+            $arrMatriculas[$Estud->grado_promovido] += 1;
+          }
+          else
+          {
+            $arrMatriculas[$Estud->grado_promovido] = 1;
+          }
+          $tot_matriculados += 1;
+        }
+
+         $col1 = $Estud->is_active_f(true) .'<br/>'
+                .$Estud->getFoto().'<br/>'
+                .$Estud->documento .'<br/><br/>Retirar Estudiante<br/>'
+                .$Estud->getLnkRetirar(RetiroEstudiante::Voluntario)
+                .$Estud->getLnkRetirar(RetiroEstudiante::Institucion)
+                .$Estud->getLnkRetirar(RetiroEstudiante::Graduacion);
+
+        $col2 = "Grado: $Estud->grado_nombre [$Estud->salon_nombre] <br>" 
+                 ."<h3>{$Estud->getLnkEditPage($Estud->getNombreCompleto())} {$Estud->isNuevoIco()}</h3>"
+                 ."{$Estud->getPagoPension()} {$Estud->getlnkSetPonerAldia()} <br> 
+                   {$Estud->getDebePreicfes()} - {$Estud->getDebeAlmuerzos()} <br>"
+                 .$Estud->getlnkSetMesPagosTodos().'<br>'
+                 .$Estud->getCuentaInstit(true).'<br><br>'
+                 .'Boletines '.$Estud->getLnkBoletinesTodos();
+        
+        $col3  = 
+                '<div clasas="w3-panel w3-teal">'.$lnk_gen_num_mat.'<br>'
+                .$Estud->getEstadoMat()->label_ico().'<br>'
+                .'<small>'.$Estud->getEstadoMat()->comments().'</small><hr>'
+                .'<br>'
+                .(($Estud->madre) ? "$Estud->madre<br>" : '')
+                .(($Estud->madre_email) ? "$ico_email $Estud->madre_email<br>" : '')
+                .(($Estud->madre_id) ? "C.C. $Estud->madre_id<br>" : '')
+                .($Estud->madre_tel_1 ? OdaUtils::linkTelefono(telefono: (string)$Estud->madre_tel_1, show_tel:true) : '' )
+                .($Estud->madre_tel_1 ? OdaUtils::linkWA(telefono: (string)$Estud->madre_tel_1) : '')
+                .'<br><br>'
+                .(($Estud->padre) ? "$Estud->padre<br>" : '')
+                .(($Estud->padre_email) ? "$ico_email $Estud->padre_email<br>" : '')
+                .(($Estud->padre_id) ? "C.C. $Estud->padre_id<br>" : '')
+                .OdaUtils::linkTelefono(telefono: (string)$Estud->padre_tel_1, show_tel:true)
+                .OdaUtils::linkWA(telefono: (string)$Estud->padre_tel_1)
+                .'<br><br>'
+                .'Cambiar de Salon  '.$Estud->getSalonesCambiar('secretaria').'<br>';
+
+         $data=[$col1, $col2, $col3];
+         $tabla->addRow(
+            data: $data, 
+            attrs_td: ['class="searchTdata w3-center"', 'class="searchTdata"']
+         );
+      }
+      
+      $btns_listas_clase = '';
+      foreach ($arrData['Salones'] as $key => $value) {
+        $btns_listas_clase .= (new Estudiante)::getLnkListaGenerica($value->id) ;
+      }
+
+      $bloque_matriculas = '';
+      if ($_show_matricula) {
+        $arrGrados = Grado::getGradosArray();
+        $resultados_mat = '';
+        foreach ($arrMatriculas as $key => $value) {
+          $resultados_mat .= OdaTags::Badges($arrGrados[$key], $value);
+        }
+        $tot_sin_matricula = $tot_estudiantes-$tot_matriculados;
+  
+        $lnk_listado_mat = $Estud->getLnkListMatriculadosPdf($tot_matriculados);
+        $lnk_listado_pendientes_mat = $Estud->getLnkListPendientesMatriculaPdf($tot_sin_matricula);
+
+        $bloque_matriculas = "<div class=\"w3-row\">
+        <div class=\"w3-padding w3-bar\">
+          $resultados_mat
+        </div>
+        <p>$lnk_listado_mat $lnk_listado_pendientes_mat<p>
+      </div>";
+      }
+
+      echo "
+      <div class=\"w3-row\">
+
+        <div class=\"w3-row\">
+          <div class=\"w3-padding\">
+            <h3>Listas de Clase</h3>
+            {$btns_listas_clase}
+          </div>
+        </div>
+        {$bloque_matriculas}
+      </div>";
+      echo $tabla;
+
+
+    } catch (\Throwable $th) {
+      OdaLog::error($th);
+      echo $th;
+     }
+
+   ?>   
+</div>
+
+<?php
+ echo "
+   <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const input = document.getElementById('inputSearch');
+      input.value = '{$_default_search}';
+      input.focus();
+    });
+  </script>
+  ";
+?>
+
+<?= Tag::js(src: "table_filter"); ?>

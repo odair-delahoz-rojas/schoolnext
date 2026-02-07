@@ -1,0 +1,138 @@
+<div class="w3-panel">
+   <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+   <?= View::flash(); ?>  
+</div>
+
+
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 40px;
+    }
+    .drop-zone {
+      max-width: 400px;
+      height: 200px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 2px dashed #666;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .drop-zone.dragover {
+      background: #e0ffe0;
+      border-color: #28a745;
+    }
+    .drop-zone input {
+      display: none;
+    }
+    ul {
+      margin-top: 20px;
+      padding: 0;
+      list-style: none;
+    }
+    li {
+      padding: 5px;
+      font-size: 14px;
+    }
+    .error { color: red; }
+    .success { color: green; }
+</style>
+
+
+
+  <h2>Subida de imágenes (PNG, &lt; 100kb, nombre numérico)</h2>
+  
+  <form id="uploadForm" enctype="multipart/form-data">
+    <div class="drop-zone" id="dropZone">
+      Arrastra y suelta tus imágenes aquí o haz clic para seleccionarlas
+      <input type="file" id="fileInput" name="files[]" multiple accept="image/png">
+    </div>
+    <ul id="fileList"></ul>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    const dropZone = document.getElementById("dropZone");
+    const fileInput = document.getElementById("fileInput");
+    const fileList = document.getElementById("fileList");
+    const uploadForm = document.getElementById("uploadForm");
+
+    dropZone.addEventListener("click", () => fileInput.click());
+
+    dropZone.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropZone.classList.add("dragover");
+    });
+
+    dropZone.addEventListener("dragleave", () => {
+      dropZone.classList.remove("dragover");
+    });
+
+    dropZone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropZone.classList.remove("dragover");
+      handleFiles(e.dataTransfer.files);
+      fileInput.files = e.dataTransfer.files;
+    });
+
+    fileInput.addEventListener("change", () => {
+      handleFiles(fileInput.files);
+    });
+
+    function handleFiles(files) {
+      fileList.innerHTML = "";
+      [...files].forEach(file => {
+        const li = document.createElement("li");
+        const errors = [];
+
+        if (file.type !== "image/png") {
+          errors.push("❌ No es un archivo PNG");
+        }
+        if (file.size > 100 * 1024) {
+          errors.push("❌ El archivo pesa más de 100kb");
+        }
+        const nameWithoutExt = file.name.split(".")[0];
+        if (!/^\d+$/.test(nameWithoutExt)) {
+          errors.push("❌ El nombre debe ser un número");
+        }
+
+        if (errors.length > 0) {
+          li.innerHTML = `<span class="error">${file.name}: ${errors.join(", ")}</span>`;
+        } else {
+          li.innerHTML = `<span class="success">${file.name}: ✔ Válido</span>`;
+        }
+        fileList.appendChild(li);
+      });
+    }
+
+    uploadForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const formData = new FormData(uploadForm);
+
+      fetch("https://schoolnext.tecnorobotica.com/api/estudiantes/uploadFotosEstudiantes", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        fileList.innerHTML = "";
+        data.forEach(result => {
+          const li = document.createElement("li");
+          li.innerHTML = result.success 
+            ? `<span class="success">${result.file}: ✔ Subido correctamente</span>`
+            : `<span class="error">${result.file}: ❌ ${result.error}</span>`;
+          fileList.appendChild(li);
+        });
+      })
+      .catch(err => {
+        alert("Error al subir archivos");
+        console.error(err);
+      });
+    });
+  </script>

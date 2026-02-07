@@ -1,0 +1,32 @@
+<div class="w3-panel">
+  <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+  <?= View::flash(); ?>
+  <div class="w3-row w3-section">
+    
+      <?php
+      echo OdaForm::inputSearch();
+      $tabla = new OdaTable(theme: $theme, showTotalRegs: true);
+      $tabla->setHead(arr_attrs_th: ['style="width:10%;"','style="width:90%;"'] );
+
+      foreach($data as $key => $Estud) {
+         $col1 = $Estud->is_active_f(true) .'<br/>'
+                .$Estud->getFoto().'<br/>'
+                .Html::linkAction("activarEstudiante/$Estud->id/", 'Activar', 'class="w3-btn w3-green w3-block"').'<br/>';
+         
+         $col2 = '<h3>'.$Estud->getLnkShowPage('secretaria', $Estud->estudiante_nombre2).'</h3>'
+                .'Último Grado: '.$Estud->grado_mat.' : '.$arrData['Grados'][(int)$Estud->grado_mat] .'</br>'
+                .'Doc: '.$Estud->documento.'</br>'
+                .'Retiro: '.$Estud->fecha_ret.' - Motivo: '.$Estud->retiro.'</br>'
+                .'Tiempo de retiro: '.$Estud->tiempoRetiro();
+         
+         $tabla->addRow(
+            data: [$col1, $col2], 
+            attrs_td: ['class="searchTdata w3-center"', 'class="searchTdata"']
+         );
+      }
+      echo $tabla;
+      ?>
+      
+   </div>
+   
+<?= Tag::js("table_filter", false); ?>

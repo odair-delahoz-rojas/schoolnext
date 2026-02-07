@@ -1,0 +1,46 @@
+<div class="w3-panel">
+
+<?php
+  try {
+    $ModeloAspirante  = $arrData['Aspirante'];
+    $FormAspir = new OdaForm(modelo: $ModeloAspirante, action: 'admin/aspirantes/actualizarSecretaria', method: 'post');
+    $FormAspir->setEdit();
+    
+    $ModeloAspirPsico  = $arrData['AspirantePsico'];    
+    $FormAspirPsico = new OdaForm(modelo: $ModeloAspirPsico, action: '');
+    
+    $datos_basicos   = require('form_info_basicos.phtml');
+    $datos_padre     = require('form_info_padre.phtml');
+    $datos_madre     = require('form_info_madre.phtml');
+    $datos_results   = require('form_info_results.phtml');
+    $edit_secretaria = require('form_edit_secretaria.phtml');
+    
+    $tabs = new OdaTabs();
+    $tabs->addTab('basicos', 'Básicos', $datos_basicos, true);
+    $tabs->addTab('madre', 'Madre', $datos_madre, true);
+    $tabs->addTab('padre', 'Padre', $datos_padre, true);    
+    $tabs->addTab('results', 'Resultados', $datos_results, true);    
+    
+    $nombre_aspirante = "<h2>$ModeloAspirante->nombres $ModeloAspirante->apellido1 $ModeloAspirante->apellido2</h2>";
+    echo 
+    "<div class=\"w3-row\">
+
+      <div class=\"w3-half w3-container\">
+        $nombre_aspirante 
+        {$FormAspir->getOpenForm()}
+          $edit_secretaria
+        {$FormAspir::close()}
+      </div>
+
+      <div class=\"w3-half w3-container\">
+        $tabs
+      </div>
+
+    </div>";
+
+  } catch (\Throwable $th) {
+    OdaFlash::error($th);
+  }
+  
+?>
+</div>

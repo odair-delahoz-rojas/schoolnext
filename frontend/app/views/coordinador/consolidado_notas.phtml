@@ -1,0 +1,51 @@
+<div class="w3-panel">
+    <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+    <?php View::flash(); ?>
+    <?php 
+        //echo OdaUtils::ver_array($Registros);
+        $arrInfoSalon=[];
+        $tot_salones = Count($data);
+        foreach ($data as $salon => $RegEstudiantes) {
+            list($salon_nombre, $salon_id) = explode(";",$salon);
+            $tot_estudiantes = Count($RegEstudiantes);
+            
+            foreach ($RegEstudiantes as $estudiante => $RegPeriodos) {
+                list($estudiante_nombre, $estudiante_codigo) = explode(";",$estudiante);
+                $tablaEstud = new OdaTable();
+                foreach ($RegPeriodos as $periodo => $RegMaterias) {
+                    $tot_materias = Count($RegMaterias);
+                    $arrTitMaterias = [""];
+                    $arrNotas = ["P$periodo"];
+                    foreach ($RegMaterias as $asignatura => $notas) {
+                        list($asignatura_nombre, $asignatura_abrev) = explode(";",$asignatura);
+                        $arrTitMaterias[] = OdaTags::tooltip($asignatura_abrev, $asignatura_nombre);
+                        list($nota_definitiva, $plan_apoyo, $nota_final, $valorativo) = explode(";", $notas);
+
+                        if ($nota_definitiva<60) {
+                            $arrNotas[] = OdaTags::tooltip($nota_final, "Def:$nota_definitiva PA:$plan_apoyo");
+                        } else {
+                            $arrNotas[] = $nota_final;
+                        }
+                    }
+                    $tablaEstud->addRow($arrNotas);
+                }
+                $tablaEstud->setCaption("$estudiante_codigo - $estudiante_nombre");
+                $tablaEstud->setHead($arrTitMaterias);
+                $arrInfoSalon[$salon_nombre][$estudiante_nombre]= $tablaEstud.'<hr>';
+            }
+        }
+
+        // Escribir resultado.
+        foreach ($arrInfoSalon as $salon => $ArrEstuds) {
+            echo Tag::create('button', "$salon", ['onclick'=>"acordeon('$salon')", 'class'=>"w3-button w3-block w3-black w3-left-align"]);
+            $estuds = '';
+            foreach ($ArrEstuds as $estud) {
+                $estuds .= "$estud";
+            }
+            echo "<div id=\"$salon\" class=\"w3-hide w3-container\">$estuds</div>";
+        }
+    ?>
+</div>
+
+<?= tag::js("tabs_h", false);?>
+<?= tag::js("acordeon", false);?>

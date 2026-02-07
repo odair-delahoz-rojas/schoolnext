@@ -1,0 +1,61 @@
+<div class="w3-container">
+  <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+  <?php View::flash(); ?>
+</div>
+
+<div class="w3-container">
+  <?php
+  try {
+  $message = Config::get('messages.comprimir_imagenes');
+  $model = $arrData['Adjuntos'];
+  $fieldsToHidden = $model::getFieldsHidden('edit');
+  
+  $myForm = new OdaForm(
+    $model, "admin/estudiante_adjuntos/edit_ajax/$model->id/secretaria.listadoEstudActivos", 
+    multipart: true,
+    url_back: 'secre-estud-list-activos',
+  );
+  $myForm->setEdit();
+  $myForm->setColumnas(2);
+  $myForm->setAtrib('id="frm_edit" name="frm_edit"');
+  
+  $myForm->addFile2('nombre_archivo1');
+  $myForm->addSelect('estado_archivo1', 1, EstadoAdjuntos::toArray() );
+  $myForm->addFile2('nombre_archivo2');
+  $myForm->addSelect('estado_archivo2', 1, EstadoAdjuntos::toArray() );
+  $myForm->addFile2('nombre_archivo3');
+  $myForm->addSelect('estado_archivo3', 1, EstadoAdjuntos::toArray() );
+  
+  
+  $myForm->addFile2('nombre_archivo4', 2);
+  $myForm->addSelect('estado_archivo4', 2, EstadoAdjuntos::toArray() );
+  $myForm->addFile2('nombre_archivo5', 2);
+  $myForm->addSelect('estado_archivo5', 2, EstadoAdjuntos::toArray() );
+  $myForm->addFile2('nombre_archivo6', 2);
+  $myForm->addSelect('estado_archivo6', 2, EstadoAdjuntos::toArray() );
+  
+  $myForm->addHiddens(implode(",", $fieldsToHidden));
+  
+  echo OdaTags::tag('div', $message, 'class="w3-panel"');
+  echo "<div class=\"w3-container\">$myForm</div>";
+  
+  } catch (\Throwable $th) {
+    OdaFlash::error($th);
+  }
+  
+  ?>
+
+  <pre>
+    <?php
+      if (1==$user_id && 1==Config::get('config.application.modo_depuracion_admin')) {
+        echo "<p>Campos Incluidos</p>";
+        print_r( $myForm->getFieldsInForm() );
+        echo "<p>Campos que faltan</p>";
+        print_r( $myForm->getFieldsNotInForm() );
+        echo "<p>Campos Ocultos</p>";
+        print_r($fieldsToHidden);
+      }
+    ?>
+  </pre>
+
+</div>

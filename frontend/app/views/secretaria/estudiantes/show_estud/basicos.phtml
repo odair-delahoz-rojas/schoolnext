@@ -1,0 +1,44 @@
+<?php
+try {
+
+  $myTabla = new OdaTable();
+
+  $myTabla->addRow([
+    $frmEstud->getDataLabel('nombres'), 
+    $frmEstud->getDataLabel('apellido1'), 
+    $frmEstud->getDataLabel('apellido2'),
+  ]);
+  
+  $myTabla->addRow([
+    $frmEstud->getDataLabel('sexo'),
+    $frmEstud->getDataLabel('tipo_dcto'),
+    $frmEstud->getDataLabel('documento'),
+  ]);
+  
+  $myTabla->addRow([
+    $frmEstud->getDataLabel('fecha_nac'),
+    '',
+    '',
+  ]);
+  
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('pais_nac'),
+    $frmDataEstud->getDataLabel('depto_nac'),
+    $frmDataEstud->getDataLabel('ciudad_nac'),
+  ]);
+  
+  $myTabla2 = new OdaTable();
+  $retiro = (strtolower($frmEstud->getDataOnly('retiro'))=='activo') ? $frmEstud->getLabel('retiro') : $frmEstud->getDataLabel('retiro');
+  $estado = $frmEstud->getLabel('is_active'). $modelEstud->is_active_f();
+  
+  $myTabla2->addRow([
+    $estado,
+    $retiro,
+    $frmEstud->getDataLabel('fecha_ret'),
+  ]);
+  
+  $myTabs->addTab('basic', 'Estudiante', $myTabla.'<br>'.$myTabla2);
+  
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

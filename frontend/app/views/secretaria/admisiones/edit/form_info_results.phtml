@@ -1,0 +1,23 @@
+<?php 
+try {  
+  $tabla = new OdaTable('id="myTable-m" class="w3-table w3-responsive w3-striped w3-bordered"');
+  $tabla->setCaption('Resultados de Ex&aacute;menes');
+
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('result_matem'), 
+      $FormAspir->getDataLabel('result_caste'), 
+      ],
+  );
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('result_ingle'), 
+      $FormAspir->getDataLabel('result_scien'), 
+      ],
+  );
+
+  return $tabla;
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

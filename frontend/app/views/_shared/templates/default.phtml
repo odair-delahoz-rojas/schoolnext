@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+  
+ <head>
+  <meta charset=<?=APP_CHARSET?> >
+  <title><?=$page_title?></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?= Tag::css('w3/w3') ?>
+  <?= Tag::css("w3/w3-theme-".$_instituto_id) ?>
+  <?= Tag::css('fontawesome/css/all.min') ?>
+  <?= Tag::css('propios') ?>
+  <?= Html::includeCss() ?>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+  <style> 
+    html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif} 
+  </style>
+</head>
+
+<body class=<?="w3-theme-$theme"?> >
+  <?php View::partial('header','', ['theme'=>$theme, 'themei'=>$themei]) ?>
+  <?php View::partial('aside','', ['theme'=>$theme, 'themei'=>$themei]) ?>
+  <div class="w3-main" style="margin-left:250px;margin-top:43px;">
+    <?php View::content() ?>
+    <?php View::partial('footer','', ['theme'=>$theme, 'themei'=>$themei] ) ?>
+  </div>
+  
+  
+  <script>
+    var mySidebar = document.getElementById("mySidebar"); // Get the Sidebar
+    var overlayBg = document.getElementById("myOverlay"); // Get the DIV with overlay effect
+    function w3_open() { // Toggle between showing and hiding the sidebar, and add overlay effect
+      if (mySidebar.style.display === 'block') {
+        mySidebar.style.display = 'none';
+        overlayBg.style.display = "none";
+      } else {
+        mySidebar.style.display = 'block';
+        overlayBg.style.display = "block";
+      }
+    }
+    function w3_close() { // Close the sidebar with the close button
+      mySidebar.style.display = "none";
+      overlayBg.style.display = "none";
+    }
+    </script>
+
+<?php
+  /*echo Tag::js('jquery/jquery+kumbiaphp.min', false); 
+    <script type="text/javascript" src="css/datatables/datatables.min.js"></script>
+  */
+  echo Tag::js('w3');
+  echo Tag::js('htmx207.min');
+?>
+
+</body>
+
+</html>

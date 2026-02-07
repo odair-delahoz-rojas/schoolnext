@@ -1,0 +1,34 @@
+<div class="w3-margin-top">
+<?php
+  $forta= OdaTags::tag(tag: 'span', 
+  content: "F: ". $arrData['min_fortaleza'] ." - ". $arrData['max_fortaleza'], 
+  attrs: 'class="w3-text-green"');
+
+  $debil= OdaTags::tag(tag: 'span', 
+  content: "D: ". $arrData['min_debilidad'] ." - ". $arrData['max_debilidad'], 
+  attrs: 'class="w3-text-blue"');
+
+  $recom= OdaTags::tag(tag: 'span', 
+  content: "R: ". $arrData['min_recomendacion'] ." - ". $arrData['max_recomendacion'], 
+  attrs: 'class="w3-text-red"');
+
+  $info_indic = OdaTags::tag(tag:'span', content:"$forta $debil $recom", attrs:'class="w3-small"');
+  
+  $tabla = Form::open(action: "admin/seguimientos/guardarSeguimientos/{$arrData['Salon']->id}/{$arrData['Asignatura']->id}").'<table>';
+  $tabla .= '<tr> <td colspan="11"><hr></td><tr>';
+  $tabla .= '<tr> <td colspan="11">'.Form::submit(text: 'Guardar').'</td><tr>';
+  foreach ($data as $Reg) {
+    $tabla .= require('seguimientos_form.phtml');
+    $tabla .= '<tr> <td colspan="11"><hr></td><tr>';
+  }
+  $tabla .= '<tr> <td colspan="11">'.Form::submit(text: 'Guardar').'</td><tr>';
+  $tabla .= '</table>'.Form::close();
+  echo $tabla;
+
+// PENDIENTE PROGRAMAR ::
+// Preview de la descripción de logros asignados a cada estudiante. Botón 'ver'
+
+?>
+</div>
+
+

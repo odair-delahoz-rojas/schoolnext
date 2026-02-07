@@ -1,0 +1,47 @@
+<?php 
+try {  
+  $tabla = new OdaTable('id="myTable-ad" class="w3-table w3-responsive w3-striped w3-bordered"');
+  $annio_matriculas = $_annio_actual + 1;
+
+  return  "
+  <div class=\"w3-display-container\">
+    <div class=\"w3-display-topleft\"> 
+      <span class=\"w3-button\" onclick=\"openTab(event,'{$prev}')\"><< Anterior</span>
+      <span class=\"w3-button\" onclick=\"openTab(event,'{$next}')\">Siguiente >></span>
+    </div>
+    <br/><br/>
+
+    <div>
+      <h2>Paso {$num_paso}: Documentos Adjuntos</h2>
+      <p>Debe enviar al correo electrónico <b>{$data['institucion_email']}</b> los siguientes documentos:
+      <ul>
+        <li>los dos últimos Informes Académicos del estudiante</li>
+        <li>formato diligenciado de consulta y reporte a centrales de riesgo</li>
+      </ul>
+      <br>
+        Asunto del correo: ADMISIONES {$data['institucion_nombre']}  {$data['annio_matricula']} - ''NOMBRE DEL ESTUDIANTE''
+      <br>
+      <p>Nota: Estos informes son obligatorios para asentar el registro del aspirante. Deberá enviarlos lo mas pronto posible.</p>
+    </div>
+
+    <br/><br/>
+    <div class=\"w3-display-bottomleft\"> 
+      <span class=\"w3-button\" onclick=\"openTab(event,'{$prev}')\"><< Anterior</span>
+      <span class=\"w3-button\" onclick=\"openTab(event,'{$next}')\">Siguiente >></span>
+    </div>
+  </div>";
+
+  // return "<p>Aquí debe adjuntar los archivo de los dos últimos Informes Académicos 
+  // y el formato diligenciado de consulta y reporte a centrales de riesgo. 
+  // Los archivos adjuntos deben estár en formato PDF o de imagen (jpg, jpeg o png).</p>
+  // $tabla
+  // <p>Estos informes son obligatorios para asentar el registro del aspirante. 
+  // Si no los tiene en el momento, deberá enviarlos lo mas pronto posible al correo electrónico 
+  // <b>windsorschoolvalledupar@gmail.com</b>";
+
+  
+   
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

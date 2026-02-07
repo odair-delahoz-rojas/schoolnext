@@ -1,0 +1,142 @@
+<div class="w3-container">
+   <?= View::flash(); ?>
+   <?= View::Encab($controller_name, $page_action, ''); ?>
+</div>
+
+<div class="w3-row">
+  
+  <div class="w3-container w3-twothird">
+  <?php
+    echo OdaForm::inputSearch();
+    $tabla = new OdaTable(showTotalRegs: true);
+    $tabla->setHead(
+      data_head: "x, Profesor, Asignatura, Salon",
+      arr_attrs_th: ['style="width:10%;"', 'style="width:35%;"', 'style="width:35%;"', 'style="width:20%;"'] 
+    );
+    $tabla->setCaption(caption:'Carga Total Asignada');
+    foreach($data as $key => $carga) {
+      $d0 = OdaTags::linkIcon("admin/cargas/del/$carga->id/docen-asignar-carga", 'trash-can');
+      $d1 = "[$carga->user_id] ".OdaUtils::sanearString($carga->profesor_nombre);
+      $d2 = "[$carga->asignatura_id] ".OdaUtils::sanearString($carga->asignatura_nombre);
+      $d3 = "[$carga->salon_id] $carga->salon_nombre";
+      $tabla->addRow( data: [$d0, $d1, $d2, $d3], attrs_td:[null, 'class="searchTdata"','class="searchTdata"','class="searchTdata"']);
+    }
+    echo $tabla;
+  ?>
+  </div>
+
+  <div class="w3-container w3-rest">
+    <h2>Agregar Carga</h2>
+    
+    <div id="result">
+      
+      <?php
+        $ArrGestionCarga = ['admin', 'secretarias', 'coordinadores'];
+        if ( in_array((string)Session::get('roll'), $ArrGestionCarga) )
+        {
+          echo OdaForm::number('profe_sel', '', $arrData[0]);
+        } 
+        else 
+        {
+          echo OdaForm::hidden('profe_sel', '', $arrData[0]);
+        }
+      ?>
+
+      <div id="asignatura_sel"></div>
+      <div id="salon_sel"></div>
+    </div>
+
+    <button id="btn_materia" onclick="traer_materias()">Elegir Materia</button>
+
+    <div id="materias">
+      <div id=result_materias></div>
+      <div id="salones">
+        <div id=result_salones></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<?= Tag::js("table_filter"); ?>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    console.clear();
+    document.getElementById('materias').style.display="none";
+    document.getElementById('salones').style.display="none";
+  });
+
+  function traer_materias() {
+    //console.clear();
+    w3.hide('#btn_materia');
+    w3.show('#materias');
+
+    let ruta = document.getElementById('public_path').innerHTML.trim()+'api/asignaturas/all';
+    let plantilla = "<div class=\" w3-border\"> <h2>Materias</h2> ITEMS</div>";
+    let output = '';
+    
+    fetch(ruta)
+      .then((res) => res.json())
+      
+      .then(datos => {
+          console.log(datos);
+          for (let materia in datos) {  
+            output = output + "<button id=\""+datos[materia].id+"\" class=\"w3-button w3-padding-small w3-green w3-hover-purple\" onclick=\"traer_salones("+datos[materia].id+")\">"+datos[materia].nombre+"</button>";
+          }
+          plantilla = plantilla.replace('ITEMS', output);
+          document.querySelector('#result_materias').innerHTML = plantilla;
+      })
+      .catch(
+          error => console.log(error)
+    );
+  }
+
+  
+  function traer_salones(asignatura_sel) {
+    w3.hide('#result_materias');
+    w3.show('#salones');
+    document.getElementById('asignatura_sel').innerHTML = asignatura_sel;
+
+    let ruta = document.getElementById('public_path').innerHTML.trim()+'api/salones/all';
+    let plantilla = "<div class=\"w3-border\"> <h2>Salones</h2> ITEMS</div>";
+    let output = '';
+    fetch(ruta)
+      .then((res) => res.json())
+      .then(datos => {
+          console.log(datos);
+          for (let salon in datos) {  
+            output = output + "<button id=\""+datos[salon].id+"\" class=\"w3-button w3-padding-small w3-blue w3-hover-red\" onclick=\"asignar_carga("+datos[salon].id+")\">"+datos[salon].nombre+"</button>";
+          }
+          plantilla = plantilla.replace('ITEMS', output);
+          document.querySelector('#result_salones').innerHTML = plantilla;
+      })
+      .catch(
+          error => console.log(error)
+    );
+  }
+
+
+
+  function asignar_carga(salon_sel) {
+    asignatura_sel = document.getElementById('asignatura_sel').innerHTML.trim();
+    profe = document.getElementById('profe_sel').value;
+    let ruta = document.getElementById('public_path').innerHTML.trim()+'api/carga/asignar_carga/'+salon_sel+'/'+asignatura_sel+'/'+profe; 
+
+    fetch(ruta)
+      .then((res) => res.json())
+      .then(datos => {
+        location.reload();
+      })
+      .catch(
+          error => console.log(error)
+    );
+
+
+  }
+
+
+</script>

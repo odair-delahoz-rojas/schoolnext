@@ -1,0 +1,92 @@
+<?php
+// use Mpdf\Mpdf;
+
+$tipo_informe = $pdf_tipo_informe ?? "";
+$fileName = $pdf_fileName ?? "Reporte-de-$controller_name";
+$title = $file_title ?? "Reporte de $controller_name";
+$css = $css ?? 'css/pdf.css';
+$show_watermark = $pdf_show_watermark ?? false;
+$destination = (isset($pdf_download) && $pdf_download) ? 'D' : 'I';
+
+$DoliK = new DoliConst();
+$link_web_page = $DoliK->getValue('MAIN_INFO_SOCIETE_WEB') ?? '';
+/* 
+//Activa el almacenamiento en búfer de la salida
+ob_start();
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title><?= $title ?></title>
+    <link rel="stylesheet" type="text/css" href="<?= $css ?>">
+    <meta name="author" content="SchoolNEXT>> ConstruxZion Soft (CO)">
+    <meta name="description" content="PDF output with KumbiaPHP framework">
+    <meta name="keywords" content="schoolnext, mpdf">
+
+    <body>
+
+    <htmlpageheader name="myHeader1">
+        <section id="page-header">
+            <table border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="100%" align="left" valign="center"><a href="<?=$link_web_page?>" target="_blank"><img src="img/logo.png" alt="Logo" height="40"></a></td>
+                <td width="100%" align="center" valign="center"><h1><?= $tipo_informe ?><h1></td>
+                <td width="100%" align="right" valign="center"></td>
+              </tr>
+            </table>
+        </section>
+        </section>
+    </htmlpageheader>
+
+    <?php echo $html ?>
+
+    <htmlpagefooter name="myFooter1">
+        <section id="page-footer">
+            <div id="printed-date">{DATE d/m/Y}</div>
+            <div id="page-number">{PAGENO}/{nbpg}</div>
+        </section>
+    </htmlpagefooter>
+</body>
+</html>
+
+<?php
+$html = ob_get_clean();
+ob_clean();
+ */
+
+ 
+// // Crea una instancia de la clase y le pasa el directorio temporal
+// $mpdf = new Mpdf([
+//     'tempDir' => APP_PATH . 'temp/mpdf',
+//     'format' => 'Legal',
+//     'default_font_size' => 10,
+//     'default_font' => 'helvetica',
+//     'progressBar' => true,
+//     'title2annots' => true,  // convert headers in annotations
+//     'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages 
+//     'exposeVersion' => false, // security 
+
+//     'margin_left' => 20,
+//     'margin_right' => 15,
+
+//     'margin_top' => 48,
+//     'margin_bottom' => 25, // no tocar
+    
+//     'margin_header' => 15, // no tocar
+//     'margin_footer' => 15 // no tocar
+
+//     // 'orientation' => 'L', // P(portrait), L(landscape) 
+//     // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+// ]);
+
+//$mpdf->SetProtection(permissions :array(), user_pass:Session::get('documento'));
+$mpdf->SetWatermarkText($tipo_informe);
+$mpdf->showWatermarkText = $show_watermark;
+$mpdf->watermark_font = 'DejaVuSansCondensed';
+$mpdf->watermarkTextAlpha = 0.2;
+$mpdf->SetDisplayMode('fullpage');
+
+$mpdf->WriteHTML($html);
+$mpdf->Output("$fileName.pdf", $destination);

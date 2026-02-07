@@ -1,0 +1,55 @@
+<div class="w3-panel">
+   <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+   <?= View::flash(); ?>
+
+   <div class="w3-row w3-section">
+      <?=OdaForm::inputSearch();?>
+   </div>
+   
+   <?php 
+   try {
+    $tabla = new OdaTable(theme: $theme, showTotalRegs: true);
+    $tabla->setCaption('Lista de Aspirantes Activos');
+    $tabla->setHead(
+       data_head:    ['id', 'Estado', 'Grado', 'Aspirante', 'Entrevista', 'Evaluaci&oacute;n'], 
+       attrs:         'class="w3-theme"', 
+    );
+
+    foreach($data as $key => $reg) {
+       $tabla->addRow(
+          data: [
+            OdaUtils::fecha_corta($reg->fecha_insc) .'<br>' 
+            .$reg->is_active_f(), 
+            ( ('admitido' == strtolower($reg->estatus)) ? "<i class=\"fa-solid fa-user-check\" style=\"color:seagreen\"></i>&nbsp;{$reg->lnkTrasladar()}" : $reg->estatus_f() ).'<br>'
+            .$reg->is_pago_f(),
+
+            $reg->aspirante_grado, 
+  
+            "[$reg->id] {$reg->lnkPageEditAspirantePsicologia()} <br>
+            Tel: $reg->telefono1   Doc Id: $reg->documento <br>
+            {$reg->ctrl_llamadas_f()}",
+  
+            "Entrevista: {$reg->fecha_entrev_f()} <br>
+             Asisti&oacute;: {$reg->is_fecha_entrev_f()} ",   
+
+            "Evaluaci&oacute;n: {$reg->fecha_eval_f()} <br>
+             Asisti&oacute;: {$reg->is_fecha_eval_f()}"
+
+          ], 
+          attrs_td: ['class="searchTdata"', 'class="searchTdata" w3-center', 'class="searchTdata"', 'class="searchTdata"']
+       );
+    }
+    echo $tabla;
+
+    } catch (\Throwable $th) {
+      OdaLog::error($th);
+      echo $th;
+     }
+
+   ?>   
+</div>
+
+<?= Tag::js(src: "table_filter"); ?>
+
+<script>
+</script>

@@ -1,0 +1,68 @@
+<?php 
+try {  
+  $tabla = new OdaTable();
+  $tabla->setCaption("Paso {$num_paso}: Datos Básicos del Aspirante");
+
+  $tabla->addRow(
+    data: [
+      $FormAspir->getInput(field: 'nombres'), 
+      $FormAspir->getInput(field: 'apellido1'), 
+      $FormAspir->getInput(field: 'apellido2'),
+      ''
+      ],
+  );
+
+  $tabla->addRow(
+    data: [$FormAspir->getInput(field: 'fecha_nac'), 
+           '<br><b>'.TipoDoc::caption().'</b><br>'.TipoDoc::forSelect('aspirantes_tipo_dcto', 'aspirantes[tipo_dcto]'), 
+           $FormAspir->getInput(field: 'documento'),
+           ''
+          ],
+  );
+
+  $tabla->addRow(
+    data: ['<br><b>Grado al que Aspira</b><br>'.Grado::getSelectGrados('aspirantes_grado_aspira', 'aspirantes[grado_aspira]'),
+           '',
+           '<br><b>'.Sexo::caption().'</b><br>'.Sexo::forSelect('aspirantes_sexo', 'aspirantes[sexo]'),
+           ''
+          ],
+  );
+
+  $tabla->addRow(
+    data: [$FormAspir->getInput(field: 'pais_nac'), 
+           $FormAspir->getInput(field: 'depto_nac'),
+           $FormAspir->getInput(field: 'ciudad_nac'),
+           ''
+          ],
+  );
+  
+  $tabla->addRow(
+    data: [$FormAspir->getInput(field: 'direccion'), 
+           $FormAspir->getInput(field: 'barrio'),
+           $FormAspir->getInput(field: 'telefono1'),
+           ''
+          ],
+  );
+
+  
+  $tabla->addRow(
+    data: [$FormAspirPsico->getTextarea(field: 'rel_pad_mad'), 
+          $FormAspirPsico->getTextarea(field: 'vive_con')],
+          attrs_td: ['colspan="2"','colspan="2"'],
+  );
+
+  $extras = $FormAspir->getInput(tipo: 'hidden', field: 'fecha_insc');
+
+  return $tabla.$extras;
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}
+
+/*
+$tabla .= _open('table', array('width'=>'100%'));
+  $tabla .= _tag('tr', $FormAspir->getColCampo('Aspirantepsico/rel_pad_mad') );
+  $tabla .= _tag('tr', $FormAspir->getColCampo('Aspirantepsico/vive_con',array('cols'=>'60', 'rows'=>'6')) );
+$tabla .= _close('table');
+echo $tabla;
+*/

@@ -1,0 +1,23 @@
+<div class="w3-container">
+  <?=View::flash()?>
+  <div class="w3-row w3-theme">
+    <h2 class="w3-margin-left w3-bottombar w3-border-green w3-margin-right">MÓDULO DE ADMISIONES - <?= $arrData['institucion_nombre']?> </h2>
+    
+    <span id="public_path"  class="w3-hide"><?=trim(PUBLIC_PATH)?></span>
+    <span id="theme" class="w3-hide"><?=Session::get('theme')?></span>
+    <span id="periodo" class="w3-hide"><?=Session::get('periodo')?></span>
+  </div>
+  <br>
+  
+  <?php
+    $Resumen = new OdaTable();
+    $Resumen->setCaption('Resumen del proceso');
+    $Resumen->addRow([ 'Nro. de Registro: ', $data->id ]);
+    $Resumen->addRow([ 'Aspirante: ', "$data->nombres $data->apellido1 $data->apellido2" ]);
+    $Resumen->addRow([ 'Doc Id: ', $data->documento ]);
+    $Resumen->addRow([ 'Grado al que Aspira: ', $arrData['Grados'][$data->grado_aspira] ]);
+
+    echo $Resumen.'<br><br>';
+    echo 'El colegio se comuncará con usted para iniciar el proceso basado en la información que usted acaba de suministrarnos.<hr>';
+  ?>
+</div>

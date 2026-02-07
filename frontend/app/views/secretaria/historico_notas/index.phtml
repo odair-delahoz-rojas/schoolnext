@@ -1,0 +1,27 @@
+<div class="w3-panel">
+    <?= View::Encab(page_module: $controller_name, page_action: $page_action, breadcrumb: $breadcrumb); ?>
+    <?= View::flash(); ?>
+</div>
+    
+<div class="w3-container">
+  <h2>A&nacute;os</h2>
+    <div  class="w3-bar">
+      <?php 
+        foreach ($data as $key => $annio) {
+          echo "<div class=\"w3-bar-item\">
+                  <button id=\"annio-$key\" class=\"w3-button w3-theme\" onclick=\"traer_grados($annio)\">$annio</button>
+               </div>";
+        }
+      ?>
+  </div>
+  <hr>
+  <h2 id="grado"></h2>
+  <div id="botones"></div>
+  <div id="resultados"></div>
+
+</div>
+
+
+<?php
+  echo Tag::js(src: 'secretaria/secre_consolidado_notas_historicos', cache: false);
+?>  

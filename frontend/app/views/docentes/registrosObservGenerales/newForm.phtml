@@ -1,0 +1,25 @@
+<h2>Agregando Nuevo Registro</h2>
+<?php
+$message = Config::get('messages.comprimir_imagenes');
+$msg_info = OdaTags::tag('div', $message, 'class="w3-panel w3-theme-l2"');
+
+$model = new RegistrosGen();
+$fieldsToHidden = $model::getFieldsHidden('create');
+$titulo = '<h3 id="nombre_estud_new"></h3>';
+
+$myForm = new OdaForm($model, 'admin/registros_gen/create_ajax', multipart: true);
+$myForm->setAtrib('id="frm_new" name="frm_new"');
+$myForm->setColumnas(2);
+$myForm->addInput(field:'fecha', columna:1, tipo:'date');
+$myForm->addSelect(field:'tipo_reg', columna:1, data: OdaUtils::TIPO_REG_OBSERV);
+$myForm->addSelect(field:'periodo_id', columna:1, data: OdaUtils::PERIODOS);
+
+//$myForm->addInput(field:'acudiente', columna:2, tipo:'text');
+//$myForm->addFile(field:'foto_acudiente', columna:2);
+$myForm->addTextarea(field:'asunto', columna:2);
+$myForm->addInput(field:'director', columna:2, tipo:'text');
+$myForm->addFile(field:'foto_director', columna:2); 
+
+$myForm->addHiddens(implode(",", $fieldsToHidden));
+return "<div class=\"w3-container\">$msg_info $titulo $myForm</div>";
+?>

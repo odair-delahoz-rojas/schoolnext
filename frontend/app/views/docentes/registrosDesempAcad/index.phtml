@@ -1,0 +1,40 @@
+<div class="w3-container">
+   <?= View::flash().View::Encab($controller_name, $page_action, $breadcrumb); ?>
+</div>
+
+<div class="w3-container w3-row">
+  <div id="list_estudiantes" style="display: none"> <?= require('listEstudiantes.phtml') ?></div>
+  <div id="form_new" style="display: none"> <?= require('newForm.phtml') ?> </div>
+  <div id="form_edit" style="display: none"> <?= require('editForm.phtml') ?> </div>
+  
+  <div id="list_index">
+    <?php
+    require('indexHeader.phtml');
+
+    $tabla = new OdaTable(showTotalRegs: true);
+    $tabla->setHead("Registro, *Estudiante, *Asunto, Acudiente, Docente");
+    foreach($data as $key => $reg) {
+      $estudiante = ucwords(OdaUtils::sanearString($reg->estudiante_nombre))." $reg->salon_nombre [$reg->salon_id]";
+      $btn_edit = '';
+      if ( ('sin evidencia'===$reg->getFotoAcudiente()) || ('sin evidencia'===$reg->getFotoDirector()) ) {
+        $btn_edit = "<br><button id=\"id_btn_edit\" class=\"w3-btn w3-green\" onclick=\"show_edit_form($reg->id, '$estudiante')\">". _Icons::solid('pen-to-square') ." Editar</button>";
+      }
+      $data_row = array(
+        $reg.$btn_edit,
+        $estudiante,
+        'F: '.$reg->fortalezas
+        .'<br>D: '.$reg->dificultades
+        .'<br>C: '.$reg->compromisos,
+        $reg->acudiente.'<br>'.$reg->getFotoAcudiente(),
+        $reg->director.'<br>'.$reg->getFotoDirector(),
+      );
+      $tabla->addRow(data: $data_row, attrs_td:['','class="searchTdata"','class="searchTdata"']);
+    } //END-FOR
+    echo $tabla;
+
+    require('indexFooter.phtml');
+    ?>
+  </div>
+</div>
+
+<div id="test"></div>

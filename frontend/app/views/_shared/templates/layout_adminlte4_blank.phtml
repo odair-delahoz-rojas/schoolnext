@@ -1,0 +1,25 @@
+<?php
+require_once VENDOR_PATH. 'autoload.php';
+use AdminLTE\Layout;
+
+require_once __DIR__ . '/layout_invited_config.php';
+$layout = new Layout($pageTitle, $layoutOptions);
+$layout->renderHead();
+$layout->renderBodyStart();
+$layout->renderContentWrapperStart();
+?>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="text-center">
+      <img src="<?=PUBLIC_PATH?>img/<?=Config::get('institutions.'.INSTITUTION_KEY.'.logo')?>" alt="Logo" height="60">
+    </div>
+    <?php View::content() ?>
+  </div>
+</div>
+
+<?php
+$layout->renderContentWrapperEnd();
+$layout->renderFooter('https://construxzionsoft.com.co', 'ConstruxionSoft');
+$layout->renderBodyEnd( [PUBLIC_PATH.'javascript/htmx207.min.js']);
+?>

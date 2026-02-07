@@ -1,0 +1,44 @@
+<?php 
+try {  
+  $tabla = new OdaTable('id="myTable-db" class="w3-table w3-responsive w3-striped w3-bordered"');
+  $tabla->setCaption('Datos Básicos del Aspirante');
+  
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('fecha_nac'), 
+      $FormAspir->getDataLabel('tipo_dcto'), 
+      $FormAspir->getDataLabel('documento'), 
+    ],
+  );
+
+  $Grado = (new Grado())::get($ModeloAspirante->grado_aspira);
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('grado_aspira').' '.$Grado->nombre, 
+      '', 
+      $FormAspir->getDataLabel('sexo'), 
+    ],
+  );
+  
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('pais_nac'), 
+      $FormAspir->getDataLabel('depto_nac'), 
+      $FormAspir->getDataLabel('ciudad_nac'), 
+    ],
+  );
+  
+  $tabla->addRow(
+    data: [
+      $FormAspir->getDataLabel('direccion').'<br>'
+      .$ModeloAspirante->barrio, 
+      $FormAspir->getDataLabel('telefono1'), 
+    ],
+    attrs_td: ['colspan="2"'],
+  );
+
+  return $tabla;
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

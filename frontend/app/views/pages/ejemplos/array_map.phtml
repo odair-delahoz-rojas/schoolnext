@@ -1,0 +1,40 @@
+<div class="w3-container">
+   <?= View::flash(); ?>
+   <?= View::Encab($controller_name, $page_action.' array_map'); ?>
+</div>
+
+<div class="w3-container">
+  <h2>array_map(callable $callback, array $array1, array $... = ?): array</h2>
+  <h3>Aplica la retrollamada a los elementos de los arrays dados</h3>
+  <p> array_map() devuelve un array que contiene todos los elementos de array1 después de haber aplicado la función callback a cada uno de ellos. El número de parámetros que la función callback acepta debería coincidir con el número de arrays proporcionados a array_map().</p>
+  
+  <hr>
+  <h3>Calcula el cubo de todos los elementos de un array</h3>
+  <?php
+  function cube($n): int{ return($n * $n * $n); }
+  
+  // echo OdaTags::createTag('h3', 'Antes');
+  // $a = array(1, 2, 3, 4, 5);
+  // print_r($a);
+  
+  // echo OdaTags::createTag('h3', 'Después');
+  // $b = array_map("cube", $a);
+  // print_r($b);
+  ?>
+
+  <hr>
+  <?php
+$arr = array("stringkey" => "value");
+function cb1($a) {
+    return array ($a);
+}
+function cb2($a, $b) {
+    return array ($a, $b);
+}
+print_r(array_map("cb1", $arr));
+print_r(array_map("cb2", $arr, $arr));
+print_r(array_map(null,  $arr));
+print_r(array_map(null, $arr, $arr));
+?>
+  
+</div>

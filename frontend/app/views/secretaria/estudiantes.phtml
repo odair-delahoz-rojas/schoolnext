@@ -1,0 +1,52 @@
+<?= View::Encab($controller_name, $page_action); ?>
+<?php View::flash(); ?>
+
+<h1 class="w3-center">Estudiantes Activos</h1>
+
+<div class="w3-panel">
+   <div class="w3-row w3-section">
+      <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
+      <div class="w3-rest">
+         <input oninput="w3.filterHTML('#id01', 'li', this.value)">
+         <span class="w3-small"><?= 'Total Registros: '.count($data); ?></span><br/>
+      </div>
+   </div>
+</div> 
+
+<div id="capa_saludo"></div>
+
+<div style="height: 200px;">
+   <ul id="id01" class="w3-ul w3-card-2 w3-border w3-hoverable">
+      <?php foreach($data as $key => $estud) : ?>
+         <?php $lnk_ajax2=Ajax::link("api/estudiantes/uno/$estud->id", Strings::sanear($estud->getApellidos()), 'details');?>
+         <?php $lnk_ajax1=Ajax::link("api/estudiantes/uno/$estud->id", Strings::sanear($estud->nombres), 'details');?>
+         
+         <li>
+            <div class="w3-card-4">
+               <header class="w3-container w3-theme-light">
+                  <button onclick="w3.show('#form')">Show</button>
+                  <h4><?=$estud->is_active_f(true);?><?=Ajax::link("api/estudiantes/uno/$estud->id", Strings::sanear($estud->getNombreCompleto()), 'details');?></h4>
+               </header>
+               <div class="w3-container w3-cell-row">
+                  <div class="w3-cell w3-mobile">
+                     <span><br/>C&oacute;digo: <?=$estud->id;?></span>
+                     <span><br/>Id:<?=$estud->documento;?></span>
+                     <span><br/>Sal&oacute;n : <?=$estud->salon;?></span>
+                  </div>
+                  <div class="w3-cell w3-mobile">
+                     <span><br/>Mes Pago: <?=$estud->mes_pagado;?></span>
+                     <span><br/>Cod Cont: <?=$estud->contabilidad_id;?></span>
+                  </div>
+               </div>
+               <_Tag class="w3-container w3-theme-light w3-center">
+                  <span><?=$estud->email_instit.'::'?></span>
+                  <span><?=$estud->clave_instit;?></span>
+               </_Tag>
+            </div>
+         </li> 
+
+      <?php endforeach ?>
+   </ul>
+</div>
+
+<div id="form"> </div>

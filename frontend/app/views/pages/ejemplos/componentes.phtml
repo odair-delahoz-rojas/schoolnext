@@ -1,0 +1,13 @@
+
+<div class="w3-container">
+   <?= View::flash(); ?>
+   <?= View::Encab($controller_name, $page_action); ?>
+</div>
+
+<div class="w3-container">
+    <h1>Componentes</h1>
+    <app-list nombre="Odair" apellido="De La Hoz"></app-list>
+</div>
+
+
+<?= Tag::js("components/app-list"); ?>

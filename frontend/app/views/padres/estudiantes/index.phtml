@@ -1,0 +1,26 @@
+<?= View::Encab(page_module: $controller_name, page_action: $page_action, breadcrumb: $breadcrumb); ?>
+<?php View::flash(); ?>
+
+
+<div class="w3-container">
+<?= OdaUtils::linkWhatsApp(
+      Config::get('config.construxzion.whatsapp'), 
+      'Algo no está bien ? Necesita ayuda? Soporte técnico: Escribenos por WhatssApp', 
+      false, 
+      APP_NAME. ' ' .Session::get('username') .' Necesito Soporte T&eacute;cnico')  ?>
+  <div class="w3-row">
+    <div class="w3-col w3-centerl3 m12 s12">
+      <?= require "side_bar.php" ?>
+    </div>
+    <div id="capa_datos" class="w3-col l9 m12 s12">
+      <div class="w3-container" id="info_estudiante"></div>
+      <div class="w3-container" id="proceso_matriculas"></div>
+      <div class="w3-container" id="seguimientos"></div>
+      <div class="w3-container" id="preinformes"></div>
+      <div class="w3-container" id="boletines"></div>
+      <div class="w3-container" id="planes_apoyo"></div>
+      <div class="w3-container" id="reconocimientos"></div>
+    </div>
+  </div>
+</div>
+<?=Tag::js(src: "padres/traer_datos_estudiante", cache: false); ?>

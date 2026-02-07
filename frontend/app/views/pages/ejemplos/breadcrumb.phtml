@@ -1,0 +1,20 @@
+
+
+<div class="w3-container">
+   <?= View::flash(); ?>
+   <?= View::Encab($controller_name, $page_action); ?>
+</div>
+
+<div class="w3-container">
+  <h1>Breadcrumb Test</h1>
+  <?php
+    echo 'PUBLIC_PATH: '.PUBLIC_PATH.'<br>';
+    echo 'SERVER PATH_INFO:'.$_SERVER['PATH_INFO'].'<br>';
+
+    $bc = new OdaBreadcrumb();
+    $bc->addCrumb('Paso 1', 'pages')
+       ->addCrumb('Paso 2', 'pages/ejemplos/archivos');
+    echo $bc->display();
+
+  ?>
+</div>

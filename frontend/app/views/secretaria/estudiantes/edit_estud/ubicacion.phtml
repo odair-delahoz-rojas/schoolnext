@@ -1,0 +1,24 @@
+<?php
+  $myTabla = new OdaTable();
+  
+  $myTabla->addRow([
+    $frmEstud->getInput(field:'direccion'), 
+    $frmEstud->getInput(field:'barrio'), 
+  ]);
+  
+  $myTabla->addRow([
+    $frmEstud->getInput(field:'telefono1'), 
+    $frmEstud->getInput(field:'email', tipo: 'email'),
+  ]);
+
+  $myTabla->addRow([
+    $frmEstud->getInput(field:'email_instit'),
+    $frmEstud->getInput(field:'clave_instit'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getInput(field:'religion'),
+    $frmDataEstud->getInput(field:'observacion'),
+  ]);
+
+  $myTabs->addTab('ubica', 'Ubicación', $myTabla);

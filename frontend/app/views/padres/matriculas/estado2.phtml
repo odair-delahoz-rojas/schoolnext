@@ -1,0 +1,35 @@
+<?php
+  //[SinDocumentos] => 2
+  $tabla = new OdaTable();
+  $tabla->setCaption('DESCARGAR DOCUMENTOS DE MATRÍCULA',
+        attrs: 'class="w3-center-align w3-bottombar w3-border-blue"');
+
+  $instrucciones = OdaTags::tag('h3', 'Instrucciones:<br>') 
+  .OdaTags::list([
+    'Descargar estos documentos', 
+    'Diligenciarlos según las instrucciones.', 
+    'Escanearlos en formato PDF o IMAGEN, cada uno por aparte', 
+    'Subirlos de manera independiente',
+  ], 'ol', attrs: 'class="w3-ol w3-card-4"');
+  
+
+  $num_archivos = (int)Config::get('matriculas.'.INSTITUTION_KEY.'.num_archivos');
+  $widgetLinkFiles = [];
+  for ($i=1; $i<=$num_archivos; $i++) { 
+    $tabla->addRow( [OdaTags::linkExterno(Config::get('matriculas.'.INSTITUTION_KEY.'.file_'.$i), 'Descargar '.Config::get('matriculas.'.INSTITUTION_KEY.'.file_'.$i.'_titulo'), 'class="w3-button w3-ripple w3-block"')] );
+  }
+
+  $btn_subir_arch = OdaTags::linkButton("padres/subirArchivos/$estud->id", 'Subir Archivos');
+
+  $contenido_tab .= "
+  <div class=\"w3-panel w3-pale-red w3-leftbar w3-border-red\">
+    <p>Estado del proceso [{$estado_mat->value}]: <b>{$estado_mat->label()}</b></p>
+    <p>{$estado_mat->comments()}</p>
+  </div>
+    $instrucciones
+    $tabla
+  <br><br>
+  <div class=\"w3-display-container\">
+    $btn_subir_arch
+  </div>
+  ";

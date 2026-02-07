@@ -1,0 +1,19 @@
+
+//Helper que utiliza Ajax
+
+//Crea un enlace en una Aplicacion actualizando la capa con ajax
+Ajax::link($action, $text, $update, $class = '', $attrs = '')
+Ajax::linkConfirm($action, $text, $update, $confirm, $class = '', $attrs = '')
+
+//Crea un enlace a una acción actualizando la capa con ajax
+Ajax::linkAction($action, $text, $update, $class = '', $attrs = '')
+Ajax::linkActionConfirm($action, $text, $update, $confirm, $class = '', $attrs = '')
+
+Lista desplegable para actualizar usando ajax
+Ajax::select($field, $data, $update, $action, $class = '', $attrs = '')
+
+Lista desplegable para actualizar usando ajax que toma los valores de un array de objetos
+Ajax::dbSelect($field, $show, $data, $update, $action, $blank=null, $class = '', $attrs = '')
+
+* Genera un formulario Ajax
+Ajax::form($update, $action = '', $class = '', $method = 'post', $attrs = '')

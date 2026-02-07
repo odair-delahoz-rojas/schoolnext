@@ -1,0 +1,48 @@
+<div class="w3-container">
+  <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+  <?php View::flash(); ?>
+</div>
+
+<div class="w3-container">
+  <div class="w3-cell-row">
+    <?php
+    try
+    {
+      $tabs = new OdaTabs();
+      $buttons = [];
+      if (count($data)>0)
+      {
+        foreach ($data as $key => $estud)
+        {
+          $Adjuntos = $arrData['Adjuntos'][$estud->id];
+          $estado_mat = $estud->getEstadoMat();
+          $contenido_tab ='';
+          include 'info_estud.phtml';
+          if (in_array($estado_mat->value, [3,4,5,6]))
+          {
+            include "estado3456.phtml";
+          }
+          else
+          {
+            include "estado{$estado_mat->value}.phtml";          
+          }
+          $tabs->addTab($key, $estud->nombres, $contenido_tab);
+        }
+        echo $tabs;
+      }
+    }
+    catch (\Throwable $th)
+    {
+      OdaFlash::error($th);
+    }
+    ?>
+  </div>
+    <pre> <?php
+    if (1==$user_id) { 
+      echo "Activo? $estud->is_active, Grado Actual: $estud->grado_mat, Grado Promovido: $estud->grado_promovido<br>";
+      print_r(EstadoMatricula::toArray()); 
+    }
+     ?> </pre>
+</div>
+
+<?=$tabs->getJs();?>

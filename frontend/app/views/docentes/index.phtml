@@ -1,0 +1,14 @@
+<div class="w3-panel">
+  <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+  <?= View::flash(); ?>
+  
+  <div class="w3-row">
+  <h2 class="w3-bar-item">Dashboard - Indicadores - Eventos</h2>
+    <div class="w3-container w3-green w3-mobile">
+      <h3 style="text-shadow:1px 1px 0 #444"><i class="fa-solid fa-recycle w3-large"></i> <?= Config::get('institutions.'.INSTITUTION_KEY.'.campania') ?></h3>
+    </div>
+  </div>
+
+  <?= View::partial(partial: 'eventos_dashboard', params: ['data'=>$data]); ?>
+
+</div>

@@ -1,0 +1,106 @@
+<div class="w3-row w3-margin-top">
+
+  <div class="w3-twothird">  
+    <?php
+     //echo OdaUtils::ver_array($arrData['Indicadores']) .'<hr>';
+      $forta= OdaTags::tag(tag: 'span', 
+      content: "F: ". $arrData['min_fortaleza'] ." - ". $arrData['max_fortaleza'], 
+      attrs: 'class="w3-text-green"');
+
+      $debil= OdaTags::tag(tag: 'span', 
+      content: "D: ". $arrData['min_debilidad'] ." - ". $arrData['max_debilidad'], 
+      attrs: 'class="w3-text-blue"');
+
+      $recom= OdaTags::tag(tag: 'span', 
+      content: "R: ". $arrData['min_recomendacion'] ." - ". $arrData['max_recomendacion'], 
+      attrs: 'class="w3-text-red"');
+
+      $info_indic = OdaTags::tag(tag:'span', content:"$forta $debil $recom", attrs:'class="w3-small"');
+      
+      $tabla = Form::open(action: "admin/notas/guardarCalificaciones/{$arrData['Periodo']->rowid}/{$arrData['Salon']->id}/{$arrData['Asignatura']->id}").'<table>';
+      $tabla .= '<tr> <td colspan="11"><hr></td><tr>';
+      $tabla .= '<tr> <td colspan="11">'.Form::submit(text: 'Guardar').'</td><tr>';
+      foreach ($data as $key => $Reg) {
+        $tabla .= require('calificarForm.phtml');
+        $tabla .= '<tr> <td colspan="11"><hr></td><tr>';
+      }
+      $tabla .= '<tr> <td colspan="11">'.Form::submit(text: 'Guardar').'</td><tr>';
+      $tabla .= '</table>'.Form::close();
+      echo $tabla;
+    ?>
+  </div>
+
+  <div class="w3-rest">
+    <div class="w3-rest w3-padding my-fixed-item">     
+      
+    <!-- Trigger/Open the Modal -->
+      <h6><?= "{$arrData['Periodo']->label} <br>{$arrData['Asignatura']->nombre} <br>{$arrData['Salon']->nombre} " ?></h6>
+      <h4>Calificación Masiva</h4>
+      <p>
+        <i 
+          id="check_todos_estud" 
+          class="fa-solid fa-user-check w3-large w3-green w3-button w3-round" 
+          title="Seleccionar: TODOS"
+          onclick="check_todos_estud()">
+        </i>
+        <i 
+          id="check_ningun_estud" 
+          class="fa-solid fa-user-minus w3-large w3-red w3-button w3-round" 
+          title="Seleccionar: NINGUNO"
+          onclick="check_ningun_estud()">
+        </i>
+      </p>
+      <p id="total_selected"></p>
+      <p id="total_agregados"></p>
+      <button 
+        onclick="document.getElementById('id01').style.display='block'"
+        class="w3-button w3-theme"
+        title="Abrir Lista de Indicadores"
+        >Lista de Indicadores
+        
+      </button>
+      <p></p>
+
+      
+      <div id="id01" class="w3-modal"><!-- The Modal -->
+        <div class="w3-modal-content"><!-- Modal Content -->
+          <div class="w3-container"><!-- Modal Container -->
+
+              <span id="boton_cerrar" onclick="document.getElementById('id01').style.display='none'"
+                  class="w3-button w3-display-topright">&times;</span>
+              <?php 
+                try {
+                  $head = '<h3>Calificación masiva</h3>';
+                  $contenido = '';
+                  foreach ($arrData['Indicadores'] as $indic) { 
+                    $contenido .= (new Indicador)::indicadorF(
+                      indicador: $indic->codigo, 
+                      ListaIndicadores: $arrData['IndicRef'],
+                      react: true,
+                    );
+                  }
+                  echo OdaTags::card(
+                    $head, 
+                    $contenido, 
+                    '', 
+                    [ 'class="w3-container w3-blue"', 
+                      'class="w3-container"', 
+                      'class="w3-container w3-pale-green" id="container-concepto"']
+                  );
+                
+                } catch (\Throwable $th) {
+                  OdaFlash::error($th);
+                }
+              ?>
+
+          </div><!-- END Modal Container -->
+        </div><!-- END The Modal Content -->
+      </div><!-- END The Modal -->
+
+
+      
+
+    </div>
+  </div>
+
+</div>

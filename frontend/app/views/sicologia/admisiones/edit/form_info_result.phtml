@@ -1,0 +1,81 @@
+<?php 
+try {  
+  $tabla = new OdaTable('id="myTable-m" class="w3-table w3-responsive w3-striped w3-bordered" style="width:100%"');
+
+  $select_grado = (new Grado)::getSelectGrados('aspirantes_grado_aspira', 'aspirantes[grado_aspira]', $ModeloAspirante->grado_aspira);
+  $tabla->addRow(
+    data: [
+       $FormAspir->getDataLabel('fecha_insc')
+      .$FormAspir->getCheck('is_active'), 
+      '',
+      $FormAspir->getLabel('grado_aspira').$select_grado
+      .'<br>'.$ModeloAspirante->is_pago_f(),
+    ],
+  );
+
+  
+  $tabla->addRow(
+    data: [
+      $FormAspir->getLabel('ctrl_llamadas').$ModeloAspirante->ctrl_llamadas,
+      '',
+      $FormAspir->getLabel('estatus').AspirEstatus::forSelect('aspirantes_estatus', 'aspirantes[estatus]', $ModeloAspirante->estatus), 
+    ],
+  );
+  
+  $tabla->addRow(
+    data: [
+      $FormAspir->getInput(field: 'fecha_entrev'),
+      '', 
+      $FormAspir->getCheck('is_fecha_entrev'),
+    ],
+  );
+  
+    
+  $tabla->addRow(
+    data: [
+      $FormAspir->getInput(field: 'fecha_eval'),
+      '', 
+      $FormAspir->getCheck('is_fecha_eval'), 
+    ],
+  );
+
+  $tabla->addRow(
+    data: [
+      $FormAspir->getLabel('result_matem').AspirResults::forSelect('aspirantes_result_matem', 'aspirantes[result_matem]', $ModeloAspirante->result_matem), 
+      '', 
+      $FormAspir->getLabel('result_caste').AspirResults::forSelect('aspirantes_result_caste', 'aspirantes[result_caste]', $ModeloAspirante->result_caste), 
+    ],
+  );
+  
+  
+  $tabla->addRow(
+    data: [
+      $FormAspir->getLabel('result_ingle').AspirResults::forSelect('aspirantes_result_ingle', 'aspirantes[result_ingle]', $ModeloAspirante->result_ingle), 
+        '', 
+        $FormAspir->getLabel('result_scien').AspirResults::forSelect('aspirantes_result_scien', 'aspirantes[result_scien]', $ModeloAspirante->result_scien), 
+    ],
+  );
+
+    
+  $tabla->addRow(
+    data: [ $FormAspir->getTextarea(field: 'entrevista') ],
+    attrs_td: ['colspan="3"'],
+  );
+  $tabla->addRow(
+    data: [ $FormAspir->getTextarea(field: 'recomendac') ],
+    attrs_td: ['colspan="3"'],
+  );
+  
+  $tabla->addRow(
+    data: [
+      $FormAspir::submit('Guardar y Terminar'),
+      '',
+      '',
+    ],
+  );
+  
+  return $FormAspir->getInput(field: 'id', tipo: 'hidden') . $tabla;
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

@@ -1,0 +1,79 @@
+<?php
+try {
+  $myTabla1 = new OdaTable();
+  $arrGrados = (new Grado)::getGradosArray();
+  $arrSalones = (new Salon)::getSalonesArray();
+  
+  $myTabla1->addRow([
+    $frmEstud->getLabel('grado_mat').$arrGrados[$frmEstud->getDataOnly('grado_mat')],
+    $frmEstud->getLabel('salon_id').$arrSalones[$frmEstud->getDataOnly('salon_id')],
+    $frmEstud->getDataLabel('numero_mat'),
+  ]);
+  
+  $myTabla1->addRow([
+    $frmEstud->getDataLabel('annio_promovido'),
+    $frmEstud->getLabel('grado_promovido').$Grados[$frmEstud->getDataOnly('grado_promovido')],
+    '',
+  ]);
+    
+  $myTabla2 = new OdaTable();
+  $arch1 = ($modelAdjuntos->nombre_archivo1) ? $frmAdjuntos->getInput('nombre_archivo1', 'hidden') : '';
+  $estado_arch1 = ($modelAdjuntos->nombre_archivo1) ? $frmAdjuntos->getSelect('estado_archivo1', EstadoAdjuntos::toArray(false)) : 'Archivo no subido';
+  $coment_arch1 = ($modelAdjuntos->nombre_archivo1) ? $frmAdjuntos->getInput('coment_archivo1') : $modelAdjuntos->coment_archivo1;
+  $myTabla2->addRow([
+    '1. '.$arch1.$modelAdjuntos->getLinkArchivo(1), $estado_arch1, $coment_arch1,
+  ]);
+  
+  $arch2 = ($modelAdjuntos->nombre_archivo2) ? $frmAdjuntos->getInput('nombre_archivo2', 'hidden') : '';
+  $estado_arch2 = ($modelAdjuntos->nombre_archivo2) ? $frmAdjuntos->getSelect('estado_archivo2', EstadoAdjuntos::toArray(false)) : 'Archivo no subido';
+  $coment_arch2 = ($modelAdjuntos->nombre_archivo2) ? $frmAdjuntos->getInput('coment_archivo2') : $modelAdjuntos->coment_archivo2;
+  $myTabla2->addRow([
+    '2. '.$arch2.$modelAdjuntos->getLinkArchivo(2), $estado_arch2, $coment_arch2,
+  ]);
+  
+  $arch3 = ($modelAdjuntos->nombre_archivo3) ? $frmAdjuntos->getInput('nombre_archivo3', 'hidden') : '';
+  $estado_arch3 = ($modelAdjuntos->nombre_archivo3) ? $frmAdjuntos->getSelect('estado_archivo3', EstadoAdjuntos::toArray(false)) : 'Archivo no subido';
+  $coment_arch3 = ($modelAdjuntos->nombre_archivo3) ? $frmAdjuntos->getInput('coment_archivo3') : $modelAdjuntos->coment_archivo3;
+  $myTabla2->addRow([
+    '3. '.$arch3.$modelAdjuntos->getLinkArchivo(3), $estado_arch3, $coment_arch3,
+  ]);
+  
+  $arch4 = ($modelAdjuntos->nombre_archivo4) ? $frmAdjuntos->getInput('nombre_archivo4', 'hidden') : '';
+  $estado_arch4 = ($modelAdjuntos->nombre_archivo4) ? $frmAdjuntos->getSelect('estado_archivo4', EstadoAdjuntos::toArray(false)) : 'Archivo no subido';
+  $coment_arch4 = ($modelAdjuntos->nombre_archivo4) ? $frmAdjuntos->getInput('coment_archivo4') : $modelAdjuntos->coment_archivo4;
+  $myTabla2->addRow([
+    '4. '.$arch4.$modelAdjuntos->getLinkArchivo(4), $estado_arch4, $coment_arch4,
+  ]);
+  
+  $arch5 = ($modelAdjuntos->nombre_archivo5) ? $frmAdjuntos->getInput('nombre_archivo5', 'hidden') : '';
+  $estado_arch5 = ($modelAdjuntos->nombre_archivo5) ? $frmAdjuntos->getSelect('estado_archivo5', EstadoAdjuntos::toArray(false)) : 'Archivo no subido';
+  $coment_arch5 = ($modelAdjuntos->nombre_archivo5) ? $frmAdjuntos->getInput('coment_archivo5') : $modelAdjuntos->coment_archivo5;
+  $myTabla2->addRow([
+    '5. '.$arch5.$modelAdjuntos->getLinkArchivo(5), $estado_arch5, $coment_arch5,
+  ]);
+  
+  $arch6 = ($modelAdjuntos->nombre_archivo6) ? $frmAdjuntos->getInput('nombre_archivo6', 'hidden') : '';
+  $estado_arch6 = ($modelAdjuntos->nombre_archivo6) ? $frmAdjuntos->getSelect('estado_archivo6', EstadoAdjuntos::toArray(false)) : 'Archivo no subido';
+  $coment_arch6 = ($modelAdjuntos->nombre_archivo6) ? $frmAdjuntos->getInput('coment_archivo6') : $modelAdjuntos->coment_archivo6;
+  $myTabla2->addRow([
+    '6. '.$arch6.$modelAdjuntos->getLinkArchivo(6), $estado_arch6, $coment_arch6,
+  ]);
+  
+  
+  $lnk_docs_mat = OdaTags::tag('span', "Descargar Documentos", 'class="w3-button w3-grey"')
+    .'<br><small>NOTA: Para descargar, se debe generar primero el Número de Matrícula</small>';
+  
+  //if ( (0==$modelEstud->numero_mat) or (is_null($modelEstud->numero_mat)) ) {
+  if ( !empty($modelEstud->numero_mat) ) {
+    $lnk_docs_mat = '<br>'.OdaTags::linkButton(
+      action: "admin/estudiantes/exportDocsMatricula/{$modelEstud->id}", 
+      text: "Descargar Documentos [Matrícula #{$modelEstud->numero_mat_f()}]", 
+      attrs: 'class="w3-button w3-green" target="_blank"  onclick="load()"'
+    );
+  }
+  
+  $myTabs->addTab('matri', 'Matrícula', $myTabla1.'<br><hr>'.$myTabla2."<hr><br>$lnk_docs_mat");
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

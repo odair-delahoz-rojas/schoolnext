@@ -1,0 +1,12 @@
+<header class="w3-margin-top">
+  <?php
+    try {
+      $titulo = "{$arrData['Periodo']->label} - {$arrData['Asignatura']->nombre} - {$arrData['Salon']->nombre}";
+      echo OdaTags::tag(tag:'h2', content:$titulo, attrs:'');
+      
+    } catch (\Throwable $th) {
+      OdaLog::debug($th,__FILE__);
+      OdaFlash::error($th);
+    }
+  ?>
+</header>

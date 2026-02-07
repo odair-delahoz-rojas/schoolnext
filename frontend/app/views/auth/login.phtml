@@ -1,0 +1,52 @@
+<div class="w3-container w3-padding w3-center">
+  <?= View::flash(); ?>
+  <br>
+  <div class="w3-display-container w3-padding w3-center">
+    <div class="w3-display-topmiddle w3-row">
+        <div class="w3-padding w3-row w3-blue-gray"> <br>
+        <?= 
+          OdaTags::img(
+            Config::get(
+                'institutions.'.strtolower($_instituto_id).'.logo'),
+                $_instituto_id,
+                "style=\"width:80%;\"",
+                strtoupper($_instituto_id)); 
+        ?>
+        </div> 
+        <div class="w3-padding w3-row w3-blue-gray">
+            <h2>SchoolNext App</h2>
+            <h3>Acceso Web</h3>
+        </div>
+        <div class="w3-padding w3-row w3-blue-gray w3-large">
+          <!-- <h3>En proceso de actualizacion</h3>
+          <h3>Estaremos disponibles nuevamente en unos minutos</h3> -->
+          <form action="<?=PUBLIC_PATH?>auth/login" method="post" class="w3-center">
+            <input name="mode" type="hidden" value="auth">
+            <input autocomplete="username" id="username" name="username" type="text" value="" class="w3-center w3-input w3-border w3-hover-pale-yellow" placeholder="Ingrese USUARIO"><br>
+            <input autocomplete="current-password webauthn"  id="password" name="password" type="password" value="" class="w3-center w3-input w3-border w3-hover-pale-yellow" placeholder="Ingrese CLAVE">
+            <p><button type="submit">ENTRAR</button></p>
+            <?= 'No puede ingresar ? Necesita ayuda? <br/> Soporte técnico: '
+                .OdaUtils::linkWhatsApp(
+                  Config::get('config.construxzion.whatsapp'), 
+                  'Escribenos por WhatssApp', 
+                  true, 
+                  APP_NAME. ' ' .Session::get('username') .' Necesito Soporte T&eacute;cnico')  ?>
+          </form>
+        </div>
+        <div class="w3-padding w3-row">
+          <span>
+            <?= Config::get('config.construxzion.copy') ?><br/>
+            <?= Config::get('config.construxzion.copy_text') ?><br/>
+            <a href="<?=Config::get('config.construxzion.twitter')?>" target="_blank"><?=Config::get('config.construxzion.name')?></a> 
+          </span>
+        </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  window.onload = function() {
+    document.getElementById("username").focus();
+  };
+</script>

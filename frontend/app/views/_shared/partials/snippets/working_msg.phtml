@@ -1,0 +1,9 @@
+<div id="working-message" class="w3-bar">
+   <?php if (isset($image)): ?> 
+      <span class="w3-bar-item"><?= _Icons::solid($image, 'w3-jumbo');?></span>
+      <h2 class="w3-bar-item">Dashboard - Indicadores - Eventos</h2>
+   <?php else: ?>
+      <span class="w3-bar-item"><?= _Icons::solid('person-digging', 'w3-jumbo');?></span>
+      <h2 class="w3-bar-item">Dashboard - Indicadores - Eventos</h2>
+   <?php endif; ?>        
+</div>

@@ -1,0 +1,186 @@
+<div class="w3-margin-top">
+
+   <?php
+
+   try {
+    $result = "";
+    $tabbuttons = '<div class="w3-bar w3-theme w3-card">';
+    
+    $DoliK = new DoliConst();
+    $arr_calificar_periodos = explode(",", $DoliK->getValue('SCHOOLNEXTACADEMICO_PERIODOS_CALIFICAR'));
+    $arr_seg_periodos = explode(",", $DoliK->getValue('SCHOOLNEXTACADEMICO_PERIODOS_SEGINTERMEDIO'));
+    $arr_pa_periodos = explode(",", $DoliK->getValue('SCHOOLNEXTACADEMICO_PERIODOS_PLAN_APOYO'));
+
+    foreach ($data as $periodo => $regs_periodo) 
+    {
+      if (isset($regs_periodo[0])) 
+      {
+          $tabbuttons .= "<button class=\"w3-bar-item w3-mobile w3-button tablink w3-theme-action\" 
+                            onclick=\"openTab(event,'p$periodo')\">Periodo $periodo</button>";
+
+          // ************************************************************          
+          // FILTROS PARA EL BOTÓN CALIFICAR
+          // ************************************************************
+          //$arr_calificar_periodos = (array)Config::get('docentes.calificaciones.periodos');
+          // $arr_calificar_salones = (array)Config::get('docentes.calificaciones.salones');
+          // $arr_calificar_asignaturas = (array)Config::get('docentes.calificaciones.asignaturas');
+          // $arr_calificar_usuarios = (array)Config::get('docentes.calificaciones.usuarios');
+          $btn_enabled = true;
+          if ((Count($arr_calificar_periodos)>0) && !in_array($periodo, $arr_calificar_periodos))
+          {
+            $btn_enabled = false;
+          }
+          // if ((Count($arr_calificar_salones)>0) and !in_array($arrData['Salon']->id, $arr_calificar_salones))
+          // {
+          //   $btn_enabled = false;
+          // }
+          // if ((Count($arr_calificar_asignaturas)>0) and !in_array($arrData['Asignatura']->id, $arr_calificar_asignaturas))
+          // {
+          //   $btn_enabled = false;
+          // }
+          // if ((Count($arr_calificar_usuarios)>0) and !in_array($user_id, $arr_calificar_usuarios))
+          // {
+          //   $btn_enabled = false;
+          // }
+          $btn_calificar = (new Nota)::lnkPageCalificar($periodo, $arrData['Salon']->id, $arrData['Asignatura']->id, $btn_enabled);
+                    
+          // ************************************************************          
+          // FILTROS PARA EL BOTÓN SEGUIMIENTOS
+          // ************************************************************
+          // $arr_seg_periodos = (array)Config::get('docentes.seguimientos.periodos');
+          // $arr_seg_salones = (array)Config::get('docentes.seguimientos.salones');
+          // $arr_seg_asignaturas = (array)Config::get('docentes.seguimientos.asignaturas');
+          // $arr_seg_usuarios = (array)Config::get('docentes.seguimientos.usuarios');
+          $btn_enabled = true;
+          if ((Count($arr_seg_periodos)>0) && !in_array($periodo, $arr_seg_periodos))
+          {
+            $btn_enabled = false;
+          }
+          // if ((Count($arr_seg_salones)>0) and !in_array($arrData['Salon']->id, $arr_seg_salones))
+          // {
+          //   $btn_enabled = false;
+          // }
+          // if ((Count($arr_seg_asignaturas)>0) and !in_array($arrData['Asignatura']->id, $arr_seg_asignaturas))
+          // {
+          //   $btn_enabled = false;
+          // }
+          // if ((Count($arr_seg_usuarios)>0) and !in_array($user_id, $arr_seg_usuarios))
+          // {
+          //   $btn_enabled = false;
+          // }
+          $btn_seguimientos = (new Nota)::lnkPageSeguimientos($periodo, $arrData['Salon']->id, $arrData['Asignatura']->id, $btn_enabled);
+                    
+          // ************************************************************          
+          // FILTROS PARA EL BOTÓN PLANES DE APOYO
+          // ************************************************************
+          //$arr_pa_periodos = (array)Config::get('docentes.planes_apoyo.periodos');
+          // $arr_pa_salones = (array)Config::get('docentes.planes_apoyo.salones');
+          // $arr_pa_asignaturas = (array)Config::get('docentes.planes_apoyo.asignaturas');
+          // $arr_pa_usuarios = (array)Config::get('docentes.planes_apoyo.usuarios');
+          $btn_enabled = true;
+          if ((Count($arr_pa_periodos)>0) && !in_array($periodo, $arr_pa_periodos))
+          {
+            $btn_enabled = false;
+          }
+          // if ((Count($arr_pa_salones)>0) and !in_array($arrData['Salon']->id, $arr_pa_salones))
+          // {
+          //   $btn_enabled = false;
+          // }
+          // if ((Count($arr_pa_asignaturas)>0) and !in_array($arrData['Asignatura']->id, $arr_pa_asignaturas))
+          // {
+          //   $btn_enabled = false;
+          // }
+          // if ((Count($arr_pa_usuarios)>0) and !in_array($user_id, $arr_pa_usuarios))
+          // {
+          //   $btn_enabled = false;
+          // }
+          $btn_planes_apoyo =  (new Nota)::lnkPagePlanesApoyo($periodo, $arrData['Salon']->id, $arrData['Asignatura']->id, $btn_enabled);          
+
+          $tabla = new OdaTable();
+
+          $tabla->setCaption("<h2 class=\"\"> PERIODO $periodo</h2> 
+          $btn_seguimientos &nbsp;&nbsp; $btn_calificar &nbsp;&nbsp; $btn_planes_apoyo<br><br>");
+
+          foreach ($regs_periodo as $key => $nota)
+          {
+            $t1=($themei=='d'?'d1':'l1');   $t2=($themei=='d'?'d2':'l3');
+            $nom_estud = strtoupper(OdaUtils::nombrePersona((string)$nota->estudiante_nombre)." [{$arrData['Salon']->nombre}]")
+                         ."</br>P$periodo:  {$arrData['Asignatura']->nombre} ".$nota->verNota();
+            $arr_notas_anteriores = [];
+            $notas_anteriores = '<br>Record: ';
+
+            for ($i=1; $i<=$periodo; $i++)
+            { 
+              if ($arrData['Calificaciones'][$nota->estudiante_id][$i]>0)
+              {
+                $arr_notas_anteriores[] = $arrData['Calificaciones'][$nota->estudiante_id][$i];
+                $notas_anteriores .= '(P'.$i.') <u>'.$arrData['Calificaciones'][$nota->estudiante_id][$i] .'</u>&nbsp&nbsp';
+              }
+            }
+
+            if ($periodo>1 && count($arr_notas_anteriores)>0)
+            {
+              $promedio = array_sum($arr_notas_anteriores)/count($arr_notas_anteriores);
+              $notas_anteriores .= '&nbsp'.OdaTags::Badges(caption: 'Prom: ', value: $promedio, color: 'w3-blue');
+            }
+            else 
+            {
+              $notas_anteriores = '';
+            }
+
+            $fila1 = array($nota->getFoto().'<br>Reg-'.$nota->id, $nom_estud.'<br>'.$notas_anteriores);
+            $attr = "id=\"$nota->id-1\" class=\"w3-theme-".((($key%2)==0) ? $t1:$t2).'"';
+            $attrs_td = array('class="w3-center" rowspan="3"' , 'colspan="10"');
+            $tabla->addRow(
+              data: $fila1, 
+              attrs: $attr, 
+              attrs_td: $attrs_td
+            );
+
+            $fila2 = [];
+            for ($i=1; $i<=10 ; $i++)
+            {
+              $pref = ($i<10) ? 'i0'.$i : 'i'.$i ;
+              $fila2[] = (new Indicador)::indicadorF( (int)$nota->$pref, $arrData["IndicadoresP{$periodo}"] );
+            }
+            $attr = "id=\"$nota->id-2\" class=\"w3-theme-".((($key%2)==0) ? $t1:$t2).'"';
+            $str = 'style="width:8%"'.str_repeat(',style="width:8%"',9);
+            $attrs_td = explode(',',$str);
+            $tabla->addRow(
+              data: $fila2, 
+              attrs: $attr, 
+              attrs_td: $attrs_td
+            );
+            
+            $fila3 = array($nota->i11, $nota->i12, $nota->i13, $nota->i14, $nota->i15, 
+                           $nota->i16, $nota->i17, $nota->i18, $nota->i19, $nota->i20);
+
+            $attr = "id=\"$nota->id-3\" class=\"w3-theme-".((($key%2)==0) ? $t1:$t2).'"';
+            $tabla->addRow(
+              data: $fila3, 
+              attrs: $attr, 
+              attrs_td: $attrs_td
+            );
+          }
+          
+          $display = ($periodo!=$_periodo_actual) ? "style=\"display:none\"" : '' ;
+          $result .= "<div id=\"p$periodo\" class=\"tab w3-card-4 w3-padding\" $display >";
+          $result .= $tabla;
+          $result .= '</div>';
+       }
+    }
+    $tabbuttons .= '</div>';
+    echo $tabbuttons.$result;
+   
+   }
+   
+   catch (\Throwable $th) 
+   {
+     OdaFlash::error($th);
+   }
+
+   ?>
+
+</div>
+
+<?= tag::js("tabs_h");?>

@@ -1,0 +1,16 @@
+<header class="w3-margin-top">
+  <?php
+    $titulo = "Per&iacute;odo {$arrData['Periodo']} - [{$arrData['Asignatura']->id}] {$arrData['Asignatura']->nombre} - [{$arrData['Salon']->id}] {$arrData['Salon']->nombre}";
+    echo OdaTags::tag(tag:'h2', content: $titulo, attrs:'');
+  ?>
+  <div class="w3-hide">
+    <span id="min_f" class="w3-hide"><?=$arrData['min_fortaleza']?></span>
+    <span id="max_f" class="w3-hide"><?=$arrData['max_fortaleza']?></span>
+
+    <span id="min_d" class="w3-hide"><?=$arrData['min_debilidad']?></span>
+    <span id="max_d" class="w3-hide"><?=$arrData['max_debilidad']?></span>
+
+    <span id="min_r" class="w3-hide"><?=$arrData['min_recomendacion']?></span>
+    <span id="max_r" class="w3-hide"><?=$arrData['max_recomendacion']?></span>
+  </div>
+</header>

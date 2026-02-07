@@ -1,0 +1,84 @@
+<?php
+try {
+  $frm = '';
+
+  // fila #1
+  $frm = "<tr class=\"\">";  
+  $info_reg = '<br>Reg #'.$Reg->id;
+  $f_profesor_id = $Reg->fieldForm('profesor_id', type:'hidden');
+
+  $frm .= OdaTags::tag(tag: 'td', content: $Reg->getFoto().$info_reg, attrs: 'rowspan="3"');
+  $frm .= OdaTags::tag(tag: 'td', content: $Reg->estudiante_nombre."<br>$info_indic", attrs: 'colspan="4"');
+  $frm .= OdaTags::tag(tag: 'td', content: $f_profesor_id);
+
+  $field_definitiva = $Reg->fieldForm(field_name: 'definitiva', type:'hidden');
+  $field_plan_apoyo = $Reg->fieldForm(field_name: 'plan_apoyo', type:'hidden');
+  $field_nota_final = $Reg->fieldForm(field_name: 'nota_final', type:'hidden');
+  
+  $las_notas = $field_definitiva.$field_plan_apoyo.$field_nota_final;
+  $frm .= OdaTags::tag(tag: 'td', content: $las_notas, attrs: 'colspan="1"');
+  $frm .= OdaTags::tag(tag: 'td', content: '');
+  $frm .= OdaTags::tag(tag: 'td', content: '');
+  $frm .= '</tr>';
+  
+  
+  // reglas para los indicadores
+  $patternInidisc  = ' pattern="/^('. implode('|', $arrData['Indicadores']) .')$/"';
+  $min_max  = ' min="'.$arrData['min_indic'].'" max="'.$arrData['max_indic'].'" ';
+  $max_lenght = ' maxlength="'.$arrData['ancho_lim'].'" size="'.$arrData['ancho_lim'].'"' ;
+  
+  // fila #2
+  $frm .= "<tr class=\"\">";
+  $fields['f2'] = ['i21', 'i22', 'i23', 'i24', 'i25', 'i26', 'i27', 'i28', 'i29', 'i30'];
+  foreach ($fields['f2'] as $key => $campo) { 
+  $field = $Reg->fieldForm($campo, $min_max .$max_lenght .$patternInidisc.' class="color-input"');
+  $frm .= OdaTags::tag('td', $field);
+  }//foreach
+  $frm .= '</tr>';
+  
+  // fila #3
+  $frm .= "<tr class=\"\">";
+
+  if (INSTITUTION_KEY=='santarosa') 
+  {
+    $field = $Reg->fieldForm(field_name: 'asi_calificacion', label: true);
+    $frm .= OdaTags::tag('td', $field, attrs: 'colspan="2"');
+
+    $frm .= OdaTags::tag('td', '', attrs: 'colspan="3"');
+  }
+  else
+  {
+    $field = $Reg->fieldForm(field_name: 'asi_desempeno', label: true);
+    $frm .= OdaTags::tag('td', $field, attrs: 'colspan="2"');
+    
+    $field = $Reg->fieldForm(field_name: 'asi_fecha_entrega', type: 'date', label: true);
+    $frm .= OdaTags::tag('td', $field, attrs: 'colspan="3"');
+  }  
+  $frm .= '</tr>';
+  
+  // fila #4
+  $frm .= "<tr class=\"\">";
+  if (INSTITUTION_KEY=='santarosa') 
+  {
+    $field = $Reg->fieldForm(field_name: 'asi_activ_profe', type: 'textarea', label: true);
+    $frm .= OdaTags::tag('td', $field, attrs: 'colspan="5"');
+    
+    //$field = $Reg->fieldForm(field_name: 'asi_activ_estud', type: 'textarea', label: true);
+    //$frm .= OdaTags::tag('td', $field, attrs: 'colspan="5"');
+  }
+  else
+  {
+    $field = $Reg->fieldForm(field_name: 'asi_activ_profe', type: 'textarea', label: true);
+    $frm .= OdaTags::tag('td', $field, attrs: 'colspan="5"');
+    
+    $field = $Reg->fieldForm(field_name: 'asi_activ_estud', type: 'textarea', label: true);
+    $frm .= OdaTags::tag('td', $field, attrs: 'colspan="5"');
+  }
+  $frm .= '</tr>';
+  
+  return $frm;
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}
+?>

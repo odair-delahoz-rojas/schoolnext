@@ -1,0 +1,23 @@
+<?php
+$logo = '<a href="'.$link_web_page.'" target="_blank">
+      <img src="'.PUBLIC_PATH.'img/'.Config::get('institutions.'.INSTITUTION_KEY.'.logo').'" alt="Logo" height="40"> </a>';
+?>
+
+<div style="text-align: center; font-weight: bold;">
+   <?=$logo?>
+</div>  
+
+<div class="w3-container w3-row w3-bar">
+  <div class="w3-bar-item">
+    <p>Por favor, haga una revisión del formulario antes de diligenciarlo para asegurarse que tiene 
+      la información que se requiere para poder completarlo correctamente.</p>
+      <?php 
+        if ('formsencillo'!=$data['tipo_form_admisiones'])
+        {
+          echo "<p>Descargue y diligencie el Formato de Autorización Consulta y Reporte a Centrales de Riesgo "
+            . OdaTags::link('files/download/matriculas/windsor_formato_actualizacion.pdf', 'DESCARGAR', 'target=\"_blank\"') 
+            . " al final tendrá que adjuntarlo.<p>";
+        }
+      ?>
+  </div>
+</div>

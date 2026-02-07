@@ -1,0 +1,119 @@
+<?php
+try {
+  $annio = $_annio_actual;
+  $seccion = $arrData['Grado']->seccion_id;
+  
+  $archivoPDF = new OdaMpdf([
+    'tempDir' => APP_PATH . 'temp/mpdf',
+    'format' => 'Legal',
+    'progressBar' => true,
+    'title2annots' => true,  // convert headers in annotations
+    'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages 
+    'exposeVersion' => false, // security 
+    'margin_left' => 20,
+    'margin_right' => 15,
+    'margin_top' => 48,
+    'margin_bottom' => 25, // no tocar
+    'margin_header' => 15, // no tocar
+    'margin_footer' => 15 // no tocar
+    // 'orientation' => 'L', // P(portrait), L(landscape) 
+    // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+  ]);
+
+  /* 
+  'id', 'uuid', 'annio', 'periodo_id', 'grado_id', 'salon_id', 'asignatura_id', 'estudiante_id', 
+  'definitiva', 'plan_apoyo', 'nota_final', 'profesor_id', 
+  'i31', 'i32', 'i33', 'i34', 'i35', 'i36', 'i37', 'i38', 'i39', 'i40', 
+  'paf_link_externo1', 'paf_link_externo2', 
+  'paf_temas', 'paf_acciones', 'paf_activ_estud', 'paf_activ_profe', 'paf_fecha_entrega', 
+  'is_paf_ok_coord', 'is_paf_validar_ok', 'is_paf_ok_dirgrupo', 
+*/
+
+  $archivoPDF->SetSubject($file_tipo);
+  $archivoPDF->SetTitle($file_title);
+
+  // ENCADEZADO
+  // --------------------------------
+  $attrs_td  = ['width="15%"','width="35%"','width="35%"', 'width="15%"'];
+  $tabla = new OdaTable(_attrs: 'width="100%"');
+  $tabla->setCaption("PLAN DE APOYO FINAL PERIODO {$arrData['Periodo']}");
+  $fila = [
+    'Salon:'. $arrData['Salon'],
+    'Asignatura:'. $arrData['Asign'],
+    //'Profesor:'. $data->profesor_id,
+    'Periodo:'. $arrData['Periodo'],
+  ];
+  $tabla->addRow(data: $fila, attrs: ['bgcolor="#B2BABB";'], attrs_td: $attrs_td);
+  // --------------------------------
+  // --------------------------------
+  $attrs_td  = ['colspan="2"; width="50%";','width="35%"', 'width="15%"'];
+  $fila = [
+    '<b>'.$arrData['Estud'].'</b>',
+    'Desempe&ntilde;o:' ,
+    'F. Evaluaci&oacute;n:' ,
+  ];
+  $tabla->addRow(data: $fila, attrs: ['bgcolor="#B2BABB";'], attrs_td: $attrs_td);
+  // --------------------------------
+  
+  
+  // CUERPO DEL REPORTE 
+
+  // Dificultades
+  $titulo = '<hr><h4>DIFICULTADES</h4>';
+  $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+  $dificultades = '';
+  for ($i=31; $i<=40; $i++) { 
+    $codigo = $data->{'i'."$i"};
+    if (strlen($codigo)>0) {
+      $concepto = $arrData ['Indicadores'] [$data->asignatura_id] [$codigo] ['concepto'] ?? '';      
+      if (strlen($concepto)>0) {
+        $dificultades .= "* $concepto<br>";
+      }
+    }
+  }
+  $fila = [$dificultades];
+  $tabla->addRow(data: $fila, attrs_td: ['colspan="4"']);
+  
+  
+  // Temas
+  if (strlen($data->paf_temas)>0) {
+    $titulo = '<hr><h4>TEMAS</h4>';
+    $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->paf_temas], attrs_td: ['colspan="4"']);
+  }
+
+  // paf_acciones
+  if (strlen($data->paf_acciones)>0) {
+    $titulo = '<hr><h4>Acciones Realizadas</h4>';
+    $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->paf_acciones], attrs_td: ['colspan="4"']);
+  }
+
+  // paf_activ_profe
+  if (strlen($data->paf_activ_profe)>0) {
+    $titulo = '<hr><h4>Actividades realizadas por el profesor</h4>';
+    $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->paf_activ_profe], attrs_td: ['colspan="4"']);
+  }
+
+  // paf_activ_estud
+  if (strlen($data->paf_activ_estud)>0) {
+    $titulo = '<hr><h4>Actividades para el Estudiante</h4>';
+    $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->paf_activ_estud], attrs_td: ['colspan="4"']);
+  }
+
+  // paf_link_externo1
+  if (strlen($data->paf_link_externo1)>0 or strlen($data->paf_link_externo2)>0 ) {
+    $titulo = '<hr><h4>Links a recursos externos</h4>';
+    $tabla->addRow(data: [$titulo], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->paf_link_externo1], attrs_td: ['colspan="4"']);
+    $tabla->addRow(data: [$data->paf_link_externo2], attrs_td: ['colspan="4"']);
+  }
+  
+  $archivoPDF->WriteHTML($tabla);
+  $archivoPDF->Output("{$file_name}.pdf", 'D');
+
+} catch (\Throwable $th) {
+  OdaLog::error($th);
+}

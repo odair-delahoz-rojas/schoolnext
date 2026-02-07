@@ -1,0 +1,24 @@
+<?php
+try {
+  $myTabla = new OdaTable();
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('ante_instit'),
+    $frmDataEstud->getDataLabel('ante_instit_dir'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('ante_instit_tel'),
+    '',
+  ]);
+  
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('ante_grado'),
+    $frmDataEstud->getDataLabel('ante_fecha_ret'),
+  ]);
+
+  $myTabs->addTab('instit', 'Instit Anterior', $myTabla);
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

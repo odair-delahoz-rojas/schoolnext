@@ -1,0 +1,90 @@
+.my-fixed-item {
+  position: fixed;
+  min-height: 120px;
+  width: 252px;
+  text-align: center;
+  word-wrap: break-word;
+  background-color: rgb(28, 29, 28);
+}
+
+
+/* Formatea los mensajes Flash::xxx() de KumbiaPHP */
+.flash {
+  margin: 5px 0;
+  min-height: 32px;
+  padding:3px 10px 3px 50px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  line-height: 32px;
+  border-radius: 2px;
+}
+
+.error {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
+.info {
+  color: #00529B;
+  background-color: #BDE5F8;
+}
+
+.valid {
+  color: #4F8A10;
+  background-color: #DFF2BF;
+}
+.warning {
+  color: #9F6000;
+  background-color: #FEEFB3;
+}
+
+
+/* Inicio Breadcrumb  */
+ul.breadcrumb {
+  padding: 10px 16px;
+  list-style: none;
+  /* background-color: #eee; */
+}
+
+/* Display list items side by side */
+ul.breadcrumb li {
+  display: inline;
+  font-size: 18px;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+ul.breadcrumb li+li:before {
+  padding: 8px;
+  color: black;
+  content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+ul.breadcrumb li a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Add a color on mouse-over */
+ul.breadcrumb li a:hover {
+  color: #01447e;
+  text-decoration: underline;
+}
+
+/* Fin Breadcrumb */
+
+
+
+/* Formularios */
+label {
+  display: block;
+  margin-top: 1em;
+}
+
+input:valid {
+  background-color: rgb(255, 255, 255);
+}
+
+input:invalid {
+  background-color: lightpink;
+}

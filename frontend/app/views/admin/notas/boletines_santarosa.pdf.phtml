@@ -1,0 +1,159 @@
+<?php
+try 
+{
+  $seccion_id = $arrData['Grado']->seccion_id;
+  $format = (1==$seccion_id) ? 'LETTER': 'LEGAL'; // 'LETTER' => [612.00, 792.00],  'LEGAL' => [612.00, 1008.00],
+  $archivoPDF = new MpdfBoletinesSantarosa([
+    'tempDir' => APP_PATH . 'temp/mpdf',
+    'format' => $format,
+    'progressBar' => true,
+    'title2annots' => true,  // convert headers in annotations
+    'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages
+    'exposeVersion' => false, // security
+    'margin_bottom' => 25, // no tocar
+    'margin_header' => 15, // no tocar
+    'margin_footer' => 15, // no tocar
+    'orientation' => 'P', // P(portrait), L(landscape) 
+    // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+  ]);
+
+  $pivote_estudiante = 0;
+  $pivote_materia = 0;
+  $tabla_rango = (1==$seccion_id) ? '' : (new RangoD())->showTablaRangos();
+  $t_materia = new OdaTable();
+  //$suma_humanidades = 0;
+  //$cnt_humanidades = 0;
+  foreach ($data as $key => $nota)
+  {
+    if ($pivote_estudiante <> $nota->estudiante_id)  // CAMBIO DE ESTUDIANTE
+    {
+      if ($key>0) // antes de añadir la pagina nueva del siguiete estudiante
+      {
+        $archivoPDF->WriteHTML('<br/><b>Observaciones:</b> <br/><br/> <hr/><br/> <hr/>');
+        $Params_pie = [
+          $tabla_rango,
+          $arrData['Salon']->getImgFirmaDirector(),
+          ($arrData['Docentes'][$arrData['Salon']->director_id] ?? ''),
+        ];
+        $archivoPDF->WriteHTML($archivoPDF->pieBloqueBoletines($Params_pie));
+      }
+      // Nuevo estudiante, nueva página
+      $puesto = (1==$seccion_id) ? '' : $arrData['Puestos'][$nota->estudiante_id]['puesto'];
+      $promedio = (1==$seccion_id) ? '' : number_format(round($arrData['Puestos'][$nota->estudiante_id]['promedio'], 2), 2);
+      $archivoPDF->AddPage();
+      $Params_encab = [
+        $nota->estudiante_nombre,
+        $arrData['Salon']->nombre,
+        $puesto,
+        $promedio,
+        $arrData['Annio'],
+        $arrData['Periodo'],
+      ];
+      $archivoPDF->WriteHTML($archivoPDF->encabezadoBloqueBoletines($Params_encab));
+
+      $suma_humanidades = 0;
+      $cnt_humanidades = 0;
+      $Humanidades = [9,12]; // 9:Castellano   12:Inglés
+      $t_castellano = new OdaTable('style="width:100%;"');
+      $t_ingles = new OdaTable('style="width:100%;"');
+    }
+
+    // CAMBIO DE MATERIA
+    if ($pivote_materia <> $nota->asignatura_id)
+    {
+      $Asignat = (new Asignatura())->get($nota->asignatura_id);
+      $titulo_asignatura = '<b>'.strtoupper(OdaUtils::sanearString($Asignat->nombre)).'</b>';
+      
+      $nota_plan_apoyo = '';
+      $nota_definitiva = '';
+      if ($nota->plan_apoyo>0) {
+        //$rango_plan_apoyo = (new RangoD())->getRangoNota($nota->plan_apoyo);
+        //$nota_plan_apoyo = SHOW_NOTA_BOLETIN ? "<b>[{$rango_plan_apoyo}] {$nota->plan_apoyo}</b>" : '' ;
+        $rango_definitiva = (new RangoD())->getRangoNota($nota->definitiva);
+        $nota_definitiva = SHOW_NOTA_BOLETIN ? "<b>[{$rango_definitiva}] {$nota->definitiva}</b> Recuperado -> " : '' ;
+      }
+      
+      $rango = (new RangoD())->getRangoNota($nota->nota_final);
+      $nota_estud = SHOW_NOTA_BOLETIN ? "<b>[{$rango}] {$nota->nota_final}</b>" : '' ;
+
+      $titulo_calificacion = "$nota_definitiva $nota_estud";
+      $t_materia = new OdaTable('style="width:100%;"');
+      $t_materia->addRow([$titulo_asignatura, $titulo_calificacion], attrs: ['style="width:50%;"'], attrs_td: ['style="text-align:left;"', 'style="text-align:right;"']);
+    }
+    $indicadores = '';
+    for ($i=1; $i<=20; $i++)
+    {
+      $codigo = ($i<=9) ? $nota->{"i0{$i}"} : $nota->{"i{$i}"};
+      if (strlen($codigo??'')>0)
+      {
+        $valorativo_concepto = $arrData ['Indicadores'] [$nota->asignatura_id] [$codigo] ['concepto'] ?? '';
+        if (strlen($valorativo_concepto) > 0)
+        {
+          $concepto = substr($arrData ['Indicadores'] [$nota->asignatura_id] [$codigo] ['concepto'], offset: 2) ?? '';
+          $descripcion = $concepto;
+          $indicadores .= " $descripcion";
+        }
+        else
+        {
+          // Indicador no encontrado.
+        }
+      }
+    }
+    $t_materia->addRow([$indicadores], attrs_td: ['colspan="2"']);
+
+    if ( in_array($nota->asignatura_id, $Humanidades) )
+    {
+      if ($nota->definitiva>0)
+      {
+        $suma_humanidades += $nota->nota_final;
+        $cnt_humanidades  += 1;
+      }
+      
+      if (9==$nota->asignatura_id) 
+      {
+        $t_castellano = $t_materia;
+        array_splice($Humanidades, array_search($nota->asignatura_id, $Humanidades), 1);
+      }
+      
+      if (12==$nota->asignatura_id) 
+      {
+        $t_ingles = $t_materia;
+        array_splice($Humanidades, array_search($nota->asignatura_id, $Humanidades), 1);
+      }
+
+      if ([]==$Humanidades) 
+      {
+        $t_humanidades = new OdaTable('style="width:100%;"');
+        $prom = ($cnt_humanidades>0) ? round($suma_humanidades / $cnt_humanidades, 2) : 0;
+        $rango = (new RangoD())->getRangoNota($prom);
+        $nota_estud = SHOW_NOTA_BOLETIN ? $prom : '' ;
+        $titulo_calificacion = '<b>['.$rango.'] '.$nota_estud.'</b>';
+        $t_humanidades->addRow(['<b>HUMANIDADES</b>', $titulo_calificacion], attrs: ['style="width:50%;"'], attrs_td: ['style="text-align:left;"', 'style="text-align:right;"']);
+        $archivoPDF->WriteHTML(
+          $t_humanidades . $t_castellano . $t_ingles
+        );
+      }
+    }
+    else
+    {
+      $archivoPDF->WriteHTML($t_materia);
+    }
+
+    $pivote_estudiante = $nota->estudiante_id;
+    $pivote_materia = $nota->asignatura_id;
+  }
+  $Params_pie = [
+    $tabla_rango,
+    $arrData['Salon']->getImgFirmaDirector(),
+    ($arrData['Docentes'][$arrData['Salon']->director_id] ?? '..'),
+  ];
+  $archivoPDF->WriteHTML('<br/><b>Observaciones:</b> <br/><br/> <hr/><br/> <hr/>');
+  $archivoPDF->WriteHTML($archivoPDF->pieBloqueBoletines($Params_pie));
+  $archivoPDF->showWatermarkText = false;
+  $archivoPDF->Output("{$file_name}.pdf", 'D');
+}
+catch (\Throwable $th) 
+{
+  OdaLog::error($th);
+  echo $th;
+}

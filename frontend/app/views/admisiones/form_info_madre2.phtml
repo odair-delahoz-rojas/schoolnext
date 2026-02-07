@@ -1,0 +1,49 @@
+<?php 
+  require_once VENDOR_PATH. 'autoload.php';
+  use AdminLTE\Components\Table;
+  use AdminLTE\Components\Form as Frm;
+
+try {
+  $data =  [
+    [
+      Form::text('aspirantes[madre]', $Aspirante->getLabel('madre'), ['placeholder' => $Aspirante->getPlaceholder('madre'), 'help_text' => $Aspirante->getHelp('madre')]),
+      Form::text('aspirantes[madre_id]', $Aspirante->getLabel('madre_id'), ['placeholder' => $Aspirante->getPlaceholder('madre_id'), 'help_text' => $Aspirante->getHelp('madre_id')])
+    ],
+    [
+      Form::text('aspirantes[madre_edad]', $Aspirante->getLabel('madre_edad'), ['placeholder' => $Aspirante->getPlaceholder('madre_edad'), 'help_text' => $Aspirante->getHelp('madre_edad')]),
+      Form::text('aspirantes[madre_prof]', $Aspirante->getLabel('madre_prof'), ['placeholder' => $Aspirante->getPlaceholder('madre_prof'), 'help_text' => $Aspirante->getHelp('madre_prof')])
+    ],
+    [
+      Form::text('aspirantes[madre_empresa]', $Aspirante->getLabel('madre_empresa'), ['placeholder' => $Aspirante->getPlaceholder('madre_empresa'), 'help_text' => $Aspirante->getHelp('madre_empresa')]),
+      Form::text('aspirantes[madre_cargo]', $Aspirante->getLabel('madre_cargo'), ['placeholder' => $Aspirante->getPlaceholder('madre_cargo'), 'help_text' => $Aspirante->getHelp('madre_cargo')])
+    ],
+  ];
+
+  $tabla->addRow(
+    data: [
+      $FormAspir->getInput(field: ''), 
+      $FormAspir->getInput(field: ''), 
+      ],
+  );
+  $tabla->addRow(
+    data: [
+      $FormAspir->getInput(field: 'madre_tel_ofi'), 
+      $FormAspir->getInput(field: 'madre_tel_per'), 
+      ],
+  );
+  $tabla->addRow(
+    data: [
+      $FormAspir->getInput(field: 'madre_email'), 
+      '', 
+      ],
+  );
+  
+  return "
+  <div class=\"container\">
+    <h3>Datos Básicos de la Madre</h3>
+    {$tabla}
+  </div>";
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

@@ -1,0 +1,84 @@
+<div class="w3-container">
+   <?php 
+   View::flash();
+   View::Encab($controller_name, $page_action, '');
+   ?>
+</div>
+
+<div class="w3-container">
+  <div class="w3-row-padding w3-center">
+    <div class="w3-card-4 w3-dark-grey">
+        <?php 
+        ?>
+        <h3><?= $MiUsuario->getNombreCompleto() ?></h3>
+        <?= $MiUsuario->getFoto(false) ?>
+        <h4><?= $MiUsuario->cargo ?></h4>
+    </div>
+  </div>
+  <br>
+  <div class="w3-row-padding w3-center">
+    <div class="w3-half w3-dark-grey">
+      <br>
+      <?php
+      try
+      {
+        $tabla = new OdaTable();
+        $tabla->addRow(['Documento:', $MiUsuario->documento ]);
+        $tabla->addRow(['Direccion:', $MiUsuario->direccion ]);
+        $tabla->addRow(['Email:', $MiUsuario->email ]);
+        $tabla->addRow(['Teléfono(s):', "$MiUsuario->telefono1 $MiUsuario->telefono2" ]);
+        $tabla->addRow(['Fecha Nac:', $MiUsuario->fecha_nac ]);
+        echo $tabla;    
+      
+      }
+      catch (\Throwable $th)
+      {
+        OdaFlash::error($th, true);
+        //OdaLog::error($th);
+      }
+        ?>
+      <br>
+    </div>
+
+    <div class="w3-half  w3-cell w3-dark-grey">
+      <br>
+      <?php 
+      try
+      {
+        $tabla = new OdaTable();
+        $tabla->addRow( ['Username:', "$MiUsuario->username [$MiUsuario->id]" ]);
+        $tabla->addRow( ['MS TEAMS:', $MiUsuario->getCuentaInstit() ]);
+        $tabla->addRow( ['Roll:', $MiUsuario->roll ]);
+        $tabla->addRow( ['Fecha Ingreso:', $MiUsuario->fecha_ing ]);
+        echo (string)$tabla;
+      }
+      catch (\Throwable $th)
+      {
+        OdaFlash::error($th, true);
+        //OdaLog::error($th);
+      }
+        ?>
+      <br>
+    </div>
+
+  </div>
+  <br>
+  <div class="w3-row-padding w3-center">
+    <?php 
+      if ( in_array( $MiUsuario->roll, ['coordinadores', 'admin']) ) 
+      {
+        echo OdaTags::tag('h2', 'Lista de Usuarios');
+        $tabla = new OdaTable();
+        $tabla->setHead(['UserID', 'Docente', 'Usuario SchoolNEXT', 'Usuario Plataforma', 'Clave Plataforma', 'teléfono']);
+        foreach ($arrData['listaUsuarios'] as $key => $empleado) 
+        {
+          if ( (in_array( $empleado->roll, ['coordinadores', 'docentes'])) && (1==$empleado->is_active) ) 
+          {
+            $tabla->addRow([$empleado->id, $empleado->usuario_nombre, $empleado->username, $empleado->usuario_instit, $empleado->clave_instit, $empleado->telefono1] );
+          }
+        }
+        echo $tabla;
+      }
+    ?>
+  </div>
+</div>

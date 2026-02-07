@@ -1,0 +1,11 @@
+<div class="w3-container">
+  <?php
+    echo View::flash();
+    echo View::Encab($controller_name, $page_action, $breadcrumb);
+    require 'seguimientos_header.phtml';
+    require 'seguimientos_body.phtml';
+    require 'seguimientos_footer.phtml'; 
+    // PENDIENTE PROGRAMAR ::
+    // Estadísticas de avance de la digitación de notas 
+  ?>
+</div>

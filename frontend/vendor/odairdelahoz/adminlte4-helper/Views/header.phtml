@@ -1,0 +1,35 @@
+<nav class="app-header navbar navbar-expand bg-body">
+    <div class="container-fluid">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                    <i class="bi bi-list"></i>
+                </a>
+            </li>
+            <li class="nav-item d-none d-md-block"><a href="#" class="nav-link">Home</a></li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+            <?php
+                $colorModeToggle = new \AdminLTE\Widgets\ColorModeToggle();
+                echo $colorModeToggle->build();
+            ?>
+            <li class="nav-item">
+                <a class="nav-link" data-lte-toggle="fullscreen" href="#" role="button">
+                    <i class="bi bi-arrows-fullscreen"></i>
+                </a>
+            </li>
+            <?php
+            if (isset($user) && $user !== null) {
+                echo \AdminLTE\Widgets\UserMenu::render(
+                    $user['username'] ?? '',
+                    $user['name'] ?? '',
+                    $user['image'] ?? '',
+                    $user['title'] ?? '',
+                    $user['profile_link'] ?? '#',
+                    $user['signout_link'] ?? '#'
+                );
+            }
+            ?>
+        </ul>
+    </div>
+</nav>

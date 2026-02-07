@@ -1,0 +1,49 @@
+<?php
+if (1==Session::get('id') && 1==Config::get('config.application.modo_depuracion_admin')) {
+    $vacio = $post = array();
+
+    foreach ($_POST as $nombre_variable => $nombre_valor) {
+      if (empty($nombre_valor)) {
+        $vacio[$nombre_variable] = $nombre_valor;
+      } else {
+        $post[$nombre_variable] = $nombre_valor;
+      }
+    }
+    
+    
+    $vacio2 = $arch = array();
+    foreach ($_FILES as $nombre_archivo => $nombre_valor) {
+      if (empty($nombre_valor)) {
+          $vacio2[$nombre_archivo] = $nombre_valor;
+      } else {
+          $arch[$nombre_archivo] = $nombre_valor;
+      }
+    }
+    
+    
+    print "<pre>";
+    if (empty($vacio)) {
+        print "Ninguno de los valores de POST esta vacío, se envió:\n";
+        var_dump($post);
+    } else {
+        print "Tenemos " . count($vacio) . " valores vacíos\n";
+        print "Registrados:\n"; var_dump($post);
+        print "Vacíos:\n";  var_dump($vacio);
+        exit;
+    }
+    
+    
+    
+    print "<pre>";
+    if (empty($vacio2)) {
+        print "Ninguno de los valores de FILES esta vacío, se envió:\n";
+        var_dump($arch);
+    } else {
+        print "Tenemos " . count($vacio2) . " valores vacíos\n";
+        print "Registrados:\n"; var_dump($arch);
+        print "Vacíos:\n";  var_dump($vacio2);
+        exit;
+    }
+
+
+} //END

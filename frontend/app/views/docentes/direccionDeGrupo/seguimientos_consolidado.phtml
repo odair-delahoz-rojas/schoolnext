@@ -1,0 +1,27 @@
+<div class="w3-panel">
+    <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+    <?= View::flash(); ?>
+</div>
+
+<div class="w3-panel">
+    <div  class="w3-bar">
+        <?php 
+        try {
+          $key = 0;
+          for ($periodo = $_periodo_actual; $periodo >= 1 ; $periodo --) { 
+            echo "<div id=\"btn-$key\" onclick=\"traer_data('{$data[0]->nombre}', '{$data[0]->uuid}', $periodo)\" class=\"w3-button w3-bar-item\">Periodo $periodo</div>" ;
+            $key++;
+          }
+        
+        } catch (\Throwable $th) {
+          OdaFlash::error($th);
+        }
+        ?>
+    </div>
+    <div id="resultados"></div>
+</div>
+
+<?php
+  echo (new Form)::hidden(field: 'coord', value: $user);
+  echo Tag::js(src: 'dir_grupo/dg_seguimientos_consolidado', cache: false);
+?>

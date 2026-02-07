@@ -1,0 +1,80 @@
+<div class="w3-panel">
+   <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+   <?= View::flash(); ?>
+
+   <div class="w3-row w3-section">
+      <?=OdaForm::inputSearch();?>
+   </div>
+   
+   <?php 
+   try {
+      
+      foreach ($arrData['Salones'] as $key => $value) {
+        echo (new Estudiante)::getLnkListaGenerica($value->id) ;
+      }
+
+      $tabla = new OdaTable(theme: $theme, showTotalRegs: true);
+      $tabla->setHead(
+         data_head:    ['Actions', 'Estudiante', 'Cambiar Salon'], 
+         attrs:         'class="w3-theme"', 
+         arr_attrs_th: ['style="width:10%;"','style="width:60%;"','style="width:30%;"']
+      );
+      
+      foreach($data as $key => $Estud) {
+         $col1 = $Estud->is_active_f(true) .'<br/>'
+                .$Estud->getFoto().'<br/>'
+                .$Estud->documento .'<br/><br/>Retirar Estudiante<br/>'
+                .$Estud->getLnkRetirar(RetiroEstudiante::Voluntario)
+                .$Estud->getLnkRetirar(RetiroEstudiante::Institucion)
+                .$Estud->getLnkRetirar(RetiroEstudiante::Graduacion);
+
+        $col2 = "Grado: $Estud->grado_nombre [$Estud->salon_nombre] <br>"
+                 ."<h3>{$Estud->getLnkEditPage($Estud)} {$Estud->isNuevoIco()}</h3>"
+                 .$Estud->getCuentaInstit(true).'<br><br>'
+                 ."{$Estud->getPagoPension()} {$Estud->getlnkSetPonerAldia()} <br> 
+                   {$Estud->getDebePreicfes()} - {$Estud->getDebeAlmuerzos()} <br>"
+                 .$Estud->getlnkSetMesPagosTodos().'<br>'
+                 .'Boletines '.$Estud->getLnkBoletinesTodos().'<br>'
+                 //.$Estud->getLnkPlanesApoyoTodos()
+                 ;
+
+         $col3  = $Estud->getSalonesCambiar('secretaria').'<br><br>'
+                  ."$Estud->madre <br>
+                    $Estud->madre_email <br>
+                    C.C. $Estud->madre_id <br>"
+                  .OdaUtils::linkWhatsApp(telefono: (string)$Estud->madre_tel_1)
+                  .OdaUtils::linkTelefono(telefono: (string)$Estud->madre_tel_1, show_tel:true).'<br><br>'
+                  ."$Estud->padre <br>
+                    $Estud->padre_email <br>
+                    C.C. $Estud->padre_id <br>"
+                  .OdaUtils::linkWhatsApp(telefono: (string)$Estud->padre_tel_1)
+                  .OdaUtils::linkTelefono(telefono: (string)$Estud->padre_tel_1, show_tel:true).'<br>';
+         $data=[$col1, $col2, $col3];
+         $tabla->addRow(
+            data: $data, 
+            attrs_td: ['class="searchTdata w3-center"', 'class="searchTdata"']
+         );
+      }
+      echo $tabla;
+
+
+    } catch (\Throwable $th) {
+      OdaLog::error($th);
+      echo $th;
+     }
+
+   ?>   
+</div>
+
+<?= Tag::js(src: "table_filter"); ?>
+
+<script>
+      const inputSearch = document.getElementById("inputSearch").focus();
+
+      document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.key === 'b') {
+          inputSearch.value = "Segundo";
+          inputSearch.select();
+        }
+      });
+</script>

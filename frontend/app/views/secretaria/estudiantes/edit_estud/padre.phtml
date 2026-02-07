@@ -1,0 +1,29 @@
+<?php
+  $myTabla = new OdaTable();
+
+  $myTabla->addRow([
+    $frmDataEstud->getInput('padre'),
+    $frmDataEstud->getInput('padre_id'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getInput('padre_tel_1'),
+    $frmDataEstud->getInput('padre_tel_2'),
+  ]);
+  
+  $myTabla->addRow([
+    $frmDataEstud->getInput('padre_dir'),
+    $frmDataEstud->getInput('padre_email'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getInput('padre_ocupa'),
+    $frmDataEstud->getInput('padre_lugar_tra'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getInput('padre_tiempo_ser'),
+    '',
+  ]);
+
+  $myTabs->addTab('padre', 'Padre', $myTabla);

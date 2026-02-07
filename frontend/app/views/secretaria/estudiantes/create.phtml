@@ -1,0 +1,19 @@
+<?php View::content() ?>
+<div class="page">
+    <div class="page-inner">
+        <header class="page-title-bar">
+          <h1 class="page-title">Crear un Aspirante</h1>
+        </header>
+        <div class="page-section">
+        <?= Form::open('aspirante/create', 'post') ?>
+            <?= Form::text(new Aspirante, 'nombres', array('placeholder'=>'nada', 'help'=>'nada de help')); ?>
+            <?php //form_oda::text_basic($model, 'apellido1'); ?>
+            <?php //Form::textarea('apellido1') ?> 
+            <?php //Form::text('apellido2') ?>
+            <?php //Form::datepicker('fecha_insc') ?>
+            <?= Form::submit('Guardar') ?>
+         <?= Form::close() ?>
+        </div>
+    </div>
+</div>
+

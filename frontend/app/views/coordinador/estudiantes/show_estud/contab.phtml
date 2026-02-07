@@ -1,0 +1,36 @@
+<?php
+try {
+  $myTabla = new OdaTable();
+  $myTabla2 = new OdaTable();
+
+  $arrMeses = Mes::toArray();
+  $myTabla->addRow([
+    $frmEstud->getDataLabel('annio_pagado'),
+    $frmEstud->getLabel('mes_pagado').$arrMeses[$frmEstud->getDataOnly('mes_pagado')],
+    '',
+  ]);
+  
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel(field:'deudor'),
+    $frmDataEstud->getDataLabel(field:'codeudor'),
+    $frmDataEstud->getDataLabel(field:'codeudor_cc'),
+  ]);
+  
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('resp_pago_ante_dian'), //data: TipoAcudiente::toArray()),
+    '',
+    $frmEstud->getDataLabel(field:'contabilidad_id'),
+  ]);
+  
+
+
+  $myTabla2->addRow([
+    $frmEstud->getDataLabel('is_debe_preicfes'), //data: EstadoDebe::toArray(false)),
+    $frmEstud->getDataLabel('is_debe_almuerzos'), //data: EstadoDebe::toArray(false)),
+  ]);
+  
+  $myTabs->addTab('conta', 'Contabilidad', $myTabla.'<hr>'.$myTabla2);
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

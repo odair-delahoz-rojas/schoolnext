@@ -1,0 +1,19 @@
+<?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+<?= View::flash(); ?>
+<div class="w3-panel">
+  <?php
+  
+  echo OdaTags::linkButton(action: "admin/$controller_name/create", text: 'Nuevo Registro', attrs: 'class="w3-button w3-blue"');
+
+  echo OdaTags::linkButton(action: "admin/$controller_name/exportPdf", text: 'Generar PDF', attrs: 'class="w3-button w3-green" target="_blank"');
+  echo OdaTags::linkButton(action: "admin/$controller_name/exportXml", text: 'Generar XML', attrs: 'class="w3-button w3-green" target="_blank"');
+  echo OdaTags::linkButton(action: "admin/$controller_name/exportCsv", text: 'Generar CSV', attrs: 'class="w3-button w3-green" target="_blank"');
+  echo OdaTags::linkButton(action: "admin/$controller_name/exportXls", text: 'Generar Excel', attrs: 'class="w3-button w3-green" target="_blank"');
+  
+  if ('estudiantes'==$controller_name) 
+  {
+    echo OdaTags::linkButton(action: "admin/$controller_name/exportMoodleCsv", text: 'CSV Estudiantes Moodle', attrs: 'class="w3-button w3-green" target="_blank"');
+  }
+  ?>
+
+</div>

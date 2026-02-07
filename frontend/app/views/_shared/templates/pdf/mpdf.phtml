@@ -1,0 +1,56 @@
+<?php
+use Mpdf\Mpdf;
+
+$fileName = $file_name ?? "Reporte-de-$controller_name";
+$title = $file_title ?? "Reporte de $controller_name";
+$css = $css ?? 'css/pdf.css';
+$destination = $file_download ? 'D' : 'I';
+
+ob_start();  //Activa el almacenamiento en búfer de la salida
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title><?= $title ?></title>
+    <link rel="stylesheet" type="text/css" href="<?= $css ?>">
+    <meta name="author" content="SchoolNEXT>> ConstruxZion Soft (CO)">
+    <meta name="description" content="PDF output with KumbiaPHP framework">
+    <meta name="keywords" content="schoolnext, pdf, mpdf, scaffold">
+
+    <body>
+    <htmlpageheader name="myHeader1">
+        <section id="page-header">
+            <a href="<?=PUBLIC_PATH?>"><img src="img/logo_<?=INSTITUTION_KEY?>.png" alt="Logo" height="80"></a>
+        </section>
+    </htmlpageheader>
+
+    <?php View::content() ?>
+
+    <htmlpagefooter name="myFooter1">
+        <section id="page-footer">
+            <div id="printed-date">{DATE d/m/Y}</div>
+            <div id="page-number">{PAGENO}/{nbpg}</div>
+        </section>
+    </htmlpagefooter>
+</body>
+
+</html>
+<?php
+$html = ob_get_clean();
+ob_clean();
+
+// Crea una instancia de la clase y le pasa el directorio temporal
+$mpdf = new Mpdf([
+    'tempDir' => APP_PATH . 'temp/mpdf',
+    'format' => 'A4',
+    'title2annots' => true,  // convert headers in annotations
+    'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages 
+    'exposeVersion' => false, // security 
+    //'orientation' => 'L',
+    // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+]);
+//$mpdf->SetProtection(permissions :array(), user_pass:Session::get('documento'));
+$mpdf->WriteHTML($html);
+$mpdf->Output("$fileName.pdf", $destination);

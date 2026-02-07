@@ -1,0 +1,174 @@
+<div class="w3-container">
+   <?= View::flash(); ?>
+   <?= View::Encab(page_module: $controller_name, page_action: 'Utilidades de Kumbia', breadcrumb: ''); ?>
+</div>
+
+<?php 
+  $good = '<span class="w3-text-green">'._Icons::solid(icon: 'face-smile').'</span>';
+  $bad  = '<span class="w3-text-red">'._Icons::solid(icon: 'face-frown').'</span>';
+
+  $mode = PRODUCTION ? 'Producción' : 'Desarrollo';
+  if (!$timezone = date_default_timezone_get()) {
+    $timezone = 'No se ha especificado un Timezone.';
+  }
+?>
+
+<div class="w3-container">
+  <div class="w3-row">
+
+    <div class="w3-col">
+    <?php
+        $tabla = new OdaTable(theme: 'dark');
+        $tabla->setCaption(caption: 'Constantes');
+        $tabla->setHead(data_head: ['Constante','Valor']);
+        $tabla->addRow(data: ['PRODUCTION', ((PRODUCTION) ? 'SI' : 'NO: DESARROLLO')]);
+        $tabla->addRow(data: ['APP_ROOT_PRIVATE', APP_ROOT_PRIVATE]);
+        $tabla->addRow(data: ['APP_PATH', APP_PATH]);
+        $tabla->addRow(data: ['CORE_PATH', CORE_PATH]);
+        $tabla->addRow(data: ['PUBLIC_PATH', PUBLIC_PATH]);
+        $tabla->addRow(data: ['INSTITUTION_KEY', INSTITUTION_KEY]);
+        $tabla->addRow(data: ['APP_NAME', APP_NAME]);
+        $tabla->addRow(data: ['VENDOR_PATH', VENDOR_PATH]);
+        $tabla->addRow(data: ['HELPERS_PATH', HELPERS_PATH]);
+        $tabla->addRow(data: ['ABS_PUBLIC_PATH', ABS_PUBLIC_PATH]);
+        $tabla->addRow(data: ['LOGO', LOGO]);
+        $tabla->addRow(data: ['LOGO_BRAND', LOGO_BRAND]);
+        $tabla->addRow(data: ['FILE_UPLOAD_PATH', FILE_UPLOAD_PATH]);
+        $tabla->addRow(data: ['FILE_DOWNLOAD_PATH', FILE_DOWNLOAD_PATH]);
+        $tabla->addRow(data: ['IMG_UPLOAD_PATH', IMG_UPLOAD_PATH]);
+        $tabla->addRow(data: ['IMG_DOWNLOAD_PATH', IMG_DOWNLOAD_PATH]);
+        $tabla->addRow(data: ['IMG_ESTUDIANTES_PATH', IMG_ESTUDIANTES_PATH]);
+        $tabla->addRow(data: ['PREFIJO_TABLAS_DOLIBARR', PREFIJO_TABLAS_DOLIBARR]);
+        
+        $tabla->addRow(data: ['INSTITUTION_NAME', INSTITUTION_NAME]);
+        $tabla->addRow(data: ['ANNIO_INICIAL', ANNIO_INICIAL]);
+        $tabla->addRow(data: ['ANNIO_ACTUAL', ANNIO_ACTUAL]);
+        $tabla->addRow(data: ['PERIODO_ACTUAL', PERIODO_ACTUAL]);
+        $tabla->addRow(data: ['ANNIO_MATRICULA', ANNIO_MATRICULA]);
+        $tabla->addRow(data: ['MAX_PERIODOS', MAX_PERIODOS]);
+        $tabla->addRow(data: ['PERIODO_INICIO', PERIODO_INICIO]);
+        $tabla->addRow(data: ['PERIODO_FIN', PERIODO_FIN]);
+        $tabla->addRow(data: ['PERIODO_INI_NOTAS', PERIODO_INI_NOTAS]);
+        $tabla->addRow(data: ['PERIODO_FIN_NOTAS', PERIODO_FIN_NOTAS]);
+        $tabla->addRow(data: ['PERIODO_INI_LOGROS', PERIODO_INI_LOGROS]);
+        $tabla->addRow(data: ['PERIODO_FIN_LOGROS', PERIODO_FIN_LOGROS]);
+        $tabla->addRow(data: ['PERIODO_OPENDAY', PERIODO_OPENDAY]);
+        $tabla->addRow(data: ['PERIODO_MES_REQ_BOLETIN', PERIODO_MES_REQ_BOLETIN]);
+        $tabla->addRow(data: ['PERIODO_INI_SEGUIM', PERIODO_INI_SEGUIM]);
+        $tabla->addRow(data: ['PERIODO_FIN_SEGUIM', PERIODO_FIN_SEGUIM]);
+        $tabla->addRow(data: ['PERIODO_INI_PREINF', PERIODO_INI_PREINF]);
+        $tabla->addRow(data: ['PERIODO_FIN_PREINF', PERIODO_FIN_PREINF]);
+        $tabla->addRow(data: ['PERIODO_INI_PAPOYO', PERIODO_INI_PAPOYO]);
+        $tabla->addRow(data: ['PERIODO_FIN_PAPOYO', PERIODO_FIN_PAPOYO]);
+        $tabla->addRow(data: ['PERIODO_SEGUIM_ABRIR', PERIODO_SEGUIM_ABRIR]);
+        $tabla->addRow(data: ['PERIODO_SEGUIM_CERRAR', PERIODO_SEGUIM_CERRAR]);
+        $tabla->addRow(data: ['PERIODO_PREINF_ABRIR', PERIODO_PREINF_ABRIR]);
+        $tabla->addRow(data: ['PERIODO_PREINF_CERRAR', PERIODO_PREINF_CERRAR]);
+        $tabla->addRow(data: ['PERIODO_BOLETIN_ABRIR', PERIODO_BOLETIN_ABRIR]);
+        $tabla->addRow(data: ['PERIODO_BOLETIN_CERRAR', PERIODO_BOLETIN_CERRAR]);
+        $tabla->addRow(data: ['PERIODO_PAPOYO_ABRIR', PERIODO_PAPOYO_ABRIR]);
+        $tabla->addRow(data: ['PERIODO_PAPOYO_CERRAR', PERIODO_PAPOYO_CERRAR]);
+        echo $tabla;
+    ?>
+    </div>
+
+        
+  </div>
+
+  <hr>
+
+  <div class="w3-row">
+
+    <div class="w3-third">
+      <?php
+        $tabla = new OdaTable(theme: 'dark');
+        $tabla->setCaption(caption: 'Configuración de PHP');
+        $tabla->setHead(data_head: ['Config','Servidor','']);
+
+        $ver_compare = version_compare(version1: PHP_VERSION, version2: '7.4.1') >= 0;
+        $tabla->addRow(data: ['php version', phpversion(), ($ver_compare ? $good : $bad)]);
+        
+        
+        $tabla->addRow(['magic quotes gpc', (ini_get('magic_quotes_gpc')?'ON':'OFF'), '??']);
+        
+        $upload_max_filesize = (int)(substr(ini_get('upload_max_filesize'), 0, strlen(ini_get('upload_max_filesize'))-1));
+        $tabla->addRow(['upload_max_filesize', ini_get('upload_max_filesize'), '']);
+        
+        // post_max_size > upload_max_filesize
+        $post_max_size = (int)(substr(ini_get('post_max_size'), 0, strlen(ini_get('post_max_size'))-1));
+        $diag = ($post_max_size >= $upload_max_filesize) ? $good : $bad ;
+        $tabla->addRow(['post_max_size', ini_get('post_max_size'), $diag]);
+        
+        // memory_limit >= post_max_size
+        $memory_limit = (int)(substr(ini_get('memory_limit'), 0, strlen(ini_get('memory_limit'))-1));
+        $tabla->addRow(['memory limit', ini_get('memory_limit'), (($post_max_size<=$memory_limit) ? $good : $bad) ]);
+
+        $tabla->addRow(['register globals', (ini_get('register_globals')?'ON':'OFF'), '??']);
+        $tabla->addRow(['session auto_start', (ini_get('session.auto_start')?'ON':'OFF'), '??']);
+        $tabla->addRow(['utf8_decode()',  (function_exists('utf8_decode')?'ON':'OFF'), '??']);
+        $tabla->addRow(data: ['exec()', (ini_get('exec')?'ON':'OFF'), '??']);
+        echo $tabla;
+      ?>
+    </div>
+    <div class="w3-third">
+      <?php 
+        $tabla = new OdaTable(theme: 'dark');
+        $tabla->setCaption('Extensiones PHP');
+        $tabla->setHead(['Extension','Obligatorio','']);
+
+        $Extensiones = [
+          'pdo_mysql'=>'SI',
+          'json'=>'SI',
+          'gd'=>'SI',
+          'mbstring'=>'SI',
+          'curl'=>'SI',
+          'ctype'=>'SI',
+          'session'=>'SI',
+          'apc'=>'NO',
+          'date'=>'SI',
+          'dom'=>'SI',
+          'iconv'=>'SI',
+          'pcre'=>'SI',
+          'reflection'=>'SI',
+          'bitset'=>'NO',
+          'simplexml'=>'SI',
+          'xml'=>'SI',
+          'xsl'=>'SI',
+          'xlswriter'=>'SI',
+        ];
+
+        foreach ($Extensiones as $ext_name => $req) {
+          if (extension_loaded(extension: $ext_name)) {
+            $diag = ('SI'==$req) ? $good : $bad;
+            $tabla->addRow(data: [$ext_name, $req, $diag]);
+          } else {
+            $diag = ('NO'==$req) ? $good : $bad ;
+            $tabla->addRow(data: [$ext_name, $req, $diag]);
+          }
+        }
+        echo $tabla;
+      ?>
+    </div>
+
+    <div class="w3-rest">
+      <?php
+        $tabla = new OdaTable(theme: 'dark');
+        $tabla->setCaption(caption: 'General');
+        $tabla->setHead(data_head: ['Ip Actual', OdaUtils::getIp()]);
+        $tabla->addRow(data: ['Modo', $mode]);
+        $tabla->addRow(data: ['Zona Horaria', $timezone]);
+        $tabla->addRow(data: []);
+        echo $tabla;
+
+        $tabla = new OdaTable(theme: 'dark');
+        $tabla->setCaption(caption: 'Frameworks');
+        $tabla->setHead(data_head: ['Framework','Version']);
+        $tabla->addRow(data: ['KumbiaPHP', KUMBIA_VERSION]);
+        $tabla->addRow(data: ['W3 CSS', '4.15 Dec 2020']);
+        $tabla->addRow(data: ['W3 JS', '1.04 April 2019']);
+        echo $tabla;
+      ?>
+    </div>
+
+  </div>
+</div>

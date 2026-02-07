@@ -1,0 +1,12 @@
+<?php
+   $head = OdaTags::multiTags('td', array('Año','Periodo', 'Inicio de Periodo', 'Fin de Periodo','Notas Desde', 'Notas Hasta', 'Open Day'));
+   $regs = '<tr>'.OdaTags::multiTags('td', 
+                              array(Session::get('annio'),
+                                    Session::get('periodo'),
+                                    Session::get('fecha_inicio'),
+                                    Session::get('fecha_fin'),
+                                    Session::get('f_ini_notas'),
+                                    Session::get('f_fin_notas'),
+                                    Session::get('f_open_day') )
+                     );
+   echo OdaTags::tbl_plantilla($head, $regs, null, 'Periodo: '.Session::get('periodo') );

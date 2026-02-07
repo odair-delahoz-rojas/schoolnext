@@ -1,0 +1,123 @@
+<?php
+try {
+  $annio = $data['Annio'];
+  $seccion = $arrData['Grado']->seccion_id;
+  
+  $archivoPDF = new MpdfRegistros([
+    'tempDir' => APP_PATH . 'temp/mpdf',
+    'format' => 'Legal',
+    'progressBar' => true,
+    'title2annots' => true,  // convert headers in annotations
+    'mirrorMargins' => 0,    // mirror the left and right margin values on odd and even pages 
+    'exposeVersion' => false, // security 
+    'margin_left' => 20,
+    'margin_right' => 15,
+    'margin_top' => 48,
+    'margin_bottom' => 25, // no tocar
+    'margin_header' => 15, // no tocar
+    'margin_footer' => 15, // no tocar
+    'orientation' => 'L', // P(portrait), L(landscape) 
+    // more variables in https://mpdf.github.io/reference/mpdf-variables/overview.html
+  ]);
+
+  $archivoPDF->SetSubject($file_tipo);
+  $archivoPDF->SetTitle($file_title);
+
+  $archivoPDF->SetHTMLFooter('
+  <table width="100%">
+    <tr><td width="33%">SchoolNEXT>></td>
+        <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+        <td width="33%" style="text-align: right;">Registro de Observaciones<br/>'.$data['Estudiante'].'</td>
+    </tr>
+  </table>');
+
+  $Plantillas = new Plantilla();
+
+  // 1) INFORMACIÓN BÁSICA DEL ESTUDIANTE
+  $archivoPDF->AddPage();
+  $template = $Plantillas::first("SELECT t.contenido FROM snxt_plantillas AS t WHERE t.nombre=?", ['reg_info_estudiante_'.INSTITUTION_KEY]);
+  $info_estudiante = str_replace(
+  [ 
+    '$FOTO$', '$ESTUDIANTE$', '$DIRECCION$', '$TELEFONO$',
+    '$LUGAR$', '$FECHA_NAC$', '$HERMANOS$', '$POS_HERMANOS$', '$OTROS$', '$TIPO_SANGRE$',
+
+    '$PADRE$', '$PADRE_PROF$', '$PADRE_TEL$', '$PADRE_DIR$', '$PADRE_EMAIL$',
+    '$MADRE$', '$MADRE_PROF$', '$MADRE_TEL$', '$MADRE_DIR$', '$MADRE_EMAIL$',
+    '$ACUDIENTE$', '$ACUDI_PROF$', '$ACUDI_TEL$', '$ACUDI_DIR$', '$ACUDI_EMAIL$',
+
+    '$PLANTEL_PROC$', '$PLANTEL_FECHA_ING$', '$PLANTEL_GRADO_ING$', '$PLANTEL_FECHA_RET$', '$PLANTEL_GRADO_RET$',
+  ],
+  [ 
+    '', $data['Estudiante'], $data['Estudiante']->direcccion, $data['Estudiante']->telefono1,
+    $data['DatosEstud']->ciudad_nac.' ('.$data['DatosEstud']->pais_nac.')', $data['Estudiante']->fecha_nac, '', '', '', $data['DatosEstud']->grupo_sang,
+
+    $data['DatosEstud']->padre, $data['DatosEstud']->padre_ocupa, $data['DatosEstud']->padre_tel_1, $data['DatosEstud']->padre_dir, $data['DatosEstud']->padre_email, 
+    $data['DatosEstud']->madre, $data['DatosEstud']->madre_ocupa, $data['DatosEstud']->madre_tel_1, $data['DatosEstud']->madre_dir, $data['DatosEstud']->madre_email, 
+    $data['DatosEstud']->acudiente, $data['DatosEstud']->acudi_ocupa, $data['DatosEstud']->acudi_tel_1, $data['DatosEstud']->acudi_dir, $data['DatosEstud']->acudi_email, 
+
+    $data['DatosEstud']->ante_instit, '', '', $data['DatosEstud']->ante_fecha_ret, $data['DatosEstud']->ante_grado, 
+  ], 
+  $template->contenido
+  );
+  $archivoPDF->WriteHTML($info_estudiante);
+
+
+
+  // 2) REGISTROS DE OBSERVACIONES GENERALES
+  $archivoPDF->AddPage();
+  $template = $Plantillas::first("SELECT t.contenido FROM snxt_plantillas AS t WHERE t.nombre=?", ['reg_observ_generales_'.INSTITUTION_KEY]);
+  if (Count($arrData['RegGenerales'])>0)
+  {
+    //$dir_image = sfConfig::get('sf_web_dir').'/uploads/estud_reg_observ_gen/';
+    foreach ($arrData['RegGenerales'] as $key => $RegEstud) {
+      //'tipo_reg', 'estudiante_id', 'fecha', 'acudiente', 'foto_acudiente', 'director', 'foto_director'
+      //$foto_acudiente = (file_exists($dir_image.$Reg['foto_acudiente'])) ?  '<br>'._media($dir_image.$Reg['foto_acudiente'])->size(100, 100)->set('.image') : '' ;
+      //$foto_director  = (file_exists($dir_image.$Reg['foto_director'])) ? '<br>'._media($dir_image.$Reg['foto_director'])->size(100, 100)->set('.image') : '' ;
+      $plantilla_reg_generales = $template;
+      $reg_generales = str_replace(
+      [ '$ANNIO$', '$PERIODO$', '$FECHA$', '$ESTUDIANTE$', '$GRADO$', '$ASUNTO$', 
+                 '$DESCRIPCION$', '$ALUMNO$', '$PADRE$', '$DOCENTE$' ],
+      [ $data['Annio'], $RegEstud->periodo_id, $RegEstud->fecha, $data['Estudiante'], $data['Grado'], $RegEstud->asunto, 
+                  $RegEstud->asunto, $data['Estudiante'], $RegEstud->acudiente, $RegEstud->director ], 
+      $plantilla_reg_generales->contenido
+    );
+    $archivoPDF->WriteHTML($reg_generales);
+    }
+  } else {
+    $archivoPDF->WriteHTML('<h2>No hay Registros de Observaciones Generales para mostrar</h2>');
+  }
+
+
+
+  //  3) REGISTROS DE DESEMPEÑO ACADÉMICO Y COMPORTAMENTAL
+  $archivoPDF->AddPage();
+  $template = $Plantillas::first("SELECT t.contenido FROM snxt_plantillas AS t WHERE t.nombre=?", ['reg_desemp_academ_comport_'.INSTITUTION_KEY]);
+  if (Count($arrData['RegAcademicos'])>0)
+  {
+  //$dir_image = sfConfig::get('sf_web_dir').'/uploads/estud_reg_observ_gen/';
+  foreach ($arrData['RegAcademicos'] as $key => $RegEstud) {
+    //'tipo_reg', 'estudiante_id', 'fecha', 'acudiente', 'foto_acudiente', 'director', 'foto_director'
+    //$foto_acudiente = (file_exists($dir_image.$Reg['foto_acudiente'])) ?  '<br>'._media($dir_image.$Reg['foto_acudiente'])->size(100, 100)->set('.image') : '' ;
+    //$foto_director  = (file_exists($dir_image.$Reg['foto_director'])) ? '<br>'._media($dir_image.$Reg['foto_director'])->size(100, 100)->set('.image') : '' ;
+    $plantilla_reg_academicos = $template;
+    $reg_academicos = str_replace(
+    [ '$ANNIO$', '$PERIODO$', '$FECHA$', '$ESTUDIANTE$',  
+               '$FORTALEZAS$', '$DIFICULTADES$', '$COMPROMISOS$', '$PADRE$', '$DOCENTE$' ],
+   [ $data['Annio'], $RegEstud->periodo_id, $RegEstud->fecha, $data['Estudiante'], 
+                $RegEstud->fortalezas, $RegEstud->dificultades, $RegEstud->compromisos, 
+                $RegEstud->acudiente, $RegEstud->director ], 
+      $plantilla_reg_academicos->contenido
+    );
+    $archivoPDF->WriteHTML($reg_academicos);
+  }
+  } else {
+    $archivoPDF->WriteHTML('<h2>No hay Registros de Desempeño Académico para mostrar</h2>');
+  }
+
+
+
+  $archivoPDF->Output("{$file_name}.pdf", 'I');
+
+} catch (\Throwable $th) {
+  OdaLog::error($th);
+}

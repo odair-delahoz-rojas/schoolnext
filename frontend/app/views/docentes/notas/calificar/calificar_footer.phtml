@@ -1,0 +1,116 @@
+<footer class="w3-margin-top">
+</footer>
+
+<?= tag::js(src: "tabs_h");?>
+
+<script>
+  // sincronizar inputs (definitiva) con ranges.
+  const ranges = document.querySelectorAll('input[type="range"]');
+  const valores = document.querySelectorAll('input[type="number"][id*="notas_definitiva"]');
+  for (let i = 0; i < ranges.length; i++) {
+    ranges[i].addEventListener('input', (event) => {
+      valores[i].value = event.target.value;
+    });
+  }
+  
+  for (let i = 0; i < valores.length; i++) {
+    valores[i].addEventListener('input', (event) => {
+      ranges[i].value = event.target.value;
+    });
+  }
+  
+  // manejo de colores
+  const inputs = document.querySelectorAll('.color-input');
+  inputs.forEach(input => {
+    input.addEventListener('input', () => {
+      const num = parseInt(input.value);
+      if (num >= 100 && num <= 199) {
+        input.style.color = 'green';
+      } else if (num >= 200 && num <= 299) {
+        input.style.color = 'blue';
+      } else if (num >= 300 && num <= 399) {
+        input.style.color = 'red';
+      } else {
+        input.style.color = 'black';
+      }
+    });
+  });
+
+
+  // CALIFICACION POR LOTES
+  function check_todos_estud() {
+    const all_checks = document.querySelectorAll('.chk-estud-control');
+    all_checks.forEach(check => {
+      check.checked = true;
+    });
+    contar_check_seleccionados();
+  } //END-check_todos_estud
+  
+  
+  function check_ningun_estud() {
+    const all_checks = document.querySelectorAll('.chk-estud-control');
+    all_checks.forEach(check => {
+      check.checked = false;
+    });
+    document.getElementById('total_selected').innerHTML = 'Seleccionados: 0';
+  } //END-check_ningun_estud
+
+  
+  function contar_check_seleccionados() {
+    let count_selected = 0;
+    const all_checks = document.querySelectorAll('.chk-estud-control');
+    all_checks.forEach(check => {
+      if (check.checked==true) {
+        count_selected++;
+      }
+    });
+    document.getElementById('total_selected').innerHTML = `Seleccionados: ${count_selected}`;
+  }
+
+  function indicador_onmouseenter(title) {
+    const container_concepto = document.getElementById('container-concepto');
+    container_concepto.innerHTML=title;
+  } //END-indicador_onmouseenter
+
+
+  function indicador_onmouseleave() {
+    const container_concepto = document.getElementById('container-concepto');
+    container_concepto.innerHTML='';
+  } //END-indicador_onmouseleave
+
+  
+
+
+  function indicador_onclick(codigo_indicador) {
+    agregar_indicador(codigo_indicador);
+  } //END-indicador_onclick
+  
+  
+  function agregar_indicador(codigo_indicador) {
+    console.clear();
+    let count = 0;
+    console.log(codigo_indicador);
+
+    // RECORRO TODOS LOS CHECKLISTS, PARA SABER CUAL SE DEBE AFECTAR
+    //const all_checks = document.querySelectorAll('.chk-estud-control');
+    const all_checks_selected = document.querySelectorAll('.chk-estud-control:checked');
+    all_checks_selected.forEach(check => {
+      count++;
+      var checkboxId = check.id;
+      var partes = checkboxId.split("_");
+      var id_estudiante = partes[2];
+      
+      var inputs_vacios = document.querySelectorAll('input[id^="notas_i"][id$="_' + id_estudiante + '"]:empty');
+      if (inputs_vacios.length > 0) {
+        for (var i = 0; i < inputs_vacios.length; i++) {
+          if (inputs_vacios[i].value === '') {
+            inputs_vacios[i].value = codigo_indicador;
+            break; // Detener el bucle después de asignar el valor al primer input vacío encontrado
+          }
+        }
+      }
+    });
+    document.getElementById('boton_cerrar').click();
+  } //END-agregar_indicador
+
+</script>

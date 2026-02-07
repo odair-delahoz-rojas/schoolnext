@@ -1,0 +1,15 @@
+<div class="w3-panel">
+  <?= View::Encab($controller_name, $page_action, $breadcrumb).View::flash() ?>
+</div>
+
+<div class="w3-container">
+  <?= OdaTags::buttonBars($buttons);?>
+  <?= (new Seguimientos)::lnkPageSeguimientosGrupo()?>
+  <?= (new RegistrosGen)::lnkPageRegistrosGrupo()?>
+  <div id="spinner"><i class="fa fa-spinner w3-spin" style="font-size:32px"></i></div>
+  <div id="resultados"></div>
+</div>
+
+<?php
+  echo Tag::js(src: 'dir_grupo/dg_index', cache: false);
+?>  

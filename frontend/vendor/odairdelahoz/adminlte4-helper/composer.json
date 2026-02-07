@@ -1,0 +1,16 @@
+{
+    "name": "odairdelahoz/adminlte4-helper",
+    "description": "A PHP-8.2 library designed to simplify the generation of AdminLTE 4 HTML components, widgets and layouts.",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "AdminLTE\\": "./"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -1,0 +1,46 @@
+<?php
+require_once VENDOR_PATH. 'autoload.php';
+use AdminLTE\Layout;
+
+$configFilePath = __DIR__ . '/layout_fixed_collapsed_config.php';
+if (!file_exists($configFilePath)) {
+    $layoutType = 'default';
+    $configFilePath = __DIR__ . '/layout_default_config.php';
+}
+require_once $configFilePath;
+
+$layout = new Layout($pageTitle, $layoutOptions);
+
+// Render the page
+$layout->renderHead();
+$layout->renderBodyStart();
+
+// Render main UI parts
+$layout->renderHeader('SchoolNEXT', ['name' => 'Layouts', 'link' => 'layout_preview.php'], $user);
+$layout->renderSidebar(strtoupper(INSTITUTION_KEY), (string)$user['name'], $menuItems);
+
+
+$breadcrumbs = [
+    ['name' => 'Home', 'link' => '#'],
+    ['name' => 'Layouts', 'link' => 'layout_preview.php'],
+    ['name' => $page_action]
+];
+$layout->renderContentWrapperStart($pageTitle, $breadcrumbs);
+
+// --- Page Specific Content ---
+?>
+<div class="row">
+    <div class="col-md-12">
+        <?php View::content() ?>
+    </div>
+</div>
+<?php
+// --- End Page Specific Content ---
+
+// Render content wrapper end
+$layout->renderContentWrapperEnd();
+$layout->renderFooter('https://construxzionsoft.com.co', 'ConstruxionSoft');
+$layout->renderBodyEnd(
+  [PUBLIC_PATH.'javascript/htmx207.min.js'],
+);
+?>

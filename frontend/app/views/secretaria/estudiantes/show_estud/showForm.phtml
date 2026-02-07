@@ -1,0 +1,42 @@
+<div class="w3-container">
+   <?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+   <?= View::flash(); ?>
+</div>
+
+<div class="w3-container">
+  <h2><?=$arrData['Estudiante']?> </h2>
+  <?php
+  try {
+    $modelEstud = $arrData['Estudiante'];
+    $frmEstud = new OdaForm( $modelEstud, '', 
+      multipart: false,
+      url_back: 'secretaria/listadoEstudInactivos',
+    );
+    $frmEstud->setAtrib('id="frm_edit1" name="frm_edit1"');
+    $frmEstud->setEdit();
+
+    $modelDataEstud = $arrData['DatosEstud'];
+    $frmDataEstud = new OdaForm($modelDataEstud, '');
+
+    $modelAdjuntos = $arrData['Adjuntos'];
+    $myTabs = new OdaTabs();
+
+    include 'basicos.phtml';
+    include 'ubicacion.phtml';
+    //include 'matricula.phtml';
+    include 'madre.phtml';
+    include 'padre.phtml';
+    //include 'acudiente.phtml';
+    include 'contab.phtml';
+    include 'salud.phtml';
+    include 'instit.phtml';
+    
+    echo  "<div class=\"w3-container\">$myTabs {$frmEstud->getBtnBack()}</div>";
+  
+  } catch (\Throwable $th) {
+    OdaFlash::error($th);
+  }
+  ?>
+
+</div>
+<?php // $myTabs::getJs() ?>

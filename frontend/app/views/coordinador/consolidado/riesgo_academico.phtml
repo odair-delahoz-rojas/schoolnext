@@ -1,0 +1,28 @@
+<div class="w3-panel">
+    <?= View::Encab(page_module: $controller_name, page_action: $page_action, breadcrumb: $breadcrumb); ?>
+    <?= View::flash(); ?>
+</div>
+
+<div class="w3-container">
+  
+  <div  class="w3-bar">
+    <?php 
+    foreach ($data as $key => $salon) 
+    {
+      echo "<div id=\"btn-$key\" onclick=\"traer_data($salon->id)\" class=\"w3-bar-item\">$salon</div>" ;
+    }
+    ?>
+  </div>
+
+  <h2 id="salon"></h2>
+  <div id="spinner"><i class="fa fa-spinner w3-spin" style="font-size:32px"></i></div>
+  <div id="resultados">
+  </div>
+
+</div>
+
+<!-- BEGIN BASE JS -->
+<?php
+  echo Tag::js(src: 'coordinador/consolidado_riesgo_academico', cache: false);
+?>  
+

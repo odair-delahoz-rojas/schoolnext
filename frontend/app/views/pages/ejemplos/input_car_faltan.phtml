@@ -1,0 +1,34 @@
+<div class="w3-container">
+   <?= View::flash(); ?>
+   <?= View::Encab($controller_name, ucfirst($controller_name). ': '.ucfirst($action_name), ''); ?>
+</div>
+
+<div class="w3-container">
+  
+  <?php
+    $frm = Form::Open();
+    $frm .= Form::input('text', 'test', attrs:'maxlength="10"');
+    $frm .= Form::close();
+    echo $frm;
+   ?>
+<div id="remaining-chars"></div>
+</div>
+
+<script>
+  // Selecciona el input y establece la longitud máxima permitida
+  const input = document.querySelector('#test');
+  const maxLength = 10;
+  
+  // Función que se ejecuta cada vez que se escribe algo en el input
+  input.addEventListener('input', () => {
+    // Obtiene la longitud actual del valor del input
+    const currentLength = input.value.length;
+    
+    // Calcula la cantidad de caracteres faltantes
+    const remainingChars = maxLength - currentLength;
+    
+    // Actualiza el elemento que muestra la cantidad de caracteres faltantes
+    const remainingCharsElement = document.querySelector('#remaining-chars');
+    remainingCharsElement.textContent = `Faltan ${remainingChars} caracteres`;
+  });
+</script>

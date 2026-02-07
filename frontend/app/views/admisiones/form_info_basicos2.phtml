@@ -1,0 +1,69 @@
+<?php 
+  require_once VENDOR_PATH. 'autoload.php';
+  use AdminLTE\Components\Table;
+  use AdminLTE\Components\Form;
+
+  try 
+  {
+    $selectOptionsTipoDoc = TipoDoc::toArray(false);
+    $selectOptionsSexo = Sexo::toArray(false);
+    $selectOptionsGrado = Grado::getGradosArray();
+    
+    $data =  [
+    [
+      Form::select('aspirantes[grado]', 'Grado al que Aspira', $selectOptionsGrado, ['selected_value' => '0'])
+     .Form::text('aspirantes[nombres]', $Aspirante->getLabel('nombres'), ['placeholder' => $Aspirante->getPlaceholder('nombres'), 'help_text' => $Aspirante->getHelp('nombres')])
+     .Form::text('aspirantes[apellido1]', $Aspirante->getLabel('apellido1'), ['placeholder' => $Aspirante->getPlaceholder('apellido1'), 'help_text' => $Aspirante->getHelp('apellido1')])
+     .Form::text('aspirantes[apellido2]', $Aspirante->getLabel('apellido2'), ['placeholder' => $Aspirante->getPlaceholder('apellido2'), 'help_text' => $Aspirante->getHelp('apellido2')])
+     .Form::select('aspirantes[sexo]', 'Sexo', $selectOptionsSexo, ['selected_value' => '0'])
+     .'<hr/>'
+    ],
+    
+    [
+      Form::date('aspirantes[fecha_nac]', $Aspirante->getLabel('fecha_nac'), ['type' => 'date', 'placeholder' => $Aspirante->getPlaceholder('fecha_nac'), 'help_text' => $Aspirante->getHelp('fecha_nac')])
+     .Form::select('aspirantes[tipo_dcto]', 'Tipo Documento', $selectOptionsTipoDoc, ['selected_value' => '0'])
+     .Form::text('aspirantes[documento]', $Aspirante->getLabel('documento'), ['placeholder' => $Aspirante->getPlaceholder('documento'), 'help_text' => $Aspirante->getHelp('documento')])
+     .'<hr/>'
+    ],
+
+    [
+      '<h4>Lugar de Nacimiento</h4>'
+     .Form::text('aspirantes[pais_nac]', $Aspirante->getLabel('pais_nac'), ['placeholder' => $Aspirante->getPlaceholder('pais_nac'), 'help_text' => $Aspirante->getHelp('pais_nac')])
+     .Form::text('aspirantes[depto_nac]', $Aspirante->getLabel('depto_nac'), ['placeholder' => $Aspirante->getPlaceholder('depto_nac'), 'help_text' => $Aspirante->getHelp('depto_nac')])
+     .Form::text('aspirantes[ciudad_nac]', $Aspirante->getLabel('ciudad_nac'), ['placeholder' => $Aspirante->getPlaceholder('ciudad_nac'), 'help_text' => $Aspirante->getHelp('ciudad_nac')])
+     .'<hr/>'
+    ],
+
+    [
+      '<h4>Dirección Actual</h4>'
+     .Form::text('aspirantes[direccion]', $Aspirante->getLabel('direccion'), ['placeholder' => $Aspirante->getPlaceholder('direccion'), 'help_text' => $Aspirante->getHelp('direccion')])
+     .Form::text('aspirantes[barrio]', $Aspirante->getLabel('barrio'), ['placeholder' => $Aspirante->getPlaceholder('barrio'), 'help_text' => $Aspirante->getHelp('barrio')])
+     .Form::text('aspirantes[telefono1]', $Aspirante->getLabel('telefono1'), ['placeholder' => $Aspirante->getPlaceholder('telefono1'), 'help_text' => $Aspirante->getHelp('telefono1')])
+     .'<hr/>'
+    ],
+
+  ];
+  /*
+  if ('formsencillo'!=$data['tipo_form_admisiones'])
+  {
+  $data[] = 
+    $FormAspirPsico->getTextarea(field: 'rel_pad_mad', attr: '', inline: false)
+    . $FormAspirPsico->getTextarea(field: 'vive_con', attr: '', inline: false);
+  }
+*/
+
+$tabla = Table::render(headers: [], data: $data, options: ['classes'=>'table table-responsive table-striped']);
+$extras = $FormAspir->getInput(tipo: 'hidden', field: 'fecha_insc');
+
+return "
+  <div class=\"container\">
+    <h3>Datos Básicos del Aspirante</h3>
+    {$tabla}
+    {$extras}
+  </div>";
+} 
+
+catch (\Throwable $th) 
+{
+  OdaFlash::error($th);
+}

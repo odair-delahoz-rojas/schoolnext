@@ -1,0 +1,23 @@
+<?php 
+$RegAsignatura = $arrData['asignatura'];
+$RegGrado = $arrData['grado'];
+$buttons = [];
+  for ($i=1; $i<=$_max_periodos; $i++) { 
+    $buttons[$i] = ['caption'=>"Periodo $i", 'action'=>"traer_data($i,$RegGrado->id,$RegAsignatura->id)"];
+  }
+  $botones = OdaTags::buttonBars($buttons);
+?>
+
+<div class="w3-container w3-row">
+  <div id="form_new" style="display: none"> <?= require('newForm.phtml') ?> </div>
+  <div id="form_edit" style="display: none"> <?= require('editForm.phtml') ?> </div>
+    
+  <div id="list_index">
+    <?php echo require('indexHeader.phtml') ?>
+    <div id="lista_indicadores" class="">
+      <div id="botones"><?= $botones ?></div>
+      <div id="capa_datos"></div>
+    </div>
+    
+    <?php echo require('indexFooter.phtml') ?>
+</div>

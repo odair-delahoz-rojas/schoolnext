@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2022-07-02 05:46-0500\n"
+"PO-Revision-Date: 2022-07-02 05:46-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.1\n"
+"X-Poedit-Basepath: ../../../../..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: kuadmin/app/libs/controller_scaffold_lite.php:41
+msgid "Record created"
+msgstr "Registro creado"
+
+#: kuadmin/app/libs/controller_scaffold_lite.php:57
+msgid "Record not found"
+msgstr "Registro no encontrado"
+
+#: kuadmin/app/libs/controller_scaffold_lite.php:66
+msgid "Record updated"
+msgstr "Registro actualizado"
+
+#: kuadmin/app/libs/controller_scaffold_lite.php:83
+msgid "Something was wrong"
+msgstr "Algo no va bien"
+
+#: kuadmin/app/views/_shared/partials/paginators/classic.phtml:50
+#: kuadmin/app/views/_shared/partials/paginators/classic.phtml:52
+#: kuadmin/app/views/_shared/partials/paginators/digg.phtml:55
+#: kuadmin/app/views/_shared/partials/paginators/digg.phtml:59
+msgid "Prev"
+msgstr "Anterior"
+
+#: kuadmin/app/views/_shared/partials/paginators/classic.phtml:63
+#: kuadmin/app/views/_shared/partials/paginators/digg.phtml:90
+msgid "Next"
+msgstr "Sigueinte"
+
+#: kuadmin/app/views/_shared/scaffolds/lite/page.phtml:3
+#: kuadmin/app/views/_shared/scaffolds/lite/show.phtml:12
+#: kuadmin/app/views/admin/resources/create.phtml:24
+#: kuadmin/app/views/admin/roles/create.phtml:13
+#: kuadmin/app/views/admin/users/create.phtml:27
+msgid "List"
+msgstr "Lista"
+
+#: kuadmin/app/views/_shared/scaffolds/lite/page.phtml:5
+#: kuadmin/app/views/_shared/scaffolds/lite/show.phtml:13
+#: kuadmin/app/views/admin/resources/create.phtml:2
+#: kuadmin/app/views/admin/roles/create.phtml:2
+#: kuadmin/app/views/admin/users/create.phtml:3
+msgid "Create"
+msgstr "Crear"
+
+#: kuadmin/app/views/_shared/scaffolds/lite/page.phtml:16
+msgid "Actions"
+msgstr "Aciones"
+
+#: kuadmin/app/views/_shared/scaffolds/lite/page.phtml:26
+#: kuadmin/app/views/_shared/scaffolds/lite/show.phtml:14
+msgid "Edit"
+msgstr "Modificar"
+
+#: kuadmin/app/views/_shared/scaffolds/lite/page.phtml:27
+#: kuadmin/app/views/_shared/scaffolds/lite/show.phtml:15
+msgid "Are you sure you want to delete?"
+msgstr "¿Está seguro que desea borrarlo?"
+
+#: kuadmin/app/views/_shared/scaffolds/lite/page.phtml:27
+#: kuadmin/app/views/_shared/scaffolds/lite/show.phtml:15
+msgid "Are you sure?"
+msgstr "¿Estás seguro?"
+
+#: kuadmin/app/views/_shared/scaffolds/lite/page.phtml:27
+#: kuadmin/app/views/_shared/scaffolds/lite/show.phtml:15
+msgid "Delete"
+msgstr "Borrar"
+
+#: kuadmin/app/views/_shared/scaffolds/lite/page.phtml:37
+msgid "No records"
+msgstr "No hay registros"
+
+#: kuadmin/app/views/_shared/scaffolds/lite/show.phtml:4
+msgid "Show"
+msgstr "Mostrar"
+
+#: kuadmin/app/views/admin/resources/create.phtml:18
+#: kuadmin/app/views/admin/roles/create.phtml:9
+#: kuadmin/app/views/admin/users/create.phtml:22
+msgid "Save"
+msgstr "Guardar"
+
+#: kuadmin/app/views/admin/users/create.phtml:3
+msgid "Users"
+msgstr "Usuarios"

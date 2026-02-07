@@ -1,0 +1,28 @@
+<?php
+$head = ['', '<b>Grado</b>', '<b>Documento</b>', '<b>Estudiante</b>', '<b>Contacto</b>'];
+$tabla = new OdaTable(theme:'light');
+$tabla->setCaption($file_title);
+
+$brake = '';
+$cnt_int_grado = 0;
+foreach ($data as $key => $item) {
+  if ($brake <> $item->grado_nombre) {
+    if ( !empty($brake) ) {
+      $tot = $cnt_int_grado-1;
+      $tabla->addRow(['', '', '', '', "<b>Total: {$tot}</b>"]);
+    }
+    $tabla->addRow(['<hr>', '<hr>', '<hr>', '<hr>', '<hr>']);
+    $tabla->addRow($head);
+    $cnt_int_grado = 1;
+  }
+  $tabla->addRow([
+    ($key+1),
+    $item->grado_nombre, 
+    $item->documento, 
+    OdaUtils::nombrePersona(($item->estudiante_nombre ?? '')) .$item->isNuevoIco(),
+    $item->getInfoContactoAcudiente(),
+  ]);
+  $brake = $item->grado_nombre;
+  $cnt_int_grado += 1;
+}
+echo $tabla;

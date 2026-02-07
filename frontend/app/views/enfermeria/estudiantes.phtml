@@ -1,0 +1,33 @@
+<?= View::Encab($controller_name, $page_action, $breadcrumb); ?>
+<?php View::flash(); ?>
+
+<h1 class="w3-center">Estudiantes Activos</h1>
+
+<div class="w3-panel">
+   <div class="w3-row w3-section">
+      <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
+      <div class="w3-rest">
+         <input oninput="w3.filterHTML('#id01', 'li', this.value)" class="w3-input w3-border" name="filter" type="text" placeholder="Filtrar estudiante...">
+         <span class="w3-small"><?= 'Total Registros: '.count($data); ?></span><br/>
+      </div>
+   </div>
+</div> 
+
+<div id="capa_saludo"></div>
+
+<ul id="id01" class="w3-ul w3-card-4 w3-border w3-hoverable">
+   <?php foreach($data as $key => $estud) : ?>
+      <?php $lnk_ajax1=Ajax::link("api/estudiantes/singleid/{$estud->id}", OdaUtils::nombrePersona($estud->nombres), 'details');?>
+      <?php $lnk_ajax2=Ajax::link("api/estudiantes/singleid/{$estud->id}", OdaUtils::nombrePersona("$estud->apellido1 $estud->apellido2"), 'details');?>
+      <li class="w3-bar" >
+         <div class="w3-bar-item w3-center">
+            <?=  $estud->getFoto() ?>
+         </div>
+         <div class="w3-bar-item">
+            <?=$estud->id?><br/>
+            <span class="w3-ripple">
+               <span class="w3-large"> <?=$lnk_ajax1?> <br> <?=$lnk_ajax2?> </span><br>
+         </div>
+      </li>
+   <?php endforeach ?>
+</ul>

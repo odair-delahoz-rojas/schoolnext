@@ -1,0 +1,22 @@
+<?php 
+$head = ['#', 'C&oacute;digo', 'Estudiante', 'Identificacion', ''];
+
+$tabla = new OdaTable();
+$tabla->setCaption($file_title);
+$tabla->setHead($head);
+
+$brake = '';
+foreach ($data as $key => $item) {
+  //if ($brake<>$item->salon_nombre) { $tabla->addRow($head); }
+  $tabla->addRow([
+    ($key+1),
+    $item->id,
+    $item->estudiante_nombre,
+    $item->documento, 
+    str_repeat('_', 20), 
+  ]);
+  $brake = $item->salon_nombre;
+}
+
+echo $tabla;
+?>

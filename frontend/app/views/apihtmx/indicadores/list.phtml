@@ -1,0 +1,19 @@
+<?php
+require_once VENDOR_PATH . 'autoload.php';
+use AdminLTE\Components\Table as miTabla;
+
+$titulo = "Indicadores - Periodo 0" . $arrData['Periodo'] . " - Grado: " . $arrData['Grado'] . " - Asignatura: " . $arrData['Asignatura'];
+echo miTabla::render(
+  headers: $data['headers'], 
+  data: $data['items'], 
+  options: ['classes' => 'table table-striped table-bordered table-hover', 'card' => $titulo],
+);
+?>
+
+<script>
+  htmx.logger = function(elt, event, data) {
+    if(console) {
+        console.log(event, elt, data);
+    }
+  }
+</script>

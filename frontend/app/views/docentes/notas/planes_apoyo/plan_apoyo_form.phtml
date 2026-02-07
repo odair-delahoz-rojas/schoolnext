@@ -1,0 +1,85 @@
+<?php
+ /* 
+  'id', 'uuid', 'annio', 'periodo_id', 'grado_id', 'salon_id', 'asignatura_id', 'estudiante_id', 
+  'definitiva', 'plan_apoyo', 'nota_final', 'profesor_id', 
+  
+  /// planes de apoyo
+  'i31', 'i32', 'i33', 'i34', 'i35', 'i36', 'i37', 'i38', 'i39', 'i40', 
+
+  'paf_link_externo1', 'paf_link_externo2', 
+  'paf_temas', 'paf_acciones', 'paf_activ_estud', 'paf_activ_profe', 'paf_fecha_entrega', 
+  'is_paf_ok_coord', 'is_paf_validar_ok', 'is_paf_ok_dirgrupo', 
+
+*/
+
+try {
+  $frm = '';
+  
+  // fila #1
+  $Tag = new OdaTags();
+  $frm = "<tr class=\"\">";  
+  $info_reg = '<br>Reg #'.$Reg->id;
+  $f_profesor_id = $Reg->fieldForm('profesor_id', type:'hidden');
+
+  $frm .= $Tag::tag(tag: 'td', content: $Reg->getFoto().$info_reg, attrs: 'rowspan="5"');
+  $frm .= $Tag::tag(tag: 'td', content: $Reg->estudiante_nombre."<br>$info_indic", attrs: 'colspan="4"');
+  $frm .= $Tag::tag(tag: 'td', content: $f_profesor_id);
+  
+  $s_definitiva = $Tag::inputRango(id_name: $Reg->id, value: $Reg->definitiva, min: 0, max: 100, step: 1);
+  $s_plan_apoyo = $Tag::inputRango(id_name: $Reg->id, value: $Reg->plan_apoyo, min: 0, max: 100, step: 1);
+  $s_nota_final = $Tag::inputRango(id_name: $Reg->id, value: $Reg->nota_final, min: 0, max: 100, step: 1);
+  
+  $f_definitiva = $Reg->fieldForm('definitiva', type:'hidden');
+  $f_plan_apoyo = $Reg->fieldForm(field_name: 'plan_apoyo');
+  $f_nota_final = $Reg->fieldForm(field_name: 'nota_final');
+  
+  $las_notas = $f_definitiva;
+
+  $frm .= $Tag::tag(tag: 'td', content: 'Nota:<br>'. $Reg->definitiva);
+  $frm .= $Tag::tag(tag: 'td', content: 'P. Apoyo<br>'.$f_plan_apoyo, attrs: 'colspan="2"');
+  $frm .= $Tag::tag(tag: 'td', content: 'N. Final<br>'.$f_nota_final, attrs: 'colspan="2"');
+  $frm .= '</tr>';
+  
+  
+  // reglas para los indicadores
+  $patternInidisc  = ' pattern="/^('. implode('|', $arrData['Indicadores']) .')$/"';
+  $min_max  = ' min="'.$arrData['min_indic'].'" max="'.$arrData['max_indic'].'" ';
+  $max_lenght = ' maxlength="'.strlen($arrData['max_indic']).'" size="'.(strlen($arrData['max_indic'])).'"' ;
+  
+  // fila #2
+  $frm .= "<tr class=\"\">";
+  $fields['f2'] = ['i31', 'i32', 'i33', 'i34', 'i35', 'i36', 'i37', 'i38', 'i39', 'i40'];
+  foreach ($fields['f2'] as $key => $campo)
+  { 
+    $field = $Reg->fieldForm($campo, $min_max .$max_lenght .$patternInidisc.' class="color-input"');
+    $frm .= $Tag::tag('td', $field);
+  }
+  $frm .= '</tr>';
+  
+  // fila #3
+  $frm .= "<tr class=\"\">";
+  // $lnk_ext1 = $Reg->fieldForm(field_name: 'paf_link_externo1');
+  // $lnk_ext2 = $Reg->fieldForm(field_name: 'paf_link_externo2');
+  $field = $Reg->fieldForm(field_name: 'paf_temas', type: 'textarea');
+  $frm .= $Tag::tag('td', $field, attrs: 'colspan="5"');
+  
+  $field = 'Fecha de entrega<br>' .$Reg->fieldForm(field_name: 'paf_fecha_entrega');
+  $frm .= $Tag::tag('td', $field, attrs: 'colspan="5"');
+  $frm .= '</tr>';
+  
+  // fila #4
+  $frm .= "<tr class=\"\">";
+  $field = $Reg->fieldForm(field_name: 'paf_activ_profe', type: 'textarea');
+  $frm .= $Tag::tag('td', $field, attrs: 'colspan="5"');
+  
+  $field = $Reg->fieldForm(field_name: 'paf_activ_estud', type: 'textarea');
+  $frm .= $Tag::tag('td', $field, attrs: 'colspan="5"');
+  $frm .= '</tr>';
+
+  return $frm;
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}
+
+?>

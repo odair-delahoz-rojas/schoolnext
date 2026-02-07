@@ -1,0 +1,34 @@
+<?php
+try {
+  $myTabla = new OdaTable();
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('madre'),
+    $frmDataEstud->getDataLabel('madre_id'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('madre_tel_1'),
+    $frmDataEstud->getDataLabel('madre_tel_2'),
+  ]);
+  
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('madre_dir'),
+    $frmDataEstud->getDataLabel('madre_email'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('madre_ocupa'),
+    $frmDataEstud->getDataLabel('madre_lugar_tra'),
+  ]);
+
+  $myTabla->addRow([
+    $frmDataEstud->getDataLabel('madre_tiempo_ser'),
+    '',
+  ]);
+
+  $myTabs->addTab('madre', 'Madre', $myTabla);
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

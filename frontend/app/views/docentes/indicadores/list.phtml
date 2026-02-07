@@ -1,0 +1,40 @@
+<?php 
+$Asignatura = $arrData['asignatura'];
+$Grado = $arrData['grado'];
+require_once VENDOR_PATH. 'autoload.php';
+use AdminLTE\Components\Button as Button;
+use AdminLTE\Components\Badge as Badge;
+?>
+
+<h4>Indicadores <?= Badge::render('Grado '. $Grado->nombre, ['color' => 'primary']) ?> - <?= Badge::render('Asignatura '.$Asignatura->nombre, ['color' => 'info']) ?></h4>
+<div class="mb-3">
+  <div class="btn-group">
+    <?php 
+      $btn_colors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
+      for ($i=1; $i<=$_max_periodos; $i++)
+      { 
+        $options_htmx = [
+          'hx-get'=> "/apihtmx/indicadores/getListByPeriodoGradoAsignatura/{$i}/{$Grado->id}/{$Asignatura->id}",
+          'hx-trigger'=>"click",
+          'hx-target'=>"#output-elt",
+          'hx-swap'=>"innerHTML",
+          'hx-indicator'=>"#indicator",
+        ];
+        echo Button::render('Periodo 0'.$i, ['id' => "btn-{$i}", 'color' => $btn_colors[$i]], $options_htmx);  
+      }
+    ?>
+  </div>
+  <div><span id="indicator" class="htmx-indicator">Loading data...</span></div>
+</div>
+
+<div>
+  <output id="output-elt">
+  </output>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('btn-1').click();
+});
+</script>

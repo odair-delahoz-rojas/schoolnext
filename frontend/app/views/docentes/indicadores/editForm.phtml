@@ -1,0 +1,21 @@
+<h2>Editando Registro</h2>
+<?php
+  $model = new Indicador();
+  $fieldsToHidden = $model::getFieldsHidden('edit');
+  $titulo = '<h3 id="titulo_indicador_edit"></h3>';
+  
+  $myForm = new OdaForm($model, 'admin/indicadores/edit_ajax');
+  $myForm->setAtrib('id="frm_edit" name="frm_edit"');
+  //$myForm->addInput(field:'codigo', tipo:'number');
+  //$myForm->addSelect(field:'valorativo', data: OdaUtils::VALORATIVOS);
+  $myForm->addTextarea(field:'concepto');
+  $myForm->addSelect(field:'is_visible', data: OdaUtils::IS_VISIBLE);
+  $myForm->addSelect(field:'is_active', data: OdaUtils::IS_ACTIVE);
+
+  $myForm->addHiddens(implode(",", $fieldsToHidden));
+  return "<div class=\"w3-container\">$titulo $myForm</div>";
+    
+// PENDIENTE PROGRAMAR ::
+// Validar que los códigos ingresados (no repetir)
+// Sincronizar Código con Valorativo.
+?>

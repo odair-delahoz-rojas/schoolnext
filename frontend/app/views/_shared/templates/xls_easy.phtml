@@ -1,0 +1,11 @@
+<?php
+header ( header: "Content-type: application/vnd.ms-excel" );
+header ( header: "Content-Disposition: attachment; filename=$file_name.xls" );
+
+/* header(header: "Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+header(header: "Content-Disposition: attachment;filename=\"$filename.xlsx\"");
+header(header: "Cache-Control: max-age=0");
+ */
+echo $data;
+
+exit;

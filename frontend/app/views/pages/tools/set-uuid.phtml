@@ -1,0 +1,29 @@
+<div class="w3-container">
+   <?= View::flash(); ?>
+   <?= View::Encab($controller_name, $page_action); ?>
+</div>
+
+<div class="w3-container">
+<?php
+try {
+
+  $Modelo = (new Nota());
+  
+  foreach ($Modelo::all('SELECT * FROM sweb_notas where uuid is null') as $key => $obj) {
+    $uuid = $obj->xxh3Hash();
+    
+    $DQL = new OdaDql($Modelo::class);
+    $DQL->update(['uuid' => $uuid])
+      ->where("id=?")
+      ->setParams([$obj->id])
+      ->execute(true);
+
+    //echo $DQL." $obj->id<br>";
+  }
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}
+?>
+
+</div>

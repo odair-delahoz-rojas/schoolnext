@@ -1,0 +1,28 @@
+<?php
+  $links_docente  = OdaTags::linkBarItem('docen-carga-academica', 'Mi Carga', 'people-line');
+  $links_docente .= OdaTags::linkBarItem('docen-reg-observaciones', 'Reg. Observaciones', 'address-card');
+  $links_director = '';
+  if ( Session::get('es_director') )
+  {
+    $links_director .= OdaTags::linkBarItem('docen-reg-desemp-acad', 'Reg. Acad&eacute;micos', 'clipboard');
+    $links_director .= OdaTags::linkBarItem('docentes/direccion_grupo', 'Mi Grupo', 'clipboard');
+    //$links_director .= OdaTags::linkBarItem('docen-seguimientos-grupo', 'Seguimientos', 'clipboard');
+  }
+
+  if (1==(int)Session::get('periodo'))
+  {
+    $links_docente .= OdaTags::linkBarItem('docen-asignar-carga', 'Asignar Carga', 'gear'); 
+  }
+
+?>
+
+<div class="w3-bar-block">
+   <?= $links_docente .$links_director?>
+</div>
+
+<?php if(Session::get('roll')=='coordinadores'): ?>
+   <details class="w3-padding">
+      <summary> <u>Coordinaci&oacute;n</u> </summary>
+      <?php View::partial("coordinador/coordinador_menu") ?>
+   </details>
+<?php endif; ?>

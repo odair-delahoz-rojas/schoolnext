@@ -1,0 +1,62 @@
+<?php
+  $theme   = Session::get('theme');
+  $modulo  = Session::get('modulo');
+  $Periodo = Session::get('periodo');
+  $annio   = Session::get('annio');
+  $f_ini_periodo = date('M-d',strtotime(Session::get('fecha_inicio')));
+  $f_fin_periodo = date('M-d',strtotime(Session::get('fecha_fin')));
+  $f_open_day    = date('M-d',strtotime(Session::get('f_open_day')));
+  $user_id  = Session::get('id');
+  $username = Session::get('username');
+  $roll = Session::get('roll');
+?>
+<nav class="w3-sidebar w3-collapse w3-theme-<?=$theme?> w3-animate-left" 
+     style="z-index:3;width:250px;" id="mySidebar">
+  <hr/>
+  <!-- PERIODO ACADÉMICO Y LOGOUT -->
+  <div class="w3-container w3-center">
+    <div class="w3-row"><?="<span class=\"w3-tag w3-round w3-teal w3-border w3-border-white\">Periodo <span id=\"periodo_actual\">$Periodo</span> </span> <span id=\"annio_actual\">$annio</span>"?> </div>
+    <div class="w3-row">[<?="$f_ini_periodo al $f_fin_periodo"?>] </div>
+    <div class="w3-row"><?="[Open Day: $f_open_day]"?></div>
+    <div class="w3-row"><?= PRODUCTION ? 'PROD' : 'DEV' ?></div>
+  </div>
+
+  <hr/>
+  <!-- USUARIO Y NOTIFICACIONES -->
+  <div class="w3-container w3-row">
+    <div class="w3-quarter w3-margin-right">
+      <?= UsuarioDolibarr::getFotoUser(id: (int)Session::get('username'), show_cod: false)?>
+    </div>
+    <div class="w3-auto">
+      <?="$user_id $username<br>$roll<br>"?> <?=OdaTags::linkIcon('logout', 'arrow-right-from-bracket', 'alt="User Logut"'); ?>
+      <?= OdaTags::link($action='logout', $text='Salir', $attrs = '') ?> 
+      <br/>
+      <span class="w3-hover-text-<?=$theme?>"><?=OdaTags::linkIcon("pages/miperfil", 'user-gear').'&nbsp;';?></span>
+    </div>
+    <h5 class="w3-small">
+      <br>Ejecutado en <?=round((microtime(1) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000, 0);?> ms
+      <br>Usando <?=number_format(memory_get_usage() / 1048576, 2);?> MB <br><br>
+    </h5>
+  </div>
+
+  <!-- MENÚ DEL SISTEMA -->
+  <div class="w3-bar-block w3-row">
+    <a href="/" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" 
+    onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>&nbsp; Close Menu</a>
+    <menu class="w3-padding">
+      <?= OdaTags::linkBarItem($modulo, 'INICIO') ?>
+      <div class="w3-bar-block">
+        <?php View::partial("$modulo/$modulo"."_menu") ?>
+      </div>
+      <br><br>
+      <?= OdaTags::link('index/cambiarTheme', (('dark'==$theme) ? 'Modo Claro' : 'Modo Oscuro'), 'class="w3-btn w3-theme"' ) ?>
+      <br><br>
+    </menu>
+  </div>
+
+</nav>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" 
+  style="cursor:pointer" title="cerrar menú lateral" id="myOverlay">
+</div>

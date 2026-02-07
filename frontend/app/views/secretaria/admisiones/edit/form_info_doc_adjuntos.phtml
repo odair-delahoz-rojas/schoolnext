@@ -1,0 +1,24 @@
+<?php 
+try {  
+  $tabla = new OdaTable('id="myTable-ad" class="w3-table w3-responsive w3-striped w3-bordered"');
+  
+  // $tabla->setCaption('Documentos Adjuntos');
+  // $tabla->addRow(data:[
+  //   '** INFORME ACADÉMICO #1: ',
+  //   $FormAspirPsico->getTextarea(field: '')
+  // ]);
+  // $tabla->addRow(data:[
+  //   '** INFORME ACADÉMICO #2: ',
+  //   $FormAspirPsico->getTextarea(field: '')
+  // ]);
+  // $tabla->addRow(data:[
+  //   '** FORMATO AUT. CONSULTA CENTRALES RIESGO : ',
+  //   $FormAspirPsico->getTextarea(field: '')
+  // ]);
+
+
+  return  "";
+
+} catch (\Throwable $th) {
+  OdaFlash::error($th);
+}

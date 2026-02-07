@@ -1,0 +1,10 @@
+<?php
+require_once VENDOR_PATH . 'autoload.php';
+use AdminLTE\Components\Table as miTabla;
+
+echo miTabla::render(
+  headers: 
+    $data['headers'], 
+  data: 
+    $data['items'], 
+);

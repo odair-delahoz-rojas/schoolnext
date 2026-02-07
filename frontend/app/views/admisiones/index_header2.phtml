@@ -1,0 +1,20 @@
+<?php
+  require_once VENDOR_PATH. 'autoload.php';
+  use AdminLTE\Components\Alert;
+  $htmlContent = 'Por favor, haga una revisión del formulario antes de diligenciarlo para asegurarse que tiene 
+  la información que se requiere para poder completarlo correctamente.';
+?>
+
+<div class="container w3-container w3-row w3-bar">
+  <?= Alert::render($htmlContent, ['color' => 'warning', 'icon' => 'bi bi-exclamation-triangle-fill', 'dismissible' => true])?>
+  <div class="w3-bar-item"><br/>
+      <?php 
+        if ('formsencillo'!=$data['tipo_form_admisiones'])
+        {
+          echo "<p>Descargue y diligencie el Formato de Autorización Consulta y Reporte a Centrales de Riesgo "
+            . OdaTags::link('files/download/matriculas/windsor_formato_actualizacion.pdf', 'DESCARGAR', 'target=\"_blank\"') 
+            . " al final tendrá que adjuntarlo.<p>";
+        }
+      ?>
+  </div>
+</div>

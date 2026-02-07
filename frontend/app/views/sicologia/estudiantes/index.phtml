@@ -1,0 +1,38 @@
+<div class="w3-container w3-row">
+  <div id="form_new"  style="display: none"> <?= require('formNew.phtml') ?> </div>
+  <div id="form_edit" style="display: none"> <?= require('formEdit.phtml') ?> </div>
+  <?php 
+    try {
+      
+      require('indexHeader.phtml');
+      $tabla = new OdaTable(theme: $theme, showTotalRegs: true);
+      $tabla->setHead(
+         data_head:    ['Actions', 'Estudiante', 'Info Padres'], 
+         attrs:         'class="w3-theme"', 
+         arr_attrs_th: ['style="width:20%;"','style="width:40%;"','style="width:40%;"']
+      );
+      foreach($data as $key => $Estud) {
+         $col1 = "{$Estud->is_active_f()}<br/>$Estud->salon_nombre<br/>{$Estud->getFoto()}<br/>$Estud->documento";
+         $col2 = "Grado: $Estud->grado_nombre<br/>$Estud {$Estud->isNuevoIco()}";
+
+         $col3  = "$Estud->madre [$Estud->madre_id] <br>"
+                  .OdaUtils::linkWhatsApp(telefono: (string)$Estud->madre_tel_1, show_tel:true).' '
+                  .OdaUtils::linkTelefono(telefono: (string)$Estud->madre_tel_1).'<br><br>';
+         $col3 .= "$Estud->padre [$Estud->padre_id.] <br>"
+                  .OdaUtils::linkWhatsApp(telefono: (string)$Estud->padre_tel_1, show_tel:true).' '
+                  .OdaUtils::linkTelefono(telefono: (string)$Estud->padre_tel_1).'<br>';
+         $data=[$col1, $col2, $col3];
+         $tabla->addRow(
+            data: $data, 
+            attrs_td: ['class="searchTdata w3-center"', 'class="searchTdata"', 'class="searchTdata"']
+         );
+      }
+      echo $tabla;
+      require('indexFooter.phtml');
+
+    } catch (\Throwable $th) {
+      OdaLog::error($th);
+      echo $th;
+     }
+   ?>
+</div>
