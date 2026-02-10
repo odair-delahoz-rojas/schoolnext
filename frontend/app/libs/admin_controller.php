@@ -55,6 +55,9 @@ abstract class AdminController extends Controller
   public int|null $_annio_actual = 0;
   public int|null $_annio_inicial = 0;
   
+  public int|null $_annio_matricula = 0;
+  public bool|null $_show_matricula = false;
+  
   public string $_ahora = '';
   public $_now = null;
   
@@ -78,9 +81,12 @@ abstract class AdminController extends Controller
       $this->_periodo_actual = PERIODO_ACTUAL;
       $this->_annio_actual = ANNIO_ACTUAL;
       $this->_annio_inicial = ANNIO_INICIAL;
-      $this->_annio_matricula = ANNIO_MATRICULA;
+
       $this->_instituto_id = INSTITUTION_KEY;
       $this->_instituto_nombre = INSTITUTION_NAME;
+      
+      $this->_annio_matricula = ANNIO_MATRICULA;
+      $this->_show_matricula = SHOW_MATRICULA;
       
       $this->theme = (Session::get('theme')) ? Session::get('theme') : 'dark' ;
       $this->themei = substr($this->theme,0,1);
