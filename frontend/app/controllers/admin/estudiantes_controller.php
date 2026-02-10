@@ -160,28 +160,33 @@ class EstudiantesController extends ScaffoldController
     View::select(view: "secre_pdf_estudiantes_by_salon", template: 'pdf/mpdf');
   }
 
-  public function promoverMatriculas(int $grado_id) 
+
+  public function promoverMatriculas(int $grado_id, bool $trasladar = false) 
   {
     try
     {
-      $no_promover = '';
+      $no_promover = '414';
       $NewGrado = (new Grado())::get($grado_id);
       $DQLEstudiantes = new OdaDql('Estudiante');
       $DQLEstudiantes->setFrom(Config::get('tablas.estudiantes'));
 
-      $annio_promovido = (date('M')>=9) ? date('Y') : date('Y') + 1;
       $dataE = [
         'is_active' => (($NewGrado->id == $NewGrado->proximo_grado) ? 0 : 1), // SE INACTIVAN SI ES GRADO FINAL 
         'is_habilitar_mat' => 1,
-        'annio_promovido' => $annio_promovido,
-        'grado_promovido' => $NewGrado->proximo_grado, 
+        'annio_promovido' => $this->_annio_matricula,
+        'grado_promovido' => $NewGrado->proximo_grado,
         'numero_mat' => '', 
       ];
+
+      if ($trasladar) {
+        $dataE['grado_mat'] = $NewGrado->proximo_grado;
+        $dataE['salon_id'] = $NewGrado->proximo_salon;
+      }
 
       $DQLEstudiantes->update($dataE)
         ->where(' (t.is_active=1) and (t.id NOT IN ('.$no_promover.')) and (t.grado_mat=?)')
         ->setParams([$grado_id]);
-      //OdaLog::debug($DQLEstudiantes->renderlog());
+      
       $DQLEstudiantes->execute();
 
       redirect::to('secre-estud-list-activos');
@@ -191,6 +196,7 @@ class EstudiantesController extends ScaffoldController
       OdaFlash::error($th);
     }
   }
+
 
   public function editEstudiante(int $id, string $redirect='') 
   {
