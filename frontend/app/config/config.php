@@ -14,12 +14,13 @@ define('INSTITUTION_FRM_ADMISIONES', $DoliK->getValue('SCHOOLNEXTADMISIONES_FORM
 
 define('ANNIO_INICIAL', (int)$DoliK->getValue('SCHOOLNEXTCORE_ANNIO_INICIAL'));
 define('ANNIO_ACTUAL', (int)$DoliK->getValue('SCHOOLNEXTACADEMICO_ANNIO_ACTUAL'));
-define('PERIODO_ACTUAL', (int)$DoliK->getValue('SCHOOLNEXTACADEMICO_PERIODO_ACTUAL'));
+define('PERIODO_ACTUAL', PeriodoD::getPeriodoActual() );
+
 define('ANNIO_MATRICULA', (int)$DoliK->getValue('SCHOOLNEXTACADEMICO_MATRICULA_ANNIO'));
 define('SHOW_NOTA_BOLETIN', (bool)$DoliK->getValue('SCHOOLNEXTACADEMICO_SHOW_NOTA_BOLETIN'));
 define('SHOW_MATRICULA', (bool)$DoliK->getValue('SCHOOLNEXTACADEMICO_MATRICULA_ACTIVO'));
 
-define('MAX_PERIODOS', (int)(new PeriodoD())::getNumPeriodos());
+define('MAX_PERIODOS', (int)PeriodoD::getNumPeriodos() );
 
 $PeriodoActual = (new PeriodoD())->get(PERIODO_ACTUAL);
 define('PERIODO_INICIO', $PeriodoActual->fecha_inicio ?? '');
