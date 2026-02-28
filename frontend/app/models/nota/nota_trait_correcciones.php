@@ -12,8 +12,6 @@ trait NotaTraitCorrecciones {
       ->execute();
       
       if ($Estudiantes) {
-        $periodo_actual = self::$_periodo_actual;
-        $annio_actual = self::$_annio_actual;
         $ahora = new DateTime('now', new DateTimeZone('America/Bogota'));
 
         foreach ($Estudiantes as $key => $Estud) {
@@ -22,8 +20,8 @@ trait NotaTraitCorrecciones {
           $DQL->setFrom('sweb_notas');
           $DQL->insert([
             //'uuid' => $Estud->xxh3Hash(),
-            'annio' => $annio_actual,
-            'periodo_id' => $periodo_actual,
+            'annio' => ANNIO_ACTUAL,
+            'periodo_id' => PERIODO_ACTUAL,
             'grado_id' => $Salon->grado_id,
             'salon_id' => $salon_id,
             'asignatura_id' => $asignatura_id,
@@ -36,10 +34,10 @@ trait NotaTraitCorrecciones {
           );
           $DQL->execute();
 
-          if (4 == $periodo_actual ) {
+          if (4 == PERIODO_ACTUAL ) {
             $DQL->insert([
               //'uuid' => $Estud->xxh3Hash(),
-              'annio' => $annio_actual,
+              'annio' => ANNIO_ACTUAL,
               'periodo_id' => 5,
               'grado_id' => $Salon->grado_id,
               'salon_id' => $salon_id,
@@ -60,10 +58,11 @@ trait NotaTraitCorrecciones {
         OdaFlash::info('No hay registros');
       }
     
-    } catch (\Throwable $th) {
+    } 
+    catch (\Throwable $th) {
       OdaFlash::error($th);
     }
-  } //END-generarCalif_BySalonAsignatura
+  }
   
 
-} //END-Trait
+}
