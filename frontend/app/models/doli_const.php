@@ -27,9 +27,17 @@ class DoliConst extends LiteRecord
 
   public function getValue(string $const_name) 
   {
-    $sql = "SELECT * FROM ".static::getSource()." WHERE name=?";
-    $Const = (new DoliConst())::first($sql, [$const_name]);
-    return $Const->value??'';
+    //$sql = "SELECT * FROM ".static::getSource()." WHERE name=?";
+    //$Const = (new DoliConst())::first($sql, [$const_name]);
+
+    $DQL = new OdaDql('DoliConst');
+    $DQL->setFrom(Config::get('tablas.doli_const'));
+    $DQL->select('value')
+        ->where('t.name =?')
+        ->setParams([$const_name]);
+    $Const = $DQL->execute(true);
+
+    return $Const->value ?? '';
   }
 
   
