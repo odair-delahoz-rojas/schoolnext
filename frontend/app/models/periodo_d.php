@@ -54,14 +54,29 @@ class PeriodoD extends LiteRecord
   public ?string $planes_apoyo_cerrar; // date DEFAULT NULL,
 
 
-  public function __construct() 
-  {
+  public function __construct() {
     parent::__construct();
     self::$table = Config::get('tablas.periodos_d');
     self::$pk = 'rowid';
     $this->setUp();
   }
+  
+
+  public function getD(int $rowid): mixed  {
+    $sql = "SELECT * FROM ".static::getSource().' WHERE '.static::$pk.' = ?';
+    return static::query($sql, [$rowid])->fetch();
+  }
 
   
+  public static function getPeriodoActual(): int {
+    $periodo = 1;
+
+    return $periodo;
+  }
+
+
+  public static function getNumPeriodos() {
+    return 5;
+  }
 
 }
