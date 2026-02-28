@@ -48,8 +48,8 @@ trait PeriodoTraitSetUpD {
       'f_fin_notas' => '',
       'f_open_day' => '',
 
-      'mes_req_boletin' => '',
-      'orden' => '',
+      'mes_req_boletin' => 'Mes de Pago Requerido',
+      'orden' => 'Orden de lista',
 
       'seguimientos_abrir' => '',
       'seguimientos_cerrar' => '',
