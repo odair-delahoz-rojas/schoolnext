@@ -1,8 +1,8 @@
 <?php
   $theme   = Session::get('theme');
   $modulo  = Session::get('modulo');
-  $Periodo = Session::get('periodo');
-  $annio   = Session::get('annio');
+  $Periodo = PERIODO_ACTUAL;
+  $annio   = ANNIO_ACTUAL;
   $f_ini_periodo = date('M-d',strtotime(Session::get('fecha_inicio')));
   $f_fin_periodo = date('M-d',strtotime(Session::get('fecha_fin')));
   $f_open_day    = date('M-d',strtotime(Session::get('f_open_day')));
