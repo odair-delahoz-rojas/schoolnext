@@ -27,8 +27,6 @@ class Aspirante extends LiteRecord {
     int|bool $estado=null, 
     string|bool $select=null, 
     string|bool $order_by=null,
-    string|bool $where = null,
-    array|bool $params = [],
   ): array|string 
   {
     $DQL = (new OdaDql(__CLASS__))
@@ -37,7 +35,8 @@ class Aspirante extends LiteRecord {
         ->addSelect('t.grado_aspira, g.nombre as aspirante_grado')
         ->leftJoin('grado', 'g', 't.grado_aspira = g.id')
         ->orderBy(self::$_order_by_defa);
-    if (!is_null($order_by)) { $DQL->orderBy($order_by); }
+    if (null !== $order_by) { $DQL->orderBy($order_by); }
+    if (null !== $estado) { $DQL->where('t.is_active=?')->setParams([(int)$estado]); }
 
     return $DQL->execute();
   }
