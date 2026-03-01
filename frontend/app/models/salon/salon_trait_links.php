@@ -27,6 +27,7 @@ trait SalonTraitLinks {
     try
     {
       $result = '';
+      // TODO ERRROOOOORRR ?????
       if (self::$_periodo_actual != $this->is_ready_print)
       {
         $result = OdaTags::linkButton(action: "admin/salones/setupCalificarSalon/$this->id", text: 'Setup Cal', attrs: " class=\"w3-button w3-green\"");
