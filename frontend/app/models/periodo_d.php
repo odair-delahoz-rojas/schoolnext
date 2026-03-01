@@ -69,9 +69,19 @@ class PeriodoD extends LiteRecord
 
   
   public static function getPeriodoActual(): int {
-    $periodo = 1;
-
-    return $periodo;
+    $result = 1;
+    $timezone = new DateTimeZone("America/Bogota");
+    $fechaHoy = new DateTime("now", $timezone);
+    $PeriodosTodos = (new PeriodoD())->all();
+    foreach ($PeriodosTodos as $key => $EstePeriodo) {
+      $fechaInicio = new DateTime($EstePeriodo->fecha_inicio, $timezone);
+      $fechaFin = new DateTime($EstePeriodo->fecha_fin, $timezone);
+      if ($fechaHoy >= $fechaInicio && $fechaHoy <= $fechaFin) {
+        $result = $EstePeriodo->rowid;
+        break;
+      }
+    }
+    return $result;
   }
 
 
